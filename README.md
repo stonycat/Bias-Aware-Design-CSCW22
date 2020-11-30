@@ -9,6 +9,11 @@ Crawl data from TripAdvisor.com (20-30 hotels)
 ### 2020.12.08
 Survey for large-scale users version 1.0
 
+### 2020.12.18 - 2020.12.23
+Conduct Survey
+
+### 2020.12.24 - 2020.12.30
+Survey Results analysis
 
 
 
