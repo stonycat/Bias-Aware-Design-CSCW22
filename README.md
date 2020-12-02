@@ -11,6 +11,11 @@ b. About the evaluation, how to set different scenarios to cover the different c
 2) How will you get the KEY information you want to show and the information must belong to SELF-SELECTION. How do you plan to tell this story? And I strongly recommend you to design a system. (similar to tripadvisor.com)
 
 3) Maybe you should be careful to control the background of the participants, because this may also cause bias~ 
+4) RQ2. How can you distinguish between self-selection bias and for example social influence bias?
+5)  if the backend algorithms could eliminate bias, why do end users need to be aware of the bias? What is transparent design.
+6) how many participants in the survey are you expected? What are their background? Chinese? Workers in MTurk? 
+
+Prof. Ma: hypotheses “some people” → too vague to be hypothesis (always true)... RQs: specify the type of bias you would like to study… Pros and cons of transparency is the subject of study...
 
 
 ### 2020.12.06
