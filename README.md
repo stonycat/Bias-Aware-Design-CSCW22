@@ -25,20 +25,29 @@ feedback: for which RQ？
 Survey for large-scale users version 1.0 
 
 ### 2020.12.15-2020.12.18
-2nd version of Survey
-publish on Qualitrics
-Platform 1) AMT 2)Prolific
+2nd version of Survey (publish on Qualitrics)
+Platform setting 1) AMT 2)Prolific
 
-### 2020.12.18 - 2020.12.23
-Conduct Survey
-Server environment
-Sentiment analtsis (level)
+### 2020.12.18 - 2020.12.20
+Refine Survey ->final version
 
-### 2020.12.24 - 2020.12.30
-Survey Results analysis
-Design interface
-Dimension opinion mining
+### 2020.12.21 - 2020.12.23
+Conduct survey to 10-20 sample users
+analysis results
+refine survey
 
+### 2020.12.24 - 2020.12.26
+Conduct survey to more users (large scale)
+Sever environment + subjectivity method + BERT(learn about)
+Design interface prepare + LR
+
+### 2020.12.28 DDL finished
+Survey results analysis 
+Sentiment analtsis (level)  
+
+### 2020.1.4 DDL finished
+Dimension opinion mining environment 
+website prototype + our design
 
 
 
