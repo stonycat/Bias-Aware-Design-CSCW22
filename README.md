@@ -22,7 +22,7 @@ Prof. Ma: hypotheses “some people” → too vague to be hypothesis (always tr
 Crawl data from TripAdvisor.com (20-30 hotels) postpone
 feedback: for which RQ？
 ### 2020.12.08
-~~Survey for large-scale users version 1.0 ~~
+~~Survey for large-scale users version 1.0 
 
 ### 2020.12.15-2020.12.18
 2nd version of Survey (publish on Qualitrics)
