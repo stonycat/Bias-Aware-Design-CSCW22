@@ -38,19 +38,31 @@ feedback: for which RQ？
 ~~refine survey~~
 
 ### 2020.12.28 DDL finished
-~~Sentiment analtsis (level)  ~~
+~~Sentiment analtsis (level)~~
 
 ### 2020.12.31 - 2021.1.2
-Conduct survey to more users (large scale)
+~~Conduct survey to more users (large scale)~~
+
+### 2021.1.4 - 2021.1.5
 Survey results analysis 
-Design interface prepare + LR
 
+### 2021.1.5 - 1.6
+website prototype framework
 
-### 2021.1.4 DDL finished
-website prototype + our design initial version
+### 2021.1.7 
+topic modeling task 
 
-### 2021.1.7 finished
-topic model task 
+### 2021.1.7 - 2021.1.10
+website prototype design v1 (simplest design)
 
+### 2021.1.10 - 2021.1.13
+website prototype design v2 (improve design)
+
+### 2021.1.15 - 2021.1.17
+backend algorithm 
+backend data
+
+### 2021.1.18 - 2021.1.21 final version of website
+final website
 
 
