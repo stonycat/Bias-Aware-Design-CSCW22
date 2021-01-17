@@ -44,25 +44,26 @@ feedback: for which RQ？
 ~~Conduct survey to more users (large scale)~~
 
 ### 2021.1.4 - 2021.1.5
-Survey results analysis 
+~~Survey results analysis ~~
 
 ### 2021.1.5 - 1.6
-website prototype framework
+~~website prototype framework~~
 
 ### 2021.1.7 
-topic modeling task 
+~~topic modeling task~~ 
 
 ### 2021.1.7 - 2021.1.10
-website prototype design v1 (simplest design)
+~~website prototype design v1 (simplest design)~~
 
 ### 2021.1.10 - 2021.1.13
 website prototype design v2 (improve design)
 
 ### 2021.1.15 - 2021.1.17
-backend algorithm 
-backend data
+backend algorithm run
+backend data crawl
 
-### 2021.1.18 - 2021.1.21 final version of website
-final website
+### 2021.1.17 - 2021.1.21 final version of website
+coding scheme
+website + transparent design v1
 
 
