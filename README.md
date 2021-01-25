@@ -55,15 +55,14 @@ feedback: for which RQ？
 ### 2021.1.7 - 2021.1.10
 ~~website prototype design v1 (simplest design)~~
 
-### 2021.1.10 - 2021.1.13
-website prototype design v2 (improve design)
-
 ### 2021.1.15 - 2021.1.17
-backend algorithm run
-backend data crawl
+~~backend algorithm run~~
+~~backend data crawl~~
 
-### 2021.1.17 - 2021.1.21 final version of website
+### 2021.1.17 - 2021.1.25
 coding scheme
+
+### 2021.1.26 - 2021.1.28 
 website + transparent design v1
 
 
