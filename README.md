@@ -64,6 +64,23 @@ feedback: for which RQ？
 ~~IAA~~
 
 ### 2021.1.26 - 2021.1.28 
-website + transparent design v1
+~~website + transparent design v1~~
+
+### 2021.1.30 - 2021.2.4 
+~~IAA add T3 code~~
+~~crawl London hotels~~
+
+### 2021.2.1 - 2021.2.8
+~~transparent design v2 -2 kinds of design (try real data)~~
+~~data processing (hotels distribution)~~
+
+### 2021.2.9 - 2021.2.15
+choose one design - 12 interview
+
+LDA2vec for cluster 
+choose 30 hotels from the distribution, run
+
+UI structure of website (with handlebar)
+put 30 hotels data into website
 
 
