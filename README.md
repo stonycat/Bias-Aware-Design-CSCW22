@@ -75,12 +75,10 @@ feedback: for which RQ？
 ~~data processing (hotels distribution)~~
 
 ### 2021.2.9 - 2021.2.15
-choose one design - 12 interview
-
-LDA2vec for cluster 
-choose 30 hotels from the distribution, run
-
-UI structure of website (with handlebar)
-put 30 hotels data into website
+1) choose one design - 12 interview
+2.1) LDA2vec for cluster 
+2.2) Choose 30 hotels from the distribution, run
+3.1) UI structure of website (with handlebar)
+3.2) put 30 hotels data into website
 
 
