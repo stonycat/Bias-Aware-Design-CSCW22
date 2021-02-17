@@ -8,7 +8,7 @@ window.parseAPI = {
     },
 
     saveResult: (obj, metaInfo) => {
-        const Result = Parse.Object.extend('Result')
+        const Result = Parse.Object.extend('Result') //change name open new data sheet
 
         const result = new Result()
         const acl = new Parse.ACL()

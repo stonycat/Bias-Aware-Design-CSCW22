@@ -1,3 +1,4 @@
+
 /* stylelint-disable selector-list-comma-newline-after */
 
 .blog-header {
@@ -161,7 +162,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /*modal*/
 .glyphicon { margin-right:5px;}
-.rating .glyphicon {font-size: 22px;}
+.rating .glyphicon {font-size: 20px;}
 .rating-num { margin-top:0px;font-size: 54px; }
 .progress { margin-bottom: 5px;}
 .progress-bar { text-align: left; }

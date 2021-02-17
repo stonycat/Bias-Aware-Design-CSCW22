@@ -46,16 +46,16 @@ rect:hover {  fill:blue; }
   <script>
   function dashboard(id, fData){
       var barColor = 'steelblue';
-      //function segColor(c){ return {ep:"#CB4335", positive:"#F1C40F",neutral:"#52BE80", negative:"#5DADE2", en:"#1A5276"}[c]; }
-      function segColor(c){ return {newReviewer:"#CB4335", reviewer:"#F1C40F",seniorReviewer:"#52BE80", 
-            newContributor:"#5DADE2", contributor:"#1A5276", seniorContributor:"#7D3C98", 
-            proContributor:"#E67E22",topContributor:"#48C9B0"}[c]; }
+      function segColor(c){ return {ep:"#CB4335", positive:"#F1C40F",neutral:"#52BE80", negative:"#5DADE2", en:"#1A5276"}[c]; }
+      // function segColor(c){ return {newReviewer:"#CB4335", reviewer:"#F1C40F",seniorReviewer:"#52BE80", 
+      //       newContributor:"#5DADE2", contributor:"#1A5276", seniorContributor:"#7D3C98", 
+      //       proContributor:"#E67E22",topContributor:"#48C9B0"}[c]; }
       // compute total for each state.
       //emo
-      //fData.forEach(function(d){d.total=d.freq.ep+d.freq.positive+d.freq.neutral+d.freq.negative+d.freq.en;});
+      fData.forEach(function(d){d.total=d.freq.ep+d.freq.positive+d.freq.neutral+d.freq.negative+d.freq.en;});
       //contri
-      fData.forEach(function(d){d.total=d.freq.newReviewer+d.freq.reviewer+d.freq.seniorReviewer+d.freq.newContributor
-              +d.freq.contributor+d.freq.seniorContributor+d.freq.proContributor+d.freq.topContributor;});
+      // fData.forEach(function(d){d.total=d.freq.newReviewer+d.freq.reviewer+d.freq.seniorReviewer+d.freq.newContributor
+      //         +d.freq.contributor+d.freq.seniorContributor+d.freq.proContributor+d.freq.topContributor;});
       
       // function to handle histogram.
       function histoGram(fD){
@@ -107,24 +107,12 @@ rect:hover {  fill:blue; }
               // filter for selected state.
               var st = fData.filter(function(s){ return s.State == d[0];})[0],
                   nD = d3.keys(st.freq).map(function(s){ return {type:s, freq:st.freq[s]};});
-              // console.log(st);
-              // console.log(nD);
-              // call update functions of pie-chart and legend.    
-              // pC1.update(nD);
-              // pC2.update(nD);
-              // pC3.update(nD);
-              // pC4.update(nD);
-              // pC5.update(nD);
+
               leg.update(nD);
           }
           
           function mouseout(d){    // utility function to be called on mouseout.
               // reset the pie-chart and legend.    
-              // pC1.update(tF);
-              // pC2.update(nD);
-              // pC3.update(nD);
-              // pC4.update(nD);
-              // pC5.update(nD);
               leg.update(tF);
           }
           
@@ -219,8 +207,8 @@ rect:hover {  fill:blue; }
           // Draw the pie slices.
           piesvg.selectAll("path").data(pie(pD)).enter().append("path").attr("d", arc)
               .each(function(d) { this._current = d; })
-              .style("fill", function(d) { return segColor(d.data.type); })
-              .on("mouseover",mouseover).on("mouseout",mouseout);
+              .style("fill", function(d) { return segColor(d.data.type); });
+              //.on("mouseover",mouseover).on("mouseout",mouseout);
   
           // create function to update pie-chart. This will be used by histogram.
           pC.update = function(nD){
@@ -262,7 +250,8 @@ rect:hover {  fill:blue; }
           // create the first column for each segment.
           tr.append("td").append("svg").attr("width", '16').attr("height", '16').append("rect")
               .attr("width", '16').attr("height", '16')
-        .attr("fill",function(d){ return segColor(d.type); });
+              .attr("fill",function(d){ return segColor(d.type); })
+              .on("mouseover",mouseover).on("mouseout",mouseout);
               
           // create the second column for each segment.
           tr.append("td").text(function(d){ return d.type;});
@@ -294,6 +283,17 @@ rect:hover {  fill:blue; }
               var tempperc = d.freq/d3.sum(aD.map(function(v){ return v.freq; }));
               return d3.format(".2%")(tempperc.toFixed(4));
           }
+          function mouseover(d){
+              // call the update function of histogram with new data.
+              hG.update(fData.map(function(v){ 
+                  return [v.State,v.freq[d.type]];}),segColor(d.type));
+          }
+          //Utility function to be called on mouseout a pie slice.
+          function mouseout(d){
+              // call the update function of histogram with all data.
+              hG.update(fData.map(function(v){
+                  return [v.State,v.total];}), barColor);
+          }
   
           return leg;
       }
@@ -304,10 +304,10 @@ rect:hover {  fill:blue; }
           return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
       });    
       //contri
-      var tF = ['newReviewer','reviewer','seniorReviewer','newContributor','contributor', 'seniorContributor', 
-      'proContributor', 'topContributor'].map(function(d){ 
-          return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
-      });    
+      // var tF = ['newReviewer','reviewer','seniorReviewer','newContributor','contributor', 'seniorContributor', 
+      // 'proContributor', 'topContributor'].map(function(d){ 
+      //     return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
+      // });    
       
       // calculate total frequency by state for all segment.
       var sF = fData.map(function(d){return [d.State,d.total];});
@@ -343,16 +343,16 @@ rect:hover {  fill:blue; }
   ,{State:'2',freq:{ep:0, positive:0, neutral:2, negative:20, en:7}} 
   ,{State:'1',freq:{ep:1, positive:0, neutral:1, negative:6, en:8}}
   ];
-  var barContriData=[
-  {State:'5',freq:{newReviewer:46, reviewer:66, seniorReviewer:37, newContributor:59, contributor:78, seniorContributor:61, proContributor:56, topContributor:33}} 
-  ,{State:'4',freq:{newReviewer:16, reviewer:38, seniorReviewer:14, newContributor:30, contributor:47, seniorContributor:47, proContributor:62, topContributor:38}}	
-  ,{State:'3',freq:{newReviewer:12, reviewer:13, seniorReviewer:3, newContributor:7, contributor:14, seniorContributor:19, proContributor:20, topContributor:8}} 
-  ,{State:'2',freq:{newReviewer:5, reviewer:4, seniorReviewer:5, newContributor:5, contributor:6, seniorContributor:0, proContributor:1, topContributor:3}} 
-  ,{State:'1',freq:{newReviewer:4, reviewer:2, seniorReviewer:5, newContributor:2, contributor:1, seniorContributor:0, proContributor:2, topContributor:0}}
-  ];
+  // var barContriData=[
+  // {State:'5',freq:{newReviewer:46, reviewer:66, seniorReviewer:37, newContributor:59, contributor:78, seniorContributor:61, proContributor:56, topContributor:33}} 
+  // ,{State:'4',freq:{newReviewer:16, reviewer:38, seniorReviewer:14, newContributor:30, contributor:47, seniorContributor:47, proContributor:62, topContributor:38}}	
+  // ,{State:'3',freq:{newReviewer:12, reviewer:13, seniorReviewer:3, newContributor:7, contributor:14, seniorContributor:19, proContributor:20, topContributor:8}} 
+  // ,{State:'2',freq:{newReviewer:5, reviewer:4, seniorReviewer:5, newContributor:5, contributor:6, seniorContributor:0, proContributor:1, topContributor:3}} 
+  // ,{State:'1',freq:{newReviewer:4, reviewer:2, seniorReviewer:5, newContributor:2, contributor:1, seniorContributor:0, proContributor:2, topContributor:0}}
+  // ];
 
 
-  // dashboard('#dashboard', barEmoData);
-  dashboard('#dashboard', barContriData);
+  dashboard('#dashboard', barEmoData);
+  // dashboard('#dashboard', barContriData);
 
   </script>

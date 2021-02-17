@@ -143,10 +143,13 @@
       hotel.index = i
     })
   </script>
-  <script>
+  <script>//data to backend
     parseAPI.init()
     function recordResult() {
-      parseAPI.saveResult({username: 'hello', q1: true, q2: false}, {anything: 'you wanna add', numbers: 123, but: {better: 'not object'}})
+      parseAPI.saveResult(
+        {username: 'hello', q1: true, q2: false}, 
+        {anything: 'you wanna add', numbers: 123, but: {better: 'not object'}} //not obj
+      ) 
     }
   </script>
   <script>
