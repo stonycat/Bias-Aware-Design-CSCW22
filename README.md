@@ -74,11 +74,18 @@ feedback: for which RQ？
 ~~transparent design v2 -2 kinds of design (try real data)~~
 ~~data processing (hotels distribution)~~
 
-### 2021.2.9 - 2021.2.15
-1) choose one design - 12 interview
-2.1) LDA2vec for cluster 
-2.2) Choose 30 hotels from the distribution, run
-3.1) UI structure of website (with handlebar)
-3.2) put 30 hotels data into website
+### 2021.2.9 - 2021.2.16
+~~1) choose one design - 12 interview~~
+~~2.1) LDA2vec for cluster ~~
+~~coding keywords~~
+~~data json~~
+~~3.1) UI structure of website (with handlebar)~~
 
+### 2.18-2.22
+Choose 30 hotels from the distribution, run
+improve design3 
+put 30 hotels data into website
+automatical data in design
 
+filtering function (hier)
+some interactions
