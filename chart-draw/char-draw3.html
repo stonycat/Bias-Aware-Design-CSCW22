@@ -46,7 +46,7 @@ rect:hover {  fill:blue; }
   <script>
   function dashboard(id, fData){
       var barColor = 'steelblue';
-      function segColor(c){ return {ep:"#CB4335", positive:"#F1C40F",neutral:"#52BE80", negative:"#5DADE2", en:"#1A5276"}[c]; }
+      function segColor(c){ return {ep:"#f03b62", positive:"#cf5b82",neutral:"#a481ac", negative:"#7ea6d3", en:"#63beed"}[c]; }
       // function segColor(c){ return {newReviewer:"#CB4335", reviewer:"#F1C40F",seniorReviewer:"#52BE80", 
       //       newContributor:"#5DADE2", contributor:"#1A5276", seniorContributor:"#7D3C98", 
       //       proContributor:"#E67E22",topContributor:"#48C9B0"}[c]; }
@@ -70,7 +70,7 @@ rect:hover {  fill:blue; }
               .attr("transform", "translate(" + hGDim.l + "," + hGDim.t + ")");
   
           // create function for x-axis mapping.
-          var x = d3.scaleBand().rangeRound([0, hGDim.w], 0.1) //v3 d3.scale.ordinal().rangeRoundBands([0, hGDim.w], 0.1)
+          var x = d3.scaleBand().range([0, hGDim.w]).padding(0.2)//rangeRound([0, hGDim.w], 2.0) //v3 d3.scale.ordinal().rangeRoundBands([0, hGDim.w], 0.1)
                   .domain(fD.map(function(d) { return d[0]; }));
   
           // Add x-axis to the histogram svg.
@@ -140,7 +140,7 @@ rect:hover {  fill:blue; }
       
       // function to handle pieChart.
       function pieChart(pD){
-          var pC ={},    pieDim ={w:250, h: 250};
+          var pC ={},    pieDim ={w:200, h: 200};
           pieDim.r = Math.min(pieDim.w, pieDim.h) / 2;
                   
           // create svg for pie chart.

@@ -28,6 +28,7 @@
   <script src="js/bootstrap.min.js"></script>
   <script src="js/bootstrap-slider.js"></script>
   <script src="https://kit.fontawesome.com/4421af3ebc.js" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="json/t1.js"></script> 
 </head>
 
 <body>
@@ -206,77 +207,14 @@
   </script>
 
   <script>
-    // Data to be rendered
-    var context = {
-      //title: 'Which hotel do you like?',
-      hotels: [{
-        name: 'Hotel A',
-        price: '$102',
-        img:'holder.js/250x250?theme=thumb',
-        rating: '3.5',
-        ratingNum: '1,050 total',
-        reviews: [{
-          username:"Singh Osahan",
-          user_wrote_time: "Mar 2020",
-          title: "A pleasant stay",
-          content: "Contrary to popular belief, Lorem Ipsum is not simply random text. ",
-          currentRating: "5",
-          contriNum: 22737,
-          helpfulNum: 10668,
-          helpful_vote: 12,
-          userImg:"user-img.png",
-          polarity: "0.6710829436779022",
-          keywords: "['hotel', 'breakfast', 'london', 'beds', 'welcoming']",
-          category: "service",
-        },
-        {
-          username:"Gurdeep Singh",
-          user_wrote_time: "Tue, 20 Mar 2020",
-          content: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-          currentRating: '4',
-          helpfulVs: 12,
-          userImg:"user-img.png"
-        }
-        ],
-        totalRatingData: [
-          { a: '1', b: 28 },
-          { a: '2', b: 55 },
-          { a: '3', b: 43 },
-          { a: '4', b: 91 },
-          { a: '5', b: 81 }
-        ]
-      }, 
-      {
-        name: 'Hotel B',
-        price: '$99',
-        img:'holder.js/250x250?theme=thumb',
-        rating: '4.0',
-        ratingNum: '750 total',
-        reviews: [{
-          username:"",
-          time: "",
-          content: "It's ok!",
-          currentRating: 4,
-          helpfulVs: 12,
-          userImg:""
-        },
-        {
-          content: "Price is cheap, but not comfortable!",
-          currentRating: 2
-        }
-        ],
-        totalRatingData: [
-          { a: '1', b: 91 },
-          { a: '2', b: 63 },
-          { a: '3', b: 101 },
-          { a: '4', b: 38 },
-          { a: '5', b: 53 }
-        ]
-      }]
-    }
+    // load data from js file
+    console.log("load json by var in js")
+    console.log(context);
+    
 
     context.hotels.forEach((hotel, i) => {
-      hotel.index = i
+      hotel.index = i;
+      //console.log(hotel.index);
     })
   </script>
   <script>
