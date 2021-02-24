@@ -13,60 +13,62 @@ crossorigin="anonymous"></script>
 <!--data in js-->
 <script src="data/emoData.js"></script>
 <script src="data/contriData.js"></script>
+<!-- <script src="data/contriData.js"></script> -->
 
 <body>
   <div class="row">
+    
     <div id='dashboard'></div>
-    <div id='legend'></div>
+    <div id='legend'>
+      
+    </div>
   </div>
 
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-md-6" id='sankeyPie'></div>
-  </div>
+  </div> -->
 
 
- 
+
   <script>
   function dashboard(id, fData){
       var barColor = 'steelblue';
       //try emo color
       // function segColor(c){ return {ep:"#36f356", positive:"#cf5b82",neutral:"#a481ac", negative:"#7ea6d3", en:"#63beed"}[c]; }
       // function segColor(c){ return {ep:"#fb7f01", positive:"#fdab00",neutral:"#a7a8ac", negative:"#0180d1", en:"#024383"}[c]; }
+      
       function segColor(c){ return {
         ep:"#ffd100", positive:"#ffb81b",neutral:"#8bb8e8", negative:"#005587", en:"#003b5c"}[c]; 
       }
       
       
       // function segColor(c){ return {newReviewer:"#caf0f8", reviewer:"#ade8f4",seniorReviewer:"#90e0ef", 
-      //       newContributor:"#48cae4", contributor:"#00b4d8", seniorContributor:"#0096c7", 
-      //       proContributor:"#0077b6",topContributor:"#023e8a"}[c]; }
+      //       contributor:"#00b4d8", seniorContributor:"#0096c7", proContributor:"#0077b6"}[c]; }
       //compute total for each state.
       //emo
       fData.forEach(function(d){d.total=d.freq.ep+d.freq.positive+d.freq.neutral+d.freq.negative+d.freq.en;});
       //contri
-      // fData.forEach(function(d){d.total=d.freq.newReviewer+d.freq.reviewer+d.freq.seniorReviewer+d.freq.newContributor
-      //         +d.freq.contributor+d.freq.seniorContributor+d.freq.proContributor+d.freq.topContributor;});
+      // fData.forEach(function(d){d.total=d.freq.newReviewer+d.freq.reviewer+d.freq.seniorReviewer
+      // +d.freq.contributor+d.freq.seniorContributor+d.freq.proContributor;});
       
       // function to handle histogram.
-      function histoGram(fD){
+      function histoGram(fD, nLdata){
           var hG={},    hGDim = {t: 60, r: 0, b: 0, l: 30};
           hGDim.w = 500 - hGDim.l - hGDim.r, 
-          hGDim.h = 300 - hGDim.t - hGDim.b;
+          hGDim.h = 600 - hGDim.t - hGDim.b;
               
           //create svg for histogram.
+          var barY = hGDim.h/2;
           var hGsvg = d3.select(id).append("svg")
               .attr("width", hGDim.w + hGDim.l + hGDim.r)
-              .attr("height", hGDim.h + hGDim.t + hGDim.b).append("g")
+              .attr("height", hGDim.h + hGDim.t).append("g")
               .attr("transform", "translate(" + hGDim.l + "," + hGDim.t + ")");
   
           // create function for x-axis mapping.
           var x = d3.scaleBand().range([0, hGDim.w]).padding(0.2)//rangeRound([0, hGDim.w], 2.0) //v3 d3.scale.ordinal().rangeRoundBands([0, hGDim.w], 0.1)
                   .domain(fD.map(function(d) { return d[0]; }));
-  
-          
-
           // Create function for y-axis map.
-          var y = d3.scaleLinear().range([hGDim.h, 0])// v3 d3.scale.linear().range([hGDim.h, 0])
+          var y = d3.scaleLinear().range([barY, 0])// v3 d3.scale.linear().range([hGDim.h, 0])
                   .domain([0, d3.max(fD, function(d) { return d[1]; })]);
   
           // Create bars for histogram to contain rectangles and freq labels.
@@ -75,10 +77,13 @@ crossorigin="anonymous"></script>
           
           //create the rectangles.
           bars.append("rect")
-              .attr("x", function(d) { return x(d[0]); })
+              .attr("x", function(d) { 
+                // console.log("barX", x(d[0]));
+                return x(d[0]); 
+              })
               .attr("y", function(d) { return y(d[1]); })
               .attr("width", x.bandwidth())//rangeBand())
-              .attr("height", function(d) { return hGDim.h - y(d[1]); })
+              .attr("height", function(d) { return hGDim.h/2 - y(d[1]); })
               .attr('fill',barColor)
               .on("mouseover",mouseover)// mouseover is defined below.
               .on("mouseout",mouseout);// mouseout is defined below.
@@ -88,21 +93,147 @@ crossorigin="anonymous"></script>
               .attr("x", function(d) { return x(d[0])+x.bandwidth()/2; })
               .attr("y", function(d) { return y(d[1])-10; })
               .attr("text-anchor", "middle");  
+          
+          bars.attr("id", "tooltip")
 
           // Add x-axis to the histogram svg.
           hGsvg.append("g").attr("class", "x axis")
               // .style("font-size", "9px")
-              .attr("transform", "translate(0," + hGDim.h + ")")
+              .attr("transform", "translate(0," + hGDim.h/2 + ")")
               .call(d3.axisTop().tickSize(0).scale(x));
               //v3 .call(d3.svg.axis().scale(x).orient("bottom"));
+          
+          
+          //*****add sankey chart in this svg*******//
+          var maxNodeY = Math.max(nLdata.links[0].value, nLdata.links[1].value,
+            nLdata.links[2].value,nLdata.links[3].value,nLdata.links[4].value);
+
+          var minNodeY = Math.min(nLdata.links[0].value, nLdata.links[1].value,
+            nLdata.links[2].value,nLdata.links[3].value,nLdata.links[4].value);
+
+          // console.log(minNodeY, maxNodeY);
+          var pieSankey = hGsvg.append("g").attr("class", "sankeyPie")
+              .attr("width", hGDim.w + hGDim.l + hGDim.r)
+              .attr("height", hGDim.h/6)
+              .attr("transform", "translate(" + 0 + "," + barY + ")");
+        
+          var sankey = d3.sankey()
+            .nodeWidth(5) // node.dx = nodeWidth
+            .nodePadding(80) 
+            .size([hGDim.w, hGDim.h/6]);
+
+          var sankeyPath = sankey.link();
+          
+          sankey
+              .nodes(nLdata.nodes)
+              .links(nLdata.links)
+              .layout(32); // what is this? iterations
+
+          var link = pieSankey.append("g").selectAll(".link").data(nLdata.links)
+              .enter().append("path")
+              .attr("class", "link");  
+              
+          var node = pieSankey.append("g").selectAll(".node")
+              .data(nLdata.nodes)
+            .enter().append("g")
+              .attr("class", "node")
+              .attr("transform", function(d, i) {
+                  // console.log(i);
+                  switch(i) {
+                    case 0: 
+                    case 5:{
+                      d.x = x("5") + (x.bandwidth()-d.dy) / 2; 
+                      break;
+                    }
+                    case 1: 
+                    case 6:{
+                      d.x = x("4") + (x.bandwidth()-d.dy) / 2; 
+                      break;
+                    }
+                    case 2: 
+                    case 7:{
+                      d.x = x("3") + (x.bandwidth()-d.dy) / 2; 
+                      break;
+                    }
+                    case 3: 
+                    case 8:{
+                      d.x = x("2") + (x.bandwidth()-d.dy) / 2; 
+                      break;
+                    }
+                    case 4: 
+                    case 9:{
+                      d.x = x("1") + (x.bandwidth()-d.dy) / 2; 
+                      break;
+                    }
+                  };
+                  return "translate(" + d.x + "," + d.y + ")"; 
+              })
+              .call(d3.drag()
+              .on("drag", dragmove));
+
+            //add rect as uppernode
+            node.filter(function(d){
+                return !d.pieData; //add rect
+              }).append("rect")
+                .attr("height", sankey.nodeWidth())
+                .attr("width", function(d) { 
+                  // console.log(d.dy, x.bandwidth());
+                  return Math.min(d.dy, x.bandwidth()); })
+                .style("fill", "#ADB5BD");
 
 
+            //render link later for alignment 
+            link.attr("d", sankeyPath)
+              .style("stroke-width", function(d) { 
+                return Math.min(d.dy, x.bandwidth()); 
+              })
+              .style("stroke", "#ADB5BD")
+              .sort(function(a, b) { 
+                return b.dy - a.dy; 
+              });
+
+          var arc = d3.arc()
+              .outerRadius(40)
+              .innerRadius(0);//donut to pie
+          
+          var pie = d3.pie()
+                .sort(null)
+                .value(function(d) { return d.value; });
+          
+          var g = node.filter(function(d){
+              return d.pieData;
+            }).append("g")
+            .attr('transform', function(d,i){ // have been transformed by d.x d.y
+              return 'translate('+d.dy/2+',' + 0 + ')';// just change d.x
+            })
+            .attr("class","pie")
+            .selectAll(".arc")
+            .data(function(d){return pie(d.pieData);})
+            .enter().append("g")
+            .attr("class", "arc");
+
+            g.append("path")
+              .attr("d", arc)
+              .attr("fill",function(d,i){ 
+                // console.log(d);
+                return segColor(d.data.type); 
+              })
+      
+          function dragmove(d) {
+            //d3.select(this).attr("transform", "translate(" + d.x + "," + (d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))) + ")");
+            d3.select(this).attr("transform", "translate(" + (d.x = Math.max(0, Math.min(hGDim.w - d.dy, d3.event.x))) + "," + d.y + ")");
+            sankey.relayout();
+            link.attr("d", sankeyPath);
+          }
+          
           function mouseover(d){  // utility function to be called on mouseover.
               // filter for selected state.
               var st = fData.filter(function(s){ return s.State == d[0];})[0],
                   nD = d3.keys(st.freq).map(function(s){ return {type:s, freq:st.freq[s]};});
 
               leg.update(nD);
+              // add bar tooltip 
+
           }
           
           function mouseout(d){    // utility function to be called on mouseout.
@@ -121,7 +252,7 @@ crossorigin="anonymous"></script>
               // transition the height and color of rectangles.
               bars.select("rect").transition().duration(500)
                   .attr("y", function(d) {return y(d[1]); })
-                  .attr("height", function(d) { return hGDim.h - y(d[1]); })
+                  .attr("height", function(d) { return barY - y(d[1]); })
                   .attr("fill", color);
   
               // transition the frequency labels location and change value.
@@ -132,56 +263,6 @@ crossorigin="anonymous"></script>
           return hG;
       }
       
-      
-      function pieChart(pD){
-          var pC ={},    pieDim ={w:200, h: 200};
-          pieDim.r = Math.min(pieDim.w, pieDim.h) / 2;
-                  
-          // create svg for pie chart.
-          var piesvg = d3.select(id).append("svg")
-              .attr("width", pieDim.w).attr("height", pieDim.h).append("g")
-              .attr("transform", "translate("+pieDim.w/2+","+pieDim.h/2+")");
-          
-          // create function to draw the arcs of the pie slices.
-          var arc = d3.arc().outerRadius(pieDim.r - 10).innerRadius(0);
-  
-          // create a function to compute the pie slice angles.
-          var pie = d3.pie().sort(null).value(function(d) { return d.freq; });
-  
-          // Draw the pie slices.
-          piesvg.selectAll("path").data(pie(pD)).enter().append("path").attr("d", arc)
-              .each(function(d) { this._current = d; })
-              .style("fill", function(d) { return segColor(d.data.type); })
-              .on("mouseover",mouseover).on("mouseout",mouseout);
-  
-          // create function to update pie-chart. This will be used by histogram.
-          pC.update = function(nD){
-              piesvg.selectAll("path").data(pie(nD)).transition().duration(500)
-                  .attrTween("d", arcTween);
-          }        
-          // Utility function to be called on mouseover a pie slice.
-          function mouseover(d){
-              // call the update function of histogram with new data.
-              hG.update(fData.map(function(v){ 
-                  return [v.State,v.freq[d.data.type]];}),segColor(d.data.type));
-          }
-          //Utility function to be called on mouseout a pie slice.
-          function mouseout(d){
-              // call the update function of histogram with all data.
-              hG.update(fData.map(function(v){
-                  return [v.State,v.total];}), barColor);
-          }
-          // Animating the pie-slice requiring a custom function which specifies
-          // how the intermediate paths should be drawn.
-          function arcTween(a) {
-              var i = d3.interpolate(this._current, a);
-              this._current = i(0);
-              return function(t) { return arc(i(t));    };
-          }    
-          return pC;
-      }
-      
-
       function sankeyPie(nLdata){
         var marginPie = {top: 0, right: 0, bottom: 40, left: 32},
             width = 500 - marginPie.left - marginPie.right, 
@@ -202,7 +283,7 @@ crossorigin="anonymous"></script>
         
         var sankey = d3.sankey()
             .nodeWidth(5) // node.dx = nodeWidth
-            .nodePadding(82) 
+            .nodePadding(68) 
             .size([width, height]);
 
         var path = sankey.link();
@@ -243,7 +324,7 @@ crossorigin="anonymous"></script>
               return !d.pieData; //add rect
           }).append("rect")
               .attr("height", sankey.nodeWidth())
-              .attr("width", function(d) { return d.dy; })
+              .attr("width", function(d) { return Math.max(1, d.dy); })
               .style("fill", "#ADB5BD");
               // .attr("transform", function(d) {
               //     return "translate(" + d.x + "," + d.y + ")"; 
@@ -290,6 +371,8 @@ crossorigin="anonymous"></script>
           }
 
       }
+      
+      
       // function to handle pieChart.
       function pieChart2(pD){
         var pC ={},    pieDim ={w:100, h: 100};
@@ -416,8 +499,8 @@ crossorigin="anonymous"></script>
           return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
       });    
       //contri
-      // var tF = ['newReviewer','reviewer','seniorReviewer','newContributor','contributor', 'seniorContributor', 
-      // 'proContributor', 'topContributor'].map(function(d){ 
+      // var tF = ['newReviewer','reviewer','seniorReviewer','contributor', 'seniorContributor', 
+      // 'proContributor'].map(function(d){ 
       //     return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
       // });    
       
@@ -434,14 +517,7 @@ crossorigin="anonymous"></script>
                 nD2 = d3.keys(st2.freq).map(function(s){ return {type:s, freq:st2.freq[s]};})
       var st1 = fData.filter(function(s){ return s.State;})[4],
                 nD1 = d3.keys(st1.freq).map(function(s){ return {type:s, freq:st1.freq[s]};})
-      console.log("all data:", fData);
-      var hG = histoGram(sF), // create the histogram.
-          // pC1 = pieChart2(nD5),
-          // pC2 = pieChart2(nD4),
-          // pC3 = pieChart2(nD3),
-          // pC4 = pieChart2(nD2),
-          // pC5 = pieChart2(nD1);
-          leg= legend(tF);  // create the legend.
+      //console.log("all data:", fData);
 
       var energy = {
           "nodes": [{
@@ -461,7 +537,7 @@ crossorigin="anonymous"></script>
             "name": "5"
           },{
             "node": 5,
-            "name": "node5",
+            "name": "6",
             "pieData": [{
               "value": Math.random()
             },{
@@ -475,7 +551,7 @@ crossorigin="anonymous"></script>
             }]
           },{
             "node": 6,
-            "name": "node6",
+            "name": "7",
             "pieData": [{
               "value": Math.random()
             },{
@@ -490,7 +566,7 @@ crossorigin="anonymous"></script>
           },
           {
             "node": 7,
-            "name": "node7",
+            "name": "8",
             "pieData": [{
               "value": Math.random()
             },{
@@ -505,7 +581,7 @@ crossorigin="anonymous"></script>
           },
           {
             "node": 8,
-            "name": "node8",
+            "name": "9",
             "pieData": [{
               "value": Math.random()
             },{
@@ -519,7 +595,7 @@ crossorigin="anonymous"></script>
             }]
           }, {
             "node": 9,
-            "name": "node9",
+            "name": "10",
             "pieData": [{
               "value": Math.random()
             },{
@@ -536,20 +612,20 @@ crossorigin="anonymous"></script>
           "links": [{
             "source": 0,
             "target": 5,
-            "value": 74
+            "value": 64
           }, {
             "source": 1,
             "target": 6,
-            "value": 62  //node.dy = node.value * ky, ky~nodePadding & value
+            "value": 54  //node.dy = node.value * ky, ky~nodePadding & value
           },
           {
             "source": 2,
             "target": 7,
-            "value": 19  //node.dy = node.value * ky, ky~nodePadding & value
+            "value": 15  //node.dy = node.value * ky, ky~nodePadding & value
           }, {
             "source": 3,
             "target": 8,
-            "value": 5  //node.dy = node.value * ky, ky~nodePadding & value
+            "value": 1  //node.dy = node.value * ky, ky~nodePadding & value
           },
           {
             "source": 4,
@@ -557,7 +633,19 @@ crossorigin="anonymous"></script>
             "value": 7  //node.dy = node.value * ky, ky~nodePadding & value
           }]// all links
         }    
-      
+      // console.log(linkNum1);
+      energy.links.map((link, index, arr) => {
+        ind = (index+1).toString()
+        
+        if (ind == "5") ind2 = "1"
+        if (ind == "4") ind2 = "2"
+        if (ind == "3") ind2 = "3"
+        if (ind == "2") ind2 = "4"
+        if (ind == "1") ind2 = "5"
+        // console.log(link.value, ind2);
+        link.value = linkNum1[ind2];
+      })
+
       // read link data from fData
       energy.nodes.map((item, index, arr)=>{
         // console.log(item.name);
@@ -571,15 +659,21 @@ crossorigin="anonymous"></script>
           });
         }
       })
-      console.log("post-process:", energy.nodes);
+      // console.log("post-process:", energy.nodes);
       
-      sankeyPie(energy);
+      //sankeyPie(energy);
+      var hG = histoGram(sF, energy), // create the histogram.
+          // pC1 = pieChart2(nD5),
+          // pC2 = pieChart2(nD4),
+          // pC3 = pieChart2(nD3),
+          // pC4 = pieChart2(nD2),
+          // pC5 = pieChart2(nD1);
+          leg= legend(tF);  // create the legend.
+
   }
   </script>
   
   <script>
-  
-
-  dashboard('#dashboard', AlhambraHotel);
+  dashboard('#dashboard', hotelNum1);
   // dashboard('#dashboard', barContriData);
   </script>
