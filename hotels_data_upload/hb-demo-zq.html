@@ -15,7 +15,9 @@
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
-
+  <!-- <script src="/node_modules/readmore-js/readmore.min.js"></script> -->
+  <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://raw.githubusercontent.com/jedfoster/Readmore.js/master/readmore.js"></script> -->
   <!-- Bootstrap4 core JavaScript
   ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
@@ -23,6 +25,9 @@
     integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
     crossorigin="anonymous"></script>
   <script>window.jQuery || document.write('<script src="js/jquery-slim.min.js"><\/script>')</script>
+  <!-- <script src="js/readmore.js"></script> -->
+  <!-- <script src="/node_modules/readmore-js/readmore.min.js"></script> -->
+  
   <script src="js/popper.min.js"></script>
   <script src="js/holder.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
@@ -158,6 +163,10 @@
           </div><!--hotel1 end col-md-12-->
         </div><!--row mb-2 end-->
         {{/each}}<!--hotel card end-->
+      <div class="readall_box">
+        <div class="read_more_mask"></div>
+        <a class="read_more_btn" href="javascript:void(0);" target="_self">Readall</a>
+      </div>
 
 
       </div><!--container end-->
@@ -194,36 +203,54 @@
                 <h5 class="mb-1">All Reviews</h5>
                   <div class="reviews-members pt-4 pb-4">
                     {{#each hotel.reviews as |review|}}
-                      <h6 class="mb-1"><a class="text-black" href="#">{{review.username}}</a></h6>
+                      <h6 class="mb-1"><a class="text-black" href="#">{{review.user_name}}</a></h6>  
+                      <!-- <h6 class="mb-1"><a class="text-black" href="#">{{review.username}}</a></h6>  -->
+                      <!-- h means title(head) -->
+                      <!-- <p class="mb-1">{{review.username}}</p> -->
                       <p class="mb-1 text-muted">{{review.user_wrote_time}}</p>
                       <div class="rating">
-                        {{#ifEquals review.currentRating '5'}}
+                        {{#ifEquals review.currentRating '5.0'}}
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         {{/ifEquals}}
-                        {{#ifEquals review.currentRating '4'}}
+                        {{#ifEquals review.currentRating '4.0'}}
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         {{/ifEquals}}
-                        {{#ifEquals review.currentRating '3'}}
+                        {{#ifEquals review.currentRating '3.0'}}
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         {{/ifEquals}}
-                        {{#ifEquals review.currentRating '2'}}
+                        {{#ifEquals review.currentRating '2.0'}}
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         {{/ifEquals}}
-                        {{#ifEquals review.currentRating '1'}}
+                        {{#ifEquals review.currentRating '1.0'}}
                         <i class="fas fa-star"></i>
                         {{/ifEquals}}
                       </div>
-                      <p>{{review.content}}</p>
+                      <!-- <p>{{review.username}}</p> -->
+                      <!-- <div class="keywords"> -->
+                      <!-- {{#each review.keywords as |keyword|}}
+                        <h7 class="mb-1">Keywords</h7> -->
+                        <!-- <p class="mb-1 text-muted">{{keyword}}</p>
+                      {{/each}} --> 
+                      <!-- </div> -->
+                      <div class = "contents">
+                        <p data-controller="#readMore">{{review.content}}</p>
+                        <a id="readMore" class="timeline-read-more"></a>
+                      </div>
+                      <!-- <p>{{review.content}}</p> -->
+                      <!-- {{#each review.keywords}}
+                        <p>{{review.keywords}}</p>
+                      {{/each}} -->
+                      <p>Keywords # {{review.keywords}}</p>
                     {{/each}}
                   </div>
                   <!-- <a class="text-center w-100 d-block mt-4 font-weight-bold" href="#">See All Reviews</a> -->
@@ -295,6 +322,14 @@
       })
     })
   </script>
+  <script src="jquery-read-more.min.js"></script>
+  <!-- <script>
+//     $(".readmore").readmore({
+//       speed: 75, // how fast to animate
+//       maxHeight: 100 // how much to show, in pixels, before the link to read more
+// });
+    $('article').readmore();
+  </script> -->
 </body>
 
 </html>
