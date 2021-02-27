@@ -73,10 +73,11 @@
             </button>
           </div>
           <div class="modal-body">
-            {{#each hotel.reviews as |review|}}
-              <p>{{review.content}} {{review.rating}}</p>
-            {{/each}}
             <div id="modal-vis-{{hotel.index}}"></div>
+            <button type="button" class="btn btn-primary" onclick="filterReviews({{hotel.index}}, {rating: 5})">Fliter</button>
+            <div id="modal-reviews-{{hotel.index}}">
+              {{> reviewlist reviews=hotel.reviews}}
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -85,6 +86,12 @@
         </div>
       </div>
     </div>
+  </script>
+
+  <script id="reviewlist-template" type="text/x-handlebars-template">
+    {{#each reviews as |review|}}
+      <p>{{review.content}} {{review.rating}}</p>
+    {{/each}}
   </script>
 
   <script>
@@ -155,11 +162,22 @@
     }
   </script>
   <script>
+    var source = document.getElementById("reviewlist-template").innerHTML;
+    var reviewlistTemplate = Handlebars.compile(source);
+    function filterReviews(hotelIndex, filterParams) {
+      var reviews = _.filter(context.hotels[hotelIndex].reviews, filterParams)
+      var rendered = reviewlistTemplate({reviews});
+      // console.log(rendered); // Debug
+      document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
+    }
+  </script>
+  <script>
     // Funcations to modify content
     Handlebars.registerHelper('addone', value => value + 1);
 
     // Partials, like a component
     Handlebars.registerPartial('reviewmodal', document.getElementById("modal-template").innerHTML);
+    Handlebars.registerPartial('reviewlist', document.getElementById("reviewlist-template").innerHTML);
 
     // Code to render data into template
     var source = document.getElementById("entry-template").innerHTML;
