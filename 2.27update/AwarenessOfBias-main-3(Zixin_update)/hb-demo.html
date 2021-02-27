@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Booking Hotel</title>
+
+  <!-- Bootstrap4 core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+  <!-- Bootstrap4 core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script>window.jQuery || document.write('<script src="js/jquery-slim.min.js"><\/script>')</script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/holder.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/bootstrap-slider.js"></script>
+  <script src="https://kit.fontawesome.com/4421af3ebc.js" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://unpkg.com/parse/dist/parse.min.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/lodash@4.17.20/lodash.min.js"></script>
+  <script src="./parse.js"></script>
+
+</head>
+
+<body>
+  <!-- Empty element, will be filled in the content by the code below -->
+  <div id="handlebars-rendering-target"></div>
+
+  <script id="entry-template" type="text/x-handlebars-template">
+    {{!-- Template, mixing html with handlebars syntax --}}
+    <div class="container">
+      <h1>{{title}}</h1>
+      <div class="body">
+        {{#each hotels as |hotel| }}
+          <h2 id="hotel-{{hotel.index}}">{{addone hotel.index}} {{hotel.name}}</h2>
+          <p>{{hotel.description}}</p>
+          <h5>Reviews:</h5>
+          {{#each hotel.reviews as |review|}}
+            <p>{{review.content}} {{review.rating}}</p>
+          {{/each}}
+          {{> reviewmodal hotel=hotel}}
+          <div id="vis-{{hotel.index}}"></div>
+        {{/each}}
+      </div>
+    </div>
+  </script>
+
+  <script id="modal-template" type="text/x-handlebars-template">
+    {{!-- Modal template, using partial --}}
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-{{hotel.index}}">
+      Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-{{hotel.index}}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel">Reviews of Hotel #{{addone hotel.index}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            {{#each hotel.reviews as |review|}}
+              <p>{{review.content}} {{review.rating}}</p>
+            {{/each}}
+            <div id="modal-vis-{{hotel.index}}"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="recordResult()">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </script>
+
+  <script>
+    // Data to be rendered
+    
+    var context = {
+      title: 'Which hotel do you like?',
+    hotels: [{ 
+        name: 'Hotel A',
+        description: 'Hotel A is a 5-star luxury hotel.',
+        reviews: [{
+          content: "It's good!",
+          rating: 5
+        },
+        {
+          content: "I don't like it!",
+          rating: 1
+        }
+        ],
+        data: [
+          { a: 'A', b: 28 },
+          { a: 'B', b: 55 },
+          { a: 'C', b: 43 },
+          { a: 'D', b: 91 },
+          { a: 'E', b: 81 },
+          { a: 'F', b: 53 },
+          { a: 'G', b: 19 },
+          { a: 'H', b: 87 },
+          { a: 'I', b: 52 }
+        ]
+      }, {
+        name: 'Hotel B',
+        description: 'Hotel B is a 3-star economy hotel.',
+        reviews: [{
+          content: "It's ok!",
+          rating: 4
+        },
+        {
+          content: "Price is cheap, but not comfortable!",
+          rating: 2
+        }
+        ],
+        data: [
+          { a: 'A', b: 91 },
+          { a: 'B', b: 63 },
+          { a: 'C', b: 101 },
+          { a: 'D', b: 38 },
+          { a: 'E', b: 53 },
+          { a: 'F', b: 65 },
+          { a: 'G', b: 97 },
+          { a: 'H', b: 29 },
+          { a: 'I', b: 62 }
+        ]
+      }]
+    }
+
+    context.hotels.forEach((hotel, i) => {
+      hotel.index = i
+    })
+  </script>
+  <script>//data to backend
+    parseAPI.init()
+    function recordResult() {
+      parseAPI.saveResult(
+        {username: 'hello', q1: true, q2: false}, 
+        {anything: 'you wanna add', numbers: 123, but: {better: 'not object'}} //not obj
+      ) 
+    }
+  </script>
+  <script>
+    // Funcations to modify content
+    Handlebars.registerHelper('addone', value => value + 1);
+
+    // Partials, like a component
+    Handlebars.registerPartial('reviewmodal', document.getElementById("modal-template").innerHTML);
+
+    // Code to render data into template
+    var source = document.getElementById("entry-template").innerHTML;
+    var template = Handlebars.compile(source);
+    var rendered = template(context);
+    // console.log(rendered); // Debug
+    document.getElementById('handlebars-rendering-target').innerHTML = rendered;
+  </script>
+
+  <script type="text/javascript">
+    // code to run after the elements are created
+    context.hotels.forEach(hotel => {
+      var vegaSpec = {
+        $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
+        description: 'A simple bar chart with embedded data.',
+        data: { values: hotel.data },
+        mark: 'bar',
+        encoding: {
+          x: {
+            field: 'a',
+            type: 'ordinal'
+          },
+          y: {
+            field: 'b',
+            type: 'quantitative'
+          }
+        }
+      }
+      vegaEmbed('#vis-' + hotel.index, vegaSpec)
+      $('#modal-' + hotel.index).on('shown.bs.modal', function (e) {
+        vegaEmbed('#modal-vis-' + hotel.index, vegaSpec)
+      })
+    })
+  </script>
+</body>
+
+</html>
