@@ -156,7 +156,7 @@ h1, h2, h3, h4, h5, h6 {
     top: 0;
     left: 0;
   }
-
+  rect:hover {  opacity:0.8; }
 
 
 /*modal*/
@@ -169,5 +169,6 @@ h1, h2, h3, h4, h5, h6 {
 .sr-only { margin-left: 5px;overflow: visible;clip: auto; }
 
 .modal-lg {
-  max-width: 70%;
+  max-width: 75%;
 }
+

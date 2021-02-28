@@ -34,7 +34,7 @@
   <script src="js/data/emoData.js"></script>
   <script src="js/data/contriData.js"></script>
   <script src="js/data/keywords.js"></script>
-  <!-- <script src="https://kit.fontawesome.com/4421af3ebc.js" crossorigin="anonymous"></script> -->
+  <script src="https://kit.fontawesome.com/4421af3ebc.js" crossorigin="anonymous"></script>
   <script src="json/Alhambra_Hotel_95_4.0.js"></script>
   <script src="json/Best_Western_Swiss_Cottage_Hotel_120_3.5.js"></script>
   <script src="json/Camden_Enterprise_Hotel_106_4.5.js"></script>
@@ -204,36 +204,52 @@
                   <h5 class="mb-1">All Reviews</h5>
                     <div class="reviews-members pt-4 pb-4">
                       {{#each hotel.reviews as |review|}}
-                        <h6 class="mb-1"><a class="text-black" href="#">{{review.username}}</a></h6>
-                        <p class="mb-1 text-muted">{{review.user_wrote_time}}</p>
-                        <div class="rating">
-                          {{#ifEquals review.currentRating '5'}}
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          {{/ifEquals}}
-                          {{#ifEquals review.currentRating '4'}}
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          {{/ifEquals}}
-                          {{#ifEquals review.currentRating '3'}}
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          {{/ifEquals}}
-                          {{#ifEquals review.currentRating '2'}}
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          {{/ifEquals}}
-                          {{#ifEquals review.currentRating '1'}}
-                          <i class="fas fa-star"></i>
-                          {{/ifEquals}}
+                        <div class="media" id=review-{{hotel.index}}>
+                          <a href="#"><img alt="Avatar" src="user-img.png" class="mr-3 rounded-pill" 
+                          style="border-radius: 50rem; width: 56px;
+                            height: 56px;"></a>
+                          <div class="media-body">
+                            <div class="reviews-members-header">
+                              <h6 class="mb-1"><a class="text-black" href="#">{{review.user_name}}</a></h6>
+                              <p class="mb-1 text-muted">{{review.user_wrote_time}}</p>
+                              <small>Contributions: {{review.contriNum}} &nbsp; &nbsp; &nbsp; Helpful number: {{review.helpfulNum}}</small> 
+                              <div class="rating">
+                                {{#ifEquals review.currentRating '5.0'}}
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                {{/ifEquals}}
+                                {{#ifEquals review.currentRating '4.0'}}
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                {{/ifEquals}}
+                                {{#ifEquals review.currentRating '3.0'}}
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                {{/ifEquals}}
+                                {{#ifEquals review.currentRating '2.0'}}
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                {{/ifEquals}}
+                                {{#ifEquals review.currentRating '1.0'}}
+                                <i class="fas fa-star"></i>
+                                {{/ifEquals}}
+                              </div>
+                              <p>{{review.content}}</p>
+                              <p>Keywords # 
+                              {{#each review.keywords as |word|}} 
+                                <span class="badge">{{word}}</span> 
+                              {{/each}}</p>
+                                <!-- <p class = 'contents'>{{review.content}}</p> -->
+                             
+                          </div>
                         </div>
-                        <p>{{review.content}}</p>
+                      </div>
                       {{/each}}
                     </div>
                     <!-- <a class="text-center w-100 d-block mt-4 font-weight-bold" href="#">See All Reviews</a> -->
@@ -254,52 +270,52 @@
     </div><!--model fade end-->
   </script>
 
-  <script>
-    // console.log(context);
-    context.hotels.forEach((hotel, i) => {
-      hotel.index = i;
-    })
-  </script>
-  <script>
-    // Funcations to modify content
-    Handlebars.registerHelper('addone', value => value + 1);
-    Handlebars.registerHelper('ifEquals', function(arg1, arg2, options){ //show user rating
-      return (arg1 == arg2) ? options.fn(this):options.inverse(this);
-    });
+<script>
+  // compute hotel.index
+  context.hotels.forEach((hotel, i) => {
+    hotel.index = i;
+  })
+</script>
+<script>
+  // Funcations to modify content
+  Handlebars.registerHelper('addone', value => value + 1);
+  Handlebars.registerHelper('ifEquals', function(arg1, arg2, options){ //show user rating
+    return (arg1 == arg2) ? options.fn(this):options.inverse(this);
+  });
 
-    // Partials, like a component
-    Handlebars.registerPartial('reviewmodal', document.getElementById("modal-template").innerHTML);
+  // Partials, like a component
+  Handlebars.registerPartial('reviewmodal', document.getElementById("modal-template").innerHTML);
 
-    // Code to render data into template
-    var source = document.getElementById("entry-template").innerHTML;
-    var template = Handlebars.compile(source);
-    var rendered = template(context);
-    //console.log(rendered); // Debug
-    document.getElementById('handlebars-rendering-target').innerHTML = rendered;
-  </script>
+  // Code to render data into template
+  var source = document.getElementById("entry-template").innerHTML;
+  var template = Handlebars.compile(source);
+  var rendered = template(context);
+  //console.log(rendered); // Debug
+  document.getElementById('handlebars-rendering-target').innerHTML = rendered;
+</script>
 
 
 <!-- vis script -->
 <script> 
 function dashboard(id, fData, index, linkdata){
     // console.log(fData[0]['freq']);
-    
     var barColor = 'steelblue';
     function segColor(c){ 
       if (Object.keys(fData[0]['freq']).includes("negative")) {
-        return {ep:"#ffd100", positive:"#ffb81b",neutral:"#8bb8e8", negative:"#005587", en:"#003b5c"}[c]; 
+        return {extremelyPositive:"#ffd100", positive:"#ffb81b",neutral:"#8bb8e8", 
+        negative:"#005587", extremelyNegative:"#003b5c"}[c]; 
       } 
       else if(Object.keys(fData[0]['freq']).includes("newReviewer")) {
-        return {newReviewer:"#caf0f8", juniorReviewer:"#ade8f4",reviewer:"#90e0ef", 
-          seniorReviewer:"#00b4d8", proReviewer:"#0096c7", topReviewer:"#0077b6"}[c]; 
+        return {newReviewer:"#A2CDE4", juniorReviewer:"#84B0CD",reviewer:"#6593B7", 
+          seniorReviewer:"#4777A0", proReviewer:"#285A8A", topReviewer:"#0A3D73"}[c]; 
         }
       else if(Object.keys(fData[0]['freq']).includes("newContributor")){
-        return {newContributor:"#dec9e9", juniorContributor:"#d2b7e5", contributor:"#b185db", 
-          seniorContributor:"#9163cb", proContributor:"#7251b5", topContributor:"#481d74"}[c]; 
+        return {newContributor:"#A2CDE4", juniorContributor:"#84B0CD", contributor:"#6593B7", 
+          seniorContributor:"#4777A0", proContributor:"#285A8A", topContributor:"#0A3D73"}[c]; 
         }      
         else if(Object.keys(fData[0]['freq']).includes("food")){
-        return {food:"#dec9e9", facility:"#d2b7e5", surroundings:"#b185db", 
-          service:"#9163cb", companion:"#7251b5", travelling_purpose:"#481d74"}[c]; 
+        return {food:"#bdd002", facility:"#E76F51", surroundings:"#ffd100", 
+          service:"#7181b2", companion:"#8bb8e8", travelling_purpose:"#795ea5"}[c]; 
         }
       }
     
@@ -308,7 +324,7 @@ function dashboard(id, fData, index, linkdata){
     //emo
     if (Object.keys(fData[0]['freq']).includes("negative")) {
       fData.forEach(function(d){
-        d.total=d.freq.ep+d.freq.positive+d.freq.neutral+d.freq.negative+d.freq.en;
+        d.total=d.freq.extremelyPositive+d.freq.positive+d.freq.neutral+d.freq.negative+d.freq.extremelyNegative;
       });
       // console.log("emo");
     } else if(Object.keys(fData[0]['freq']).includes("newReviewer")){
@@ -330,6 +346,7 @@ function dashboard(id, fData, index, linkdata){
 
     // function to handle histogram.
     function histoGram(fD, nLdata){
+      // console.log(nLdata);
       var hG={},    hGDim = {t: 40, r: 40, b: 0, l: 40};
       hGDim.w = 500 - hGDim.l - hGDim.r, 
       hGDim.h = 450 - hGDim.t - hGDim.b;
@@ -367,8 +384,8 @@ function dashboard(id, fData, index, linkdata){
             else {return hGDim.h/2 - y(d[1]); }
           })
           .attr('fill',barColor)
-          .on("mouseover",mouseover)// mouseover is defined below.
-          .on("mouseout",mouseout);// mouseout is defined below.
+          .on("mouseover", mouseover)
+          .on("mouseout", mouseout);
           
       //Create the frequency labels above the rectangles.
       bars.append("text").text(function(d){ return d3.format(",")(d[1])})
@@ -383,7 +400,6 @@ function dashboard(id, fData, index, linkdata){
           // .style("font-size", "9px")
           .attr("transform", "translate(0," + hGDim.h/2 + ")")
           .call(d3.axisTop().tickSize(0).scale(x));
-          //v3 .call(d3.svg.axis().scale(x).orient("bottom"));
       
       
       //*****add sankey chart in this svg*******//
@@ -461,7 +477,7 @@ function dashboard(id, fData, index, linkdata){
           .attr("width", function(d) { 
             // console.log(d.dy, x.bandwidth());
             return Math.min(d.dy, x.bandwidth()); })
-          .style("fill", "#ADB5BD");
+          .style("fill", "#CDD0D3");
 
 
       //render link later for alignment 
@@ -469,20 +485,22 @@ function dashboard(id, fData, index, linkdata){
         .style("stroke-width", function(d) { 
           return Math.min(d.dy, x.bandwidth()); 
         })
-        .style("stroke", "#ADB5BD")
+        .style("stroke", "#CDD0D3")
         .sort(function(a, b) { 
           return b.dy - a.dy; 
         });
 
     var arc = d3.arc()
-        .outerRadius(35)
+        .outerRadius(37)
         .innerRadius(0);//donut to pie
     
     var pie = d3.pie()
           .sort(null)
           .value(function(d) { return d.value; });
     
+    var pieInd = 5;
     var g = node.filter(function(d){
+        pieInd -= 1;
         return d.pieData;
       }).append("g")
       .attr('transform', function(d,i){ // have been transformed by d.x d.y
@@ -509,13 +527,15 @@ function dashboard(id, fData, index, linkdata){
     // }
     
     function mouseover(d){  // utility function to be called on mouseover.
+        // $('.arc').find("path");
+        console.log(d);
         // filter for selected state.
         var st = fData.filter(function(s){ return s.State == d[0];})[0],
             nD = d3.keys(st.freq).map(function(s){ return {type:s, freq:st.freq[s]};});
-
         leg.update(nD);
-        // add bar tooltip 
 
+        //grey other bar-pies
+        console.log(nLdata);
     }
     
     function mouseout(d){    // utility function to be called on mouseout.
@@ -530,7 +550,6 @@ function dashboard(id, fData, index, linkdata){
         
         // Attach the new data to the bars.
         var bars = hGsvg.selectAll(".bar").data(nD);
-        
         // transition the height and color of rectangles.
         bars.select("rect").transition().duration(500)
             .attr("y", function(d) {return y(d[1]); })
@@ -542,7 +561,7 @@ function dashboard(id, fData, index, linkdata){
             .text(function(d){ return d3.format(",")(d[1])})
             .attr("y", function(d) {return y(d[1])-10; });            
     }        
-    return hG;
+        return hG;
     }
 
 
@@ -597,49 +616,50 @@ function dashboard(id, fData, index, linkdata){
         return d3.format(".2%")(tempperc.toFixed(4));
     }
     function mouseover(d){
+        //grey all pies, focus on the bars
+        $('.arc').find("path").css({fill: "#CDD0D3"});
+        
         // call the update function of histogram with new data.
         hG.update(fData.map(function(v){ 
             return [v.State,v.freq[d.type]];}),segColor(d.type));
     }
     //Utility function to be called on mouseout a pie slice.
     function mouseout(d){
+        $('.arc').find("path").css({fill: ""});
         // call the update function of histogram with all data.
         hG.update(fData.map(function(v){
             return [v.State,v.total];}), barColor);
     }
 
-    return leg;
+
+      return leg;
     }
 
     // calculate total frequency by segment for all state.
 
     if (Object.keys(fData[0]['freq']).includes("negative")){
-      //emo
-      var tF = ['ep','positive','neutral','negative','en'].map(function(d){ 
+        var tF = ['extremelyPositive','positive','neutral','negative','extremelyNegative'].map(function(d){ 
           return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
-          });  
+        });  
     }
     else if (Object.keys(fData[0]['freq']).includes("reviewer")) {
-      // contri
-      var tF = ['newReviewer','juniorReviewer', 'reviewer','seniorReviewer','proReviewer', 'topReviewer'].map(function(d){ 
+        var tF = ['newReviewer','juniorReviewer', 'reviewer','seniorReviewer',
+        'proReviewer', 'topReviewer'].map(function(d){ 
               return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
-          });    
+        });    
     } else if (Object.keys(fData[0]['freq']).includes("contributor")) {
-      // contri
-      var tF = ['newContributor', 'juniorContributor', 'contributor','seniorContributor','proContributor', 
-          'topContributor'].map(function(d){ 
+        var tF = ['newContributor', 'juniorContributor', 'contributor','seniorContributor',
+        'proContributor', 'topContributor'].map(function(d){ 
               return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
-          });    
+        });    
     } else if (Object.keys(fData[0]['freq']).includes("food")) {
-      // contri
-      var tF = ['food', 'facility', 'surroundings','service','companion', 
+        var tF = ['food', 'facility', 'surroundings','service','companion', 
           'travelling_purpose'].map(function(d){ 
               return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
-          });    
+        });    
     }
       
     
-
     // calculate total frequency by state for all segment.
     var sF = fData.map(function(d){return [d.State,d.total];});
 
@@ -782,19 +802,47 @@ function dashboard(id, fData, index, linkdata){
     })
 
     // read link data from fData
-    linkDataEmo.nodes.map((item, index, arr)=>{
-    // console.log(item.name);
-    if (item.hasOwnProperty("pieData")) { // 5 nodes with pie
-    // console.log(fData[index-5]['freq']); // 5-1 point
-    // console.log(Object.keys(fData[index-5]['freq']));
-    item.pieData.map((itemPie, indPie, arrPie) => {            
-      // console.log(itemPie); 
-      itemPie.value = fData[index-5]['freq'][Object.keys(fData[index-5]['freq'])[indPie]];
-      itemPie.type = Object.keys(fData[index-5]['freq'])[indPie];
-    });
+    Object.size = function(obj) {
+      var size = 0,
+        key;
+      for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+      }
+      return size;
+    };
+
+    if (Object.size(fData[0]['freq']) == 5){
+      // add link value
+      linkDataEmo.nodes.map((item, index, arr)=>{
+        // console.log(item.name);
+        if (item.hasOwnProperty("pieData")) { 
+          item.pieData.map((itemPie, indPie, arrPie) => {            
+            itemPie.value = fData[index-5]['freq'][Object.keys(fData[index-5]['freq'])[indPie]];
+            itemPie.type = Object.keys(fData[index-5]['freq'])[indPie];
+            });
+          }
+      })
     }
-    })
-    // console.log("post-process:", linkDataEmo.nodes);
+
+    
+    else if (Object.size(fData[0]['freq']) == 6) {
+      linkDataEmo.nodes.map((item, index, arr)=>{
+        if (item.hasOwnProperty("pieData")) { 
+          item['pieData'].push({"value": Math.random()});
+        }
+      })
+      linkDataEmo.nodes.map((item, index, arr)=>{
+      //   // console.log(item.name);
+        if (item.hasOwnProperty("pieData")) { 
+          item.pieData.map((itemPie, indPie, arrPie) => {   
+            // console.log(fData[index-5]['freq'], Object.keys(fData[index-5]['freq'])[indPie]);
+            itemPie.value = fData[index-5]['freq'][Object.keys(fData[index-5]['freq'])[indPie]];
+            itemPie.type = Object.keys(fData[index-5]['freq'])[indPie];
+          });
+        }
+      })
+    }
+
 
     //sankeyPie(linkDataEmo);
     var hG = histoGram(sF, linkDataEmo), // create the histogram.
@@ -806,46 +854,122 @@ function dashboard(id, fData, index, linkdata){
 
 
 
-  <script type="text/javascript">
-    // code to run after the elements are created
-    context.hotels.forEach(hotel => {
-      // var visHTML = '<div id="modal-vis-" '+ hotel.index +' >';
-      var visDiv = document.getElementById("modal-vis-" + hotel.index);
-      visDiv.className = 'row';
-      // console.log(visDiv);
-      var dashboardDiv = document.createElement('div');
-      dashboardDiv.id = 'dashboard' + hotel.index;
-      
-      var legendDiv = document.createElement('div');
-      legendDiv.id = 'legend' + hotel.index;
+<script type="text/javascript">
+  // code to run after the elements are created
+  context.hotels.forEach(hotel => {
+    // var visHTML = '<div id="modal-vis-" '+ hotel.index +' >';
+    var visDiv = document.getElementById("modal-vis-" + hotel.index);
+    visDiv.className = 'row';
 
-      
-      
-      var buttonGroup = document.createElement('div');
-      buttonGroup.setAttribute('class', 'btn-group');
-      buttonGroup.setAttribute('role', 'group');
-      buttonGroup.setAttribute('aria-label', 'Basic example');
-      buttonGroup.id = 'groupButton' + hotel.index;
-      
-      var buttonEmo = document.createElement('button');
-      // buttonEmo.classList =  
-      // buttonGroup.append()
-
-
-      visDiv.appendChild(dashboardDiv);
-      visDiv.appendChild(legendDiv);
-      dashboardDiv.appendChild(buttonGroup);
-
-      var hotelCategoryData = JSON.parse(JSON.stringify(hotelWordsAll[hotel.index]));
-      dashboard('#dashboard'+ hotel.index, hotelCategoryData, hotel.index, linkNumAll[hotel.index]);
-      
-      
-
-      // console.log("index", hotel.index);
-    })
+    // console.log(visDiv);
+    var dashboardDiv = document.createElement('div');
+    dashboardDiv.id = 'dashboard' + hotel.index;
     
-  </script>
+    var legendDiv = document.createElement('div');
+    legendDiv.id = 'legend' + hotel.index;
+    
+    
+    var buttonGroup = document.createElement('div');
+    buttonGroup.classList.add('row', 'btn-group', 'btn-group-sm');
+    buttonGroup.setAttribute('role', 'group');
+    buttonGroup.setAttribute('aria-label', 'Basic example');
+    buttonGroup.id = 'groupButton' + hotel.index;
+    buttonGroup.style.paddingLeft = '30px';
 
+    
+    var buttonEmo = document.createElement('button');
+    buttonEmo.classList.add("btn", "btn-outline-primary", "active");
+    buttonEmo.id = 'buttonEmo' + hotel.index;
+    buttonEmo.innerHTML = 'Emotion';
+
+
+    var buttonContri = document.createElement('button');
+    buttonContri.classList.add("btn", "btn-outline-primary");
+    buttonContri.id = 'buttonContri' + hotel.index;
+    buttonContri.innerHTML = 'Contribution';
+
+    var buttonHelpfulv = document.createElement('button');
+    buttonHelpfulv.classList.add("btn", "btn-outline-primary");
+    buttonHelpfulv.id = 'buttonHelpfulv' + hotel.index;
+    buttonHelpfulv.innerHTML = 'Helpful votes';
+
+    var buttonKeywords = document.createElement('button');
+    buttonKeywords.classList.add("btn", "btn-outline-primary");
+    buttonKeywords.id = 'buttonKeywords' + hotel.index;
+    buttonKeywords.innerHTML = 'Aspects';
+    
+    
+    buttonGroup.appendChild(buttonEmo);
+    buttonGroup.appendChild(buttonContri);
+    buttonGroup.appendChild(buttonHelpfulv);
+    buttonGroup.appendChild(buttonKeywords);
+    
+    visDiv.appendChild(dashboardDiv);
+    visDiv.appendChild(legendDiv);
+    visDiv.insertAdjacentElement('beforebegin', buttonGroup);
+
+    var hotelCategoryData = JSON.parse(JSON.stringify(hotelEmoAll[hotel.index]));
+    
+    //switch function
+
+    dashboard('#dashboard'+ hotel.index, hotelCategoryData, hotel.index, linkNumAll[hotel.index]);
+
+  })
+  
+</script>
+<script>
+$(".btn-group > .btn").click(function(){
+      $(".btn-group > .btn").removeClass("active");
+      $(this).addClass("active");
+      // console.log(this.id);
+      
+      if (this.id.includes('Contri')) {
+        // console.log("switch contri");
+        var curInd = this.id.replace('buttonContri', '');
+        var contriLoad = JSON.parse(JSON.stringify(hotelContriAll[curInd]));
+        var removeLegend = document.getElementById('legend' + curInd);
+        removeLegend.innerHTML = '';
+        var removeBar = document.getElementById('dashboard' + curInd);
+        removeBar.innerHTML = '';
+
+        dashboard('#dashboard'+ curInd, contriLoad, curInd, linkNumAll[curInd]);
+        
+      } 
+      else if (this.id.includes('Emo')) {
+        // console.log("switch emo");
+        var curInd = this.id.replace('buttonEmo', '');
+        var emoLoad = JSON.parse(JSON.stringify(hotelEmoAll[curInd]));
+        var removeLegend = document.getElementById('legend' + curInd);
+        removeLegend.innerHTML = '';
+        var removeBar = document.getElementById('dashboard' + curInd);
+        removeBar.innerHTML = '';
+
+        dashboard('#dashboard'+ curInd, emoLoad, curInd, linkNumAll[curInd]);
+      }
+      else if (this.id.includes('Helpfulv')) {
+        // console.log("switch Helpfulv");
+        var curInd = this.id.replace('buttonHelpfulv', '');
+        var helpfulvLoad = JSON.parse(JSON.stringify(hotelHelpfulAll[curInd]));
+        var removeLegend = document.getElementById('legend' + curInd);
+        removeLegend.innerHTML = '';
+        var removeBar = document.getElementById('dashboard' + curInd);
+        removeBar.innerHTML = '';
+
+        dashboard('#dashboard'+ curInd, helpfulvLoad, curInd, linkNumAll[curInd]);
+      }
+      else if (this.id.includes('Keywords')) {
+        // console.log("switch aspects");
+        var curInd = this.id.replace('buttonKeywords', '');
+        var keywordsLoad = JSON.parse(JSON.stringify(hotelWordsAll[curInd]));
+        var removeLegend = document.getElementById('legend' + curInd);
+        removeLegend.innerHTML = '';
+        var removeBar = document.getElementById('dashboard' + curInd);
+        removeBar.innerHTML = '';
+
+        dashboard('#dashboard'+ curInd, keywordsLoad, curInd, linkNumAll[curInd]);
+      }
+  });
+</script>
 
 </body>
 
