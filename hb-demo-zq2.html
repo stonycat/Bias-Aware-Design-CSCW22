@@ -204,7 +204,7 @@
                   <h5 class="mb-1">All Reviews</h5>
                     <div class="reviews-members pt-4 pb-4">
                       {{#each hotel.reviews as |review|}}
-                        <div class="media" id=review-{{hotel.index}}>
+                      <div class="media" id=review-{{hotel.index}}>
                           <a href="#"><img alt="Avatar" src="user-img.png" class="mr-3 rounded-pill" 
                           style="border-radius: 50rem; width: 56px;
                             height: 56px;"></a>
@@ -240,17 +240,21 @@
                                 <i class="fas fa-star"></i>
                                 {{/ifEquals}}
                               </div>
-                              <p>{{review.content}}</p>
-                              <p>Keywords # 
-                              {{#each review.keywords as |word|}} 
-                                <span class="badge">{{word}}</span> 
-                              {{/each}}</p>
-                                <!-- <p class = 'contents'>{{review.content}}</p> -->
-                             
+                              <div class = "review_content">
+                                <p class = "contents">{{review.content}}</p>
+                              
+                                <a href = "##" class = "readmore">Read More</a>
+                              
+                                <p>Keywords # 
+                                {{#each review.keywords as |word|}} 
+                                  <span class="badge">{{word}}</span> 
+                                {{/each}}</p>
+                              </div>
                           </div>
                         </div>
                       </div>
                       {{/each}}
+                      <a href="#" class = "loading-hotel-{{hotel.index}}">Load More</a>
                     </div>
                     <!-- <a class="text-center w-100 d-block mt-4 font-weight-bold" href="#">See All Reviews</a> -->
                   </div>
@@ -269,6 +273,53 @@
       </div>
     </div><!--model fade end-->
   </script>
+
+
+
+<script type="text/javascript">
+  // read more contents from each review
+    $(function(){
+        $('.review_content').each(function(index,element){
+            var maxwidth=300;//设置最多显示的字数
+            var text_long=$(this).find("p[class = 'contents']").text();
+            var text_short = text_long.substring(0,maxwidth);
+            if(text_long.length>maxwidth){
+                $(this).find("p[class = 'contents']").html(text_short+"...");
+            };
+            var read_button = $(this).find('a');
+            read_button.click(function(){
+                if(read_button.text()==="Read More"){
+                  read_button.parent().find("p[class = 'contents']").html(text_long);
+                  read_button.text("Read Less");
+                } else if (read_button.text()==="Read Less"){
+                  read_button.parent().find("p[class = 'contents']").html(text_short+"...");
+                  read_button.text("Read More");
+                }
+            })
+        })
+    })
+</script> 
+  
+<script>
+  // load 10 more reviews each click
+  $(function(){
+    $('.reviews-members').each(function(index,element){
+      var count = 10;
+      var read_more = $(this).find("a[class^='loading-hotel']");
+      var all_reviews = $(this).find("div[class ='media']");
+      all_reviews.each(function(index,element){
+        $(this).css({"display":'none'});
+      }); 
+
+      all_reviews.slice(0,10).show();
+      read_more.click(function(){
+        count += 10;
+        all_reviews.slice(0,count).show();
+      })
+    })
+  })
+  </script>
+
 
 <script>
   // compute hotel.index
@@ -314,7 +365,7 @@ function dashboard(id, fData, index, linkdata){
           seniorContributor:"#4777A0", proContributor:"#285A8A", topContributor:"#0A3D73"}[c]; 
         }      
         else if(Object.keys(fData[0]['freq']).includes("food")){
-        return {food:"#bdd002", facility:"#E76F51", surroundings:"#ffd100", 
+        return {food:"#bdd002", facility:"#faa307", surroundings:"#ffd100", 
           service:"#7181b2", companion:"#8bb8e8", travelling_purpose:"#795ea5"}[c]; 
         }
       }
@@ -498,15 +549,17 @@ function dashboard(id, fData, index, linkdata){
           .sort(null)
           .value(function(d) { return d.value; });
     
-    var pieInd = 5;
+    
     var g = node.filter(function(d){
-        pieInd -= 1;
         return d.pieData;
       }).append("g")
       .attr('transform', function(d,i){ // have been transformed by d.x d.y
         return 'translate('+d.dy/2+',' + 0 + ')';// just change d.x
       })
       .attr("class","pie")
+      .attr("id", function(d){
+        return "pieId" + d.pieId;
+      })
       .selectAll(".arc")
       .data(function(d){return pie(d.pieData);})
       .enter().append("g")
@@ -527,8 +580,17 @@ function dashboard(id, fData, index, linkdata){
     // }
     
     function mouseover(d){  // utility function to be called on mouseover.
-        // $('.arc').find("path");
-        console.log(d);
+        // grey pie
+        var curPieId = parseInt(d[0]);
+        for (i = 1; i < 6; i++)
+        {
+          if (i != curPieId){
+            $("#pieId" + i).find("path").css({fill: "#CDD0D3"});
+          }else{
+            continue;
+          }
+        }
+        
         // filter for selected state.
         var st = fData.filter(function(s){ return s.State == d[0];})[0],
             nD = d3.keys(st.freq).map(function(s){ return {type:s, freq:st.freq[s]};});
@@ -539,6 +601,14 @@ function dashboard(id, fData, index, linkdata){
     }
     
     function mouseout(d){    // utility function to be called on mouseout.
+        //remove grey
+        var curPieId = parseInt(d[0]);
+        for (i = 1; i < 6; i++){
+          if (i != curPieId){
+            $("#pieId" + i).find("path").css({fill: ""});
+          }
+        }
+        
         // reset the pie-chart and legend.    
         leg.update(tF);
     }
@@ -694,6 +764,7 @@ function dashboard(id, fData, index, linkdata){
     },{
       "node": 5,
       "name": "6",
+      "pieId": 5,
       "pieData": [{
         "value": Math.random()
       },{
@@ -708,6 +779,7 @@ function dashboard(id, fData, index, linkdata){
     },{
       "node": 6,
       "name": "7",
+      "pieId": 4,
       "pieData": [{
         "value": Math.random()
       },{
@@ -723,6 +795,7 @@ function dashboard(id, fData, index, linkdata){
     {
       "node": 7,
       "name": "8",
+      "pieId": 3,
       "pieData": [{
         "value": Math.random()
       },{
@@ -738,6 +811,7 @@ function dashboard(id, fData, index, linkdata){
     {
       "node": 8,
       "name": "9",
+      "pieId": 2,
       "pieData": [{
         "value": Math.random()
       },{
@@ -752,6 +826,7 @@ function dashboard(id, fData, index, linkdata){
     }, {
       "node": 9,
       "name": "10",
+      "pieId": 1,
       "pieData": [{
         "value": Math.random()
       },{
