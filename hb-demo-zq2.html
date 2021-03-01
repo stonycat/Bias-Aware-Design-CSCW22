@@ -565,8 +565,7 @@ function dashboard(id, fData, index, linkdata){
       .enter().append("g")
       .attr("class", "arc")
       .attr("id", function(d){
-        console.log(d.index);
-        return "arc" + d.index;
+        return "arc-" + d.data.type;
       });
 
       g.append("path")
@@ -610,7 +609,7 @@ function dashboard(id, fData, index, linkdata){
         var yPosition = d3.mouse(this)[1];    //d3.event.pageY;
         var st = fData.filter(function(s){ return s.State == d[0];})[0],
             nD = d3.keys(st.freq).map(function(s){ return {type:s, freq:st.freq[s]};});
-        console.log("mousemove", nD[0]);
+        // console.log("mousemove", nD[0]);
 
         tooltip
           // .attr("transform", "translate(" + xPosition + "," + yPosition + ")")
@@ -717,7 +716,7 @@ function dashboard(id, fData, index, linkdata){
     }
     function mouseover(d){
         //grey all pies, focus on the bars
-        $('.arc').find("path").css({fill: "#CDD0D3"});
+        $('.arc').not('#arc-' + d.type).find("path").css({fill: "#CDD0D3"});
         
         // call the update function of histogram with new data.
         hG.update(fData.map(function(v){ 
@@ -945,7 +944,6 @@ function dashboard(id, fData, index, linkdata){
         }
       })
     }
-
 
     //sankeyPie(linkDataEmo);
     var hG = histoGram(sF, linkDataEmo, tF), // create the histogram.
