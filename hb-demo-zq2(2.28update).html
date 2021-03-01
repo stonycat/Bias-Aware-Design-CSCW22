@@ -204,7 +204,7 @@
                   <h5 class="mb-1">All Reviews</h5>
                     <div class="reviews-members pt-4 pb-4">
                       {{#each hotel.reviews as |review|}}
-                      <div class="media" id=review-{{hotel.index}}>
+                        <div class="media" id=review-{{hotel.index}}>
                           <a href="#"><img alt="Avatar" src="user-img.png" class="mr-3 rounded-pill" 
                           style="border-radius: 50rem; width: 56px;
                             height: 56px;"></a>
@@ -250,6 +250,8 @@
                                   <span class="badge">{{word}}</span> 
                                 {{/each}}</p>
                               </div>
+                                <!-- <p class = 'contents'>{{review.content}}</p> -->
+                             
                           </div>
                         </div>
                       </div>
@@ -274,52 +276,87 @@
     </div><!--model fade end-->
   </script>
 
-
-
+  
 <script type="text/javascript">
   // read more contents from each review
-  $(function(){
-      $('.review_content').each(function(index,element){
-        var maxwidth=300;//设置最多显示的字数
-        var text_long=$(this).find("p[class = 'contents']").text();
-        var text_short = text_long.substring(0,maxwidth);
-        if(text_long.length>maxwidth){
-            $(this).find("p[class = 'contents']").html(text_short+"...");
-        };
-        var read_button = $(this).find('a');
-        read_button.click(function(){
-            if(read_button.text()==="Read More"){
-              read_button.parent().find("p[class = 'contents']").html(text_long);
-              read_button.text("Read Less");
-            } else if (read_button.text()==="Read Less"){
-              read_button.parent().find("p[class = 'contents']").html(text_short+"...");
-              read_button.text("Read More");
-            }
+    $(function(){
+      // $('.review').each(function(){
+        $('.review_content').each(function(index,element){
+            var maxwidth=300;//设置最多显示的字数
+            var text_long=$(this).find("p[class = 'contents']").text();
+            var text_short = text_long.substring(0,maxwidth);
+            if(text_long.length>maxwidth){
+                // $(this).text($(this).text().substring(0,maxwidth));
+                $(this).find("p[class = 'contents']").html(text_short+"...");
+                // $(this).add('button');
+                // $(this).html($(this).html()+"..."+"<a href='###'> Read all</a>");//如果字数超过最大字数，超出部分用...代替，并且在后面加上点击展开的链接；
+
+            };
+            var read_button = $(this).find('a');
+            read_button.click(function(){
+                if(read_button.text()==="Read More"){
+                  read_button.parent().find("p[class = 'contents']").html(text_long);
+                  read_button.text("Read Less");
+                } else if (read_button.text()==="Read Less"){
+                  read_button.parent().find("p[class = 'contents']").html(text_short+"...");
+                  read_button.text("Read More");
+                }
+
+                // $(this).parent().html(text+"<a href='###'> Read less</a>");//点击“点击展开”，展开全文
+                // read_button.parent().find("p[class = 'contents']").html(text_long);
+                // read_button.text("Read Less");
+                // read_button.click(function(){
+                //   $(this).parent().find("p[class = 'contents']").html(text_short+"...");
+                //   $(this).text("Read More");
+                // })
+                // $(this).add()
+                // $(this).addClass('less');
+              // $(this).html($(this).html()+"..."+"<a href='###'> Read all</a>");
+              // $(this).html($(this).html()+"<a href='###'> Read less</a>");
+            //点击“点击展开”，展开全文
+                // $(this).parent().css({"height":"600px","width":"100px"})
+                // $(this).html($(this).html()+"<a href='###'> Read less</a>");
+            //     $(this).find('a').click(function(){
+            //     $(this).parent().html(text_short+"..."+"<a href='###'> Read all</a>");
+            //   // $(this).html($(this).html()+"..."+"<a href='###'> Read all</a>");
+            //   // $(this).html($(this).html()+"<a href='###'> Read less</a>");
+            // })
+            })
+            // if($(this).text() === "Read Less"){
+            //   $(this).click(function(){
+            //       $(this).parent().find("p[class = 'contents']").html(text_short+"...");
+            //       $(this).text("Read More");
+            //     })
+            // };
+            // if(&(this)===)
+            // $(this).children().find("a[id = 'readless' ]").click(function(){
+            //     $(this).parent().html(text_short).parent().css({"height":"350px"})
+            // })
         })
-      })
-  })
-</script> 
-  
+      // })
+    })
+</script>
+
+
 <script>
-  // load 5 more reviews each click
+  // load 10 more reviews each click
   $(function(){
     $('.reviews-members').each(function(index,element){
-      var count = 5;
+      var count = 10;
       var read_more = $(this).find("a[class^='loading-hotel']");
       var all_reviews = $(this).find("div[class ='media']");
       all_reviews.each(function(index,element){
         $(this).css({"display":'none'});
       }); 
 
-      all_reviews.slice(0,3).show();
+      all_reviews.slice(0,10).show();
       read_more.click(function(){
-        count += 5;
+        count += 10;
         all_reviews.slice(0,count).show();
       })
     })
   })
   </script>
-
 
 <script>
   // compute hotel.index
@@ -350,22 +387,22 @@
 <script> 
 function dashboard(id, fData, index, linkdata){
     // console.log(fData[0]['freq']);
-    var barColor = "#8d99ae";//'steelblue';
+    var barColor = 'steelblue';
     function segColor(c){ 
       if (Object.keys(fData[0]['freq']).includes("negative")) {
-        return {extremelyPositive:"#FA9601", positive:"#ffd100",neutral:"#c6dbef", 
-        negative:"#6796C6", extremelyNegative:"#08519c"}[c]; 
+        return {extremelyPositive:"#ffd100", positive:"#ffb81b",neutral:"#8bb8e8", 
+        negative:"#005587", extremelyNegative:"#003b5c"}[c]; 
       } 
       else if(Object.keys(fData[0]['freq']).includes("newReviewer")) {
-        return {newReviewer:"#eff3ff", juniorReviewer:"#c6dbef",reviewer:"#9ecae1", 
-          seniorReviewer:"#6baed6", proReviewer:"#3182bd", topReviewer:"#08519c"}[c]; 
+        return {newReviewer:"#A2CDE4", juniorReviewer:"#84B0CD",reviewer:"#6593B7", 
+          seniorReviewer:"#4777A0", proReviewer:"#285A8A", topReviewer:"#0A3D73"}[c]; 
         }
       else if(Object.keys(fData[0]['freq']).includes("newContributor")){
-        return {newContributor:"#eff3ff", juniorContributor:"#c6dbef", contributor:"#9ecae1", 
-          seniorContributor:"#6baed6", proContributor:"#3182bd", topContributor:"#08519c"}[c]; 
+        return {newContributor:"#A2CDE4", juniorContributor:"#84B0CD", contributor:"#6593B7", 
+          seniorContributor:"#4777A0", proContributor:"#285A8A", topContributor:"#0A3D73"}[c]; 
         }      
         else if(Object.keys(fData[0]['freq']).includes("food")){
-        return {food:"#bdd002", facility:"#faa307", surroundings:"#ffd100", 
+        return {food:"#bdd002", facility:"#E76F51", surroundings:"#ffd100", 
           service:"#7181b2", companion:"#8bb8e8", travelling_purpose:"#795ea5"}[c]; 
         }
       }
@@ -394,8 +431,9 @@ function dashboard(id, fData, index, linkdata){
           +d.freq.service+d.freq.companion+d.freq.travelling_purpose;});
     }
     
+
     // function to handle histogram.
-    function histoGram(fD, nLdata, legendData){
+    function histoGram(fD, nLdata){
       // console.log(nLdata);
       var hG={},    hGDim = {t: 40, r: 40, b: 0, l: 40};
       hGDim.w = 500 - hGDim.l - hGDim.r, 
@@ -415,11 +453,10 @@ function dashboard(id, fData, index, linkdata){
       var y = d3.scaleLinear().range([barY, 0])// v3 d3.scale.linear().range([hGDim.h, 0])
               .domain([0, d3.max(fD, function(d) { return d[1]; })]);
 
-      var tooltip = d3.select(id).append("div").attr("class", "toolTip");
-
       // Create bars for histogram to contain rectangles and freq labels.
       var bars = hGsvg.selectAll(".bar").data(fD).enter()
               .append("g").attr("class", "bar");
+      
       //create the rectangles.
       bars.append("rect")
           .attr("x", function(d) { 
@@ -436,22 +473,22 @@ function dashboard(id, fData, index, linkdata){
           })
           .attr('fill',barColor)
           .on("mouseover", mouseover)
-          .on('mousemove', mousemove)
           .on("mouseout", mouseout);
-
+          
       //Create the frequency labels above the rectangles.
       bars.append("text").text(function(d){ return d3.format(",")(d[1])})
           .attr("x", function(d) { return x(d[0])+x.bandwidth()/2; })
           .attr("y", function(d) { return y(d[1])-10; })
           .attr("text-anchor", "middle");  
       
-      
+      bars.attr("id", "tooltip")
+
       // Add x-axis to the histogram svg.
       hGsvg.append("g").attr("class", "x axis")
-          .style("font-size", "18px")
-          .attr("class", "white")
+          // .style("font-size", "9px")
           .attr("transform", "translate(0," + hGDim.h/2 + ")")
           .call(d3.axisTop().tickSize(0).scale(x));
+      
       
       //*****add sankey chart in this svg*******//
       var maxNodeY = Math.max(nLdata.links[0].value, nLdata.links[1].value,
@@ -549,25 +586,19 @@ function dashboard(id, fData, index, linkdata){
           .sort(null)
           .value(function(d) { return d.value; });
     
-    
+    var pieInd = 5;
     var g = node.filter(function(d){
+        pieInd -= 1;
         return d.pieData;
       }).append("g")
       .attr('transform', function(d,i){ // have been transformed by d.x d.y
         return 'translate('+d.dy/2+',' + 0 + ')';// just change d.x
       })
       .attr("class","pie")
-      .attr("id", function(d){
-        return "pieId" + d.pieId;
-      })
       .selectAll(".arc")
       .data(function(d){return pie(d.pieData);})
       .enter().append("g")
-      .attr("class", "arc")
-      .attr("id", function(d){
-        console.log(d.index);
-        return "arc" + d.index;
-      });
+      .attr("class", "arc");
 
       g.append("path")
         .attr("d", arc)
@@ -584,63 +615,20 @@ function dashboard(id, fData, index, linkdata){
     // }
     
     function mouseover(d){  // utility function to be called on mouseover.
-      //tooltip
-      tooltip.style('display', 'inline');
-      
-      // grey pie
-      var curPieId = parseInt(d[0]);
-      // console.log("moveon", curPieId);
-      for (i = 1; i < 6; i++)
-      { if (i != curPieId){
-          var tagDiv = $("#dashboard" + index).find(".sankeyPie");
-          var pieDiv = tagDiv.find("#pieId" + i);
-          pieDiv.find("path").css({fill: "#CDD0D3"});
-          // $("#pieId" + i).find("path").css({fill: "#CDD0D3"});
-        }else{
-          continue;
-      }}
-      // filter for selected state.
-      // var st = fData.filter(function(s){ return s.State == d[0];})[0],
-      //     nD = d3.keys(st.freq).map(function(s){ return {type:s, freq:st.freq[s]};});
-      // leg.update(nD);
-    }
-
-    function  mousemove(d) {
-        var xPosition = d3.mouse(this)[0] + 10;//d3.event.pageX;
-        var yPosition = d3.mouse(this)[1];    //d3.event.pageY;
+        // $('.arc').find("path");
+        console.log(d);
+        // filter for selected state.
         var st = fData.filter(function(s){ return s.State == d[0];})[0],
             nD = d3.keys(st.freq).map(function(s){ return {type:s, freq:st.freq[s]};});
-        console.log("mousemove", nD[0]);
+        leg.update(nD);
 
-        tooltip
-          // .attr("transform", "translate(" + xPosition + "," + yPosition + ")")
-          .style("left", xPosition  + "px")
-          .style("top", yPosition + "px")
-          .style("display", "inline-block")
-          .html(nD[0].type + " " + nD[0].freq + "<br>"
-              + nD[1].type + " " + nD[1].freq + "<br>"
-              + nD[2].type + " " + nD[2].freq + "<br>"
-              + nD[3].type + " " + nD[3].freq + "<br>"
-              + nD[4].type + " " + nD[4].freq);
+        //grey other bar-pies
+        console.log(nLdata);
     }
     
     function mouseout(d){    // utility function to be called on mouseout.
-        //tooltip
-        tooltip.style('display', 'none');
-        //remove grey
-        var curPieId = parseInt(d[0]);
-        // console.log("moveout", curPieId);
-        for (i = 1; i < 6; i++){
-          if (i != curPieId){
-            var tagDiv = $("#dashboard" + index).find(".sankeyPie");
-            var pieDiv = tagDiv.find("#pieId" + i);
-            pieDiv.find("path").css({fill: ""});
-            // $("#pieId" + i).find("path").css({fill: ""});
-          }
-        }
-        
         // reset the pie-chart and legend.    
-        // leg.update(tF);
+        leg.update(tF);
     }
     
     // create function to update the bars. This will be used by pie-chart.
@@ -689,26 +677,26 @@ function dashboard(id, fData, index, linkdata){
     tr.append("td").text(function(d){ return d.type;});
 
     // create the third column for each segment.
-    // tr.append("td").attr("class",'legendFreq')
-    //     .text(function(d){ return d3.format(",")(d.freq);});
+    tr.append("td").attr("class",'legendFreq')
+        .text(function(d){ return d3.format(",")(d.freq);});
 
-    // // create the fourth column for each segment.
-    // tr.append("td").attr("class",'legendPerc')
-    //     .text(function(d){ 
-    //       return getLegend(d,lD);
-    //     });
+    // create the fourth column for each segment.
+    tr.append("td").attr("class",'legendPerc')
+        .text(function(d){ 
+          return getLegend(d,lD);
+        });
 
     // Utility function to be used to update the legend.
-    // leg.update = function(nD){
-    //     // update the data attached to the row elements.
-    //     var l = legend.select("tbody").selectAll("tr").data(nD);
-        
-    //     // update the frequencies.
-    //     l.select(".legendFreq").text(function(d){ return d3.format(",")(d.freq);});
+    leg.update = function(nD){
+        // update the data attached to the row elements.
+        var l = legend.select("tbody").selectAll("tr").data(nD);
 
-    //     // update the percentage column.
-    //     l.select(".legendPerc").text(function(d){ return getLegend(d,nD);});        
-    // }
+        // update the frequencies.
+        l.select(".legendFreq").text(function(d){ return d3.format(",")(d.freq);});
+
+        // update the percentage column.
+        l.select(".legendPerc").text(function(d){ return getLegend(d,nD);});        
+    }
     
     function getLegend(d,aD){ // Utility function to compute percentage.
         // return d3.format("%")(d.freq/d3.sum(aD.map(function(v){ return v.freq; })));
@@ -730,6 +718,8 @@ function dashboard(id, fData, index, linkdata){
         hG.update(fData.map(function(v){
             return [v.State,v.total];}), barColor);
     }
+
+
       return leg;
     }
 
@@ -792,7 +782,6 @@ function dashboard(id, fData, index, linkdata){
     },{
       "node": 5,
       "name": "6",
-      "pieId": 5,
       "pieData": [{
         "value": Math.random()
       },{
@@ -807,7 +796,6 @@ function dashboard(id, fData, index, linkdata){
     },{
       "node": 6,
       "name": "7",
-      "pieId": 4,
       "pieData": [{
         "value": Math.random()
       },{
@@ -823,7 +811,6 @@ function dashboard(id, fData, index, linkdata){
     {
       "node": 7,
       "name": "8",
-      "pieId": 3,
       "pieData": [{
         "value": Math.random()
       },{
@@ -839,7 +826,6 @@ function dashboard(id, fData, index, linkdata){
     {
       "node": 8,
       "name": "9",
-      "pieId": 2,
       "pieData": [{
         "value": Math.random()
       },{
@@ -854,7 +840,6 @@ function dashboard(id, fData, index, linkdata){
     }, {
       "node": 9,
       "name": "10",
-      "pieId": 1,
       "pieData": [{
         "value": Math.random()
       },{
@@ -948,7 +933,7 @@ function dashboard(id, fData, index, linkdata){
 
 
     //sankeyPie(linkDataEmo);
-    var hG = histoGram(sF, linkDataEmo, tF), // create the histogram.
+    var hG = histoGram(sF, linkDataEmo), // create the histogram.
         leg= legend(tF, '#legend' + index);  // create the legend.
 
 }
