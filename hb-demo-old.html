@@ -41,18 +41,30 @@
     <div class="container">
       <h1>{{title}}</h1>
       <div class="body">
-        {{#each hotels as |hotel| }}
-          <h2 id="hotel-{{hotel.index}}">{{addone hotel.index}} {{hotel.name}}</h2>
-          <p>{{hotel.description}}</p>
-          <h5>Reviews:</h5>
-          {{#each hotel.reviews as |review|}}
-            <p>{{review.content}} {{review.rating}}</p>
-          {{/each}}
-          {{> reviewmodal hotel=hotel}}
-          <div id="vis-{{hotel.index}}"></div>
-        {{/each}}
+        <button type="button" class="btn btn-primary" onclick="sortHotels(['rating'], ['asc'])">
+          SortByRating
+        </button>
+        <button type="button" class="btn btn-primary" onclick="sortHotels(['name'], ['asc'])">
+          SortByName
+        </button>
+        <div id="body-hotel-list">
+          {{> hotellist hotels=hotels}}
+        </div>
       </div>
     </div>
+  </script>
+
+  <script id="hotellist-template" type="text/x-handlebars-template">
+    {{#each hotels as |hotel| }}
+      <h2 id="hotel-{{hotel.index}}">{{addone hotel.index}} {{hotel.name}}</h2>
+      <p>{{hotel.description}}</p>
+      <h5>Reviews:</h5>
+      {{#each hotel.reviews as |review|}}
+        <p>{{review.content}} {{review.rating}}</p>
+      {{/each}}
+      {{> reviewmodal hotel=hotel}}
+      <div id="vis-{{hotel.index}}"></div>
+    {{/each}}
   </script>
 
   <script id="modal-template" type="text/x-handlebars-template">
@@ -102,6 +114,7 @@
     hotels: [{ 
         name: 'Hotel A',
         description: 'Hotel A is a 5-star luxury hotel.',
+        rating: 3.5,
         reviews: [{
           content: "It's good!",
           rating: 5
@@ -129,6 +142,7 @@
       }, {
         name: 'Hotel B',
         description: 'Hotel B is a 3-star economy hotel.',
+        rating: 3,
         reviews: [{
           content: "It's ok!",
           rating: 4
@@ -166,6 +180,19 @@
     }
   </script>
   <script>
+    var source = document.getElementById("hotellist-template").innerHTML;
+    var hotellistTemplate = Handlebars.compile(source);
+
+    function sortHotels(attrs, orders) {
+      var sorted = _.orderBy(context.hotels, attrs, orders);
+      console.log(sorted);
+      var rendered = hotellistTemplate({hotels: sorted});
+      // console.log(rendered); // Debug
+      document.getElementById(`body-hotel-list`).innerHTML = rendered;
+      embedVis();
+    }
+  </script>
+  <script>
     var source = document.getElementById("reviewlist-template").innerHTML;
     var reviewlistTemplate = Handlebars.compile(source);
 
@@ -183,6 +210,7 @@
     Handlebars.registerHelper('addone', value => value + 1);
 
     // Partials, like a component
+    Handlebars.registerPartial('hotellist', document.getElementById("hotellist-template").innerHTML);
     Handlebars.registerPartial('reviewmodal', document.getElementById("modal-template").innerHTML);
     Handlebars.registerPartial('reviewlist', document.getElementById("reviewlist-template").innerHTML);
 
@@ -196,28 +224,31 @@
 
   <script type="text/javascript">
     // code to run after the elements are created
-    context.hotels.forEach(hotel => {
-      var vegaSpec = {
-        $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
-        description: 'A simple bar chart with embedded data.',
-        data: { values: hotel.data },
-        mark: 'bar',
-        encoding: {
-          x: {
-            field: 'a',
-            type: 'ordinal'
-          },
-          y: {
-            field: 'b',
-            type: 'quantitative'
+    function embedVis () {
+      context.hotels.forEach(hotel => {
+        var vegaSpec = {
+          $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
+          description: 'A simple bar chart with embedded data.',
+          data: { values: hotel.data },
+          mark: 'bar',
+          encoding: {
+            x: {
+              field: 'a',
+              type: 'ordinal'
+            },
+            y: {
+              field: 'b',
+              type: 'quantitative'
+            }
           }
         }
-      }
-      vegaEmbed('#vis-' + hotel.index, vegaSpec)
-      $('#modal-' + hotel.index).on('shown.bs.modal', function (e) {
-        vegaEmbed('#modal-vis-' + hotel.index, vegaSpec)
+        vegaEmbed('#vis-' + hotel.index, vegaSpec)
+        $('#modal-' + hotel.index).on('shown.bs.modal', function (e) {
+          vegaEmbed('#modal-vis-' + hotel.index, vegaSpec)
+        })
       })
-    })
+    }
+    embedVis()
   </script>
 </body>
 
