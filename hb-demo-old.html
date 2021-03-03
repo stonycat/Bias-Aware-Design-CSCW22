@@ -109,6 +109,10 @@
         {
           content: "I don't like it!",
           rating: 1
+        },
+        {
+          content: "OK 5 points!",
+          rating: 5
         }
         ],
         data: [
@@ -164,10 +168,13 @@
   <script>
     var source = document.getElementById("reviewlist-template").innerHTML;
     var reviewlistTemplate = Handlebars.compile(source);
+
+
     function filterReviews(hotelIndex, filterParams) {
       var reviews = _.filter(context.hotels[hotelIndex].reviews, filterParams)
+      console.log(reviews);
       var rendered = reviewlistTemplate({reviews});
-      // console.log(rendered); // Debug
+      console.log(rendered); // Debug
       document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
     }
   </script>

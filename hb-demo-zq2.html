@@ -35,6 +35,8 @@
   <script src="js/data/contriData.js"></script>
   <script src="js/data/keywords.js"></script>
   <script src="https://kit.fontawesome.com/4421af3ebc.js" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://unpkg.com/lodash@4.17.20/lodash.min.js"></script>
+  
   <script src="json/Alhambra_Hotel_95_4.0.js"></script>
   <script src="json/Best_Western_Swiss_Cottage_Hotel_120_3.5.js"></script>
   <script src="json/Camden_Enterprise_Hotel_106_4.5.js"></script>
@@ -191,77 +193,25 @@
             </button>
           </div>
 
-        <!-- <div class="container"> -->
+
           <div class="modal-body">
-            <!-- <div class="row"> -->
-              <!-- <div class="col-md-5"> -->
             <div id="modal-vis-{{hotel.index}}"></div>
-              <!-- </div> -->
+            <!--filter-->
+            <button type="button" class="btn btn-primary" onclick="filterReviews({{hotel.index}}, {currentRating: '5.0'})">Fliter</button>
             
-            <!-- <div class="col-md-7"> -->
               <div class="tab-pane fade active show" id="pills-reviews" role="tabpanel" aria-labelledby="pills-reviews-tab">
                 <div class="bg-white rounded shadow-sm p-4 mb-4 restaurant-detailed-ratings-and-reviews">
                   <h5 class="mb-1">All Reviews</h5>
                     <div class="reviews-members pt-4 pb-4">
-                      {{#each hotel.reviews as |review|}}
-                      <div class="media" id=review-{{hotel.index}}>
-                          <a href="#"><img alt="Avatar" src="user-img.png" class="mr-3 rounded-pill" 
-                          style="border-radius: 50rem; width: 56px;
-                            height: 56px;"></a>
-                          <div class="media-body">
-                            <div class="reviews-members-header">
-                              <h6 class="mb-1"><a class="text-black" href="#">{{review.user_name}}</a></h6>
-                              <p class="mb-1 text-muted">{{review.user_wrote_time}}</p>
-                              <small>Contributions: {{review.contriNum}} &nbsp; &nbsp; &nbsp; Helpful number: {{review.helpfulNum}}</small> 
-                              <div class="rating">
-                                {{#ifEquals review.currentRating '5.0'}}
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                {{/ifEquals}}
-                                {{#ifEquals review.currentRating '4.0'}}
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                {{/ifEquals}}
-                                {{#ifEquals review.currentRating '3.0'}}
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                {{/ifEquals}}
-                                {{#ifEquals review.currentRating '2.0'}}
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                {{/ifEquals}}
-                                {{#ifEquals review.currentRating '1.0'}}
-                                <i class="fas fa-star"></i>
-                                {{/ifEquals}}
-                              </div>
-                              <div class = "review_content">
-                                <p class = "contents">{{review.content}}</p>
-                              
-                                <a href = "##" class = "readmore">Read More</a>
-                              
-                                <p>Keywords # 
-                                {{#each review.keywords as |word|}} 
-                                  <span class="badge">{{word}}</span> 
-                                {{/each}}</p>
-                              </div>
-                          </div>
+                      <!--replace-->
+                        <div id="modal-reviews-{{hotel.index}}">
+                          {{> reviewlist reviews=hotel.reviews}}
                         </div>
-                      </div>
-                      {{/each}}
+                      <!--replace-->
                       <a href="#" class = "loading-hotel-{{hotel.index}}">Load More</a>
-                    </div>
-                    <!-- <a class="text-center w-100 d-block mt-4 font-weight-bold" href="#">See All Reviews</a> -->
+                    </div>               
                   </div>
                 </div>
-            <!-- </div> -->
-            
-          <!-- </div> -->
           </div><!--modal-body end-->
         <!-- </div> -->
           
@@ -274,51 +224,7 @@
     </div><!--model fade end-->
   </script>
 
-
-
-<script type="text/javascript">
-  // read more contents from each review
-  $(function(){
-      $('.review_content').each(function(index,element){
-        var maxwidth=300;//设置最多显示的字数
-        var text_long=$(this).find("p[class = 'contents']").text();
-        var text_short = text_long.substring(0,maxwidth);
-        if(text_long.length>maxwidth){
-            $(this).find("p[class = 'contents']").html(text_short+"...");
-        };
-        var read_button = $(this).find('a');
-        read_button.click(function(){
-            if(read_button.text()==="Read More"){
-              read_button.parent().find("p[class = 'contents']").html(text_long);
-              read_button.text("Read Less");
-            } else if (read_button.text()==="Read Less"){
-              read_button.parent().find("p[class = 'contents']").html(text_short+"...");
-              read_button.text("Read More");
-            }
-        })
-      })
-  })
-</script> 
-  
-<script>
-  // load 5 more reviews each click
-  $(function(){
-    $('.reviews-members').each(function(index,element){
-      var count = 5;
-      var read_more = $(this).find("a[class^='loading-hotel']");
-      var all_reviews = $(this).find("div[class ='media']");
-      all_reviews.each(function(index,element){
-        $(this).css({"display":'none'});
-      }); 
-
-      all_reviews.slice(0,3).show();
-      read_more.click(function(){
-        count += 5;
-        all_reviews.slice(0,count).show();
-      })
-    })
-  })
-  </script>
+<!--count index-->
 
 
 <script>
@@ -327,6 +233,74 @@
     hotel.index = i;
   })
 </script>
+  
+<!--filter-->  
+<script id="reviewlist-template" type="text/x-handlebars-template">
+  {{#each hotel.reviews as |review|}}
+    <div class="media" id=review-{{hotel.index}}>
+        <a href="#"><img alt="Avatar" src="user-img.png" class="mr-3 rounded-pill" 
+        style="border-radius: 50rem; width: 56px;
+          height: 56px;"></a>
+        <div class="media-body">
+          <div class="reviews-members-header">
+            <h6 class="mb-1"><a class="text-black" href="#">{{review.user_name}}</a></h6>
+            <p class="mb-1 text-muted">{{review.user_wrote_time}}</p>
+            <small>Contributions: {{review.contriNum}} &nbsp; &nbsp; &nbsp; Helpful number: {{review.helpfulNum}}</small> 
+            <div class="rating">
+              {{#ifEquals review.currentRating '5.0'}}
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              {{/ifEquals}}
+              {{#ifEquals review.currentRating '4.0'}}
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              {{/ifEquals}}
+              {{#ifEquals review.currentRating '3.0'}}
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              {{/ifEquals}}
+              {{#ifEquals review.currentRating '2.0'}}
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              {{/ifEquals}}
+              {{#ifEquals review.currentRating '1.0'}}
+              <i class="fas fa-star"></i>
+              {{/ifEquals}}
+            </div>
+            <div class = "review_content">
+              <p class = "contents">{{review.content}}</p>
+              <a href = "##" class = "readmore">Read More</a>
+              <p>Keywords # 
+              {{#each review.keywords as |word|}} 
+                <span class="badge">{{word}}</span> 
+              {{/each}}</p>
+            </div>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</script>
+
+<script>
+    var source = document.getElementById("reviewlist-template").innerHTML; //new list
+    var reviewlistTemplate = Handlebars.compile(source);
+
+    function filterReviews(hotelIndex, filterParams) {
+      // console.log(hotelIndex, filterParams);
+      var reviews = _.filter(context.hotels[hotelIndex].reviews, filterParams);
+      console.log(reviews);
+      var rendered = reviewlistTemplate({reviews});
+      console.log(rendered); // Debug
+      document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
+    }
+</script>
+<!--handlebar-->
 <script>
   // Funcations to modify content
   Handlebars.registerHelper('addone', value => value + 1);
@@ -336,7 +310,7 @@
 
   // Partials, like a component
   Handlebars.registerPartial('reviewmodal', document.getElementById("modal-template").innerHTML);
-
+  Handlebars.registerPartial('reviewlist', document.getElementById("reviewlist-template").innerHTML);
   // Code to render data into template
   var source = document.getElementById("entry-template").innerHTML;
   var template = Handlebars.compile(source);
@@ -443,15 +417,9 @@ function dashboard(id, fData, index, linkdata){
       bars.append("text").text(function(d){ return d3.format(",")(d[1])})
           .attr("x", function(d) { return x(d[0])+x.bandwidth()/2; })
           .attr("y", function(d) { return y(d[1])-10; })
-          .attr("text-anchor", "middle");  
+          .attr("text-anchor", "middle")
+          .style();  
       
-      
-      // Add x-axis to the histogram svg.
-      hGsvg.append("g").attr("class", "x axis")
-          .style("font-size", "18px")
-          .attr("class", "white")
-          .attr("transform", "translate(0," + hGDim.h/2 + ")")
-          .call(d3.axisTop().tickSize(0).scale(x));
       
       //*****add sankey chart in this svg*******//
       var maxNodeY = Math.max(nLdata.links[0].value, nLdata.links[1].value,
@@ -574,7 +542,12 @@ function dashboard(id, fData, index, linkdata){
           // console.log(d);
           return segColor(d.data.type); 
         })
-
+    
+    // Add x-axis to the histogram svg.
+    hGsvg.append("g").attr("class", "x axis")
+          .style("font-size", "15px")
+          .attr("transform", "translate(0," + hGDim.h/2 + ")")
+          .call(d3.axisBottom().tickSize(0).scale(x));
     // function dragmove(d) {
     //   //d3.select(this).attr("transform", "translate(" + d.x + "," + (d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))) + ")");
     //   d3.select(this).attr("transform", "translate(" + (d.x = Math.max(0, Math.min(hGDim.w - d.dy, d3.event.x))) + "," + d.y + ")");
@@ -595,7 +568,7 @@ function dashboard(id, fData, index, linkdata){
           var pieDiv = tagDiv.find("#pieId" + i);
           pieDiv.find("path").css({fill: "#CDD0D3"});
           // $("#pieId" + i).find("path").css({fill: "#CDD0D3"});
-        }else{
+        } else {
           continue;
       }}
       // filter for selected state.
@@ -605,22 +578,44 @@ function dashboard(id, fData, index, linkdata){
     }
 
     function  mousemove(d) {
-        var xPosition = d3.mouse(this)[0] + 10;//d3.event.pageX;
-        var yPosition = d3.mouse(this)[1];    //d3.event.pageY;
+        var xPosition = d3.mouse(this)[0] + 40;//d3.event.pageX;
+        var yPosition = d3.mouse(this)[1] + 5;    //d3.event.pageY;
         var st = fData.filter(function(s){ return s.State == d[0];})[0],
             nD = d3.keys(st.freq).map(function(s){ return {type:s, freq:st.freq[s]};});
-        // console.log("mousemove", nD[0]);
+        var perc = [];
+        nD.forEach(function(t, ind){
+          var temp = nD[ind].freq/d3.sum(nD.map(function(v){ return v.freq; }));
+          perc[ind] = d3.format(".2%")(temp.toFixed(4));
+        })
 
+        var newHtml = [];
+        newHtml.push('<table><h6>' + d[1] +'</h6>');
+        // console.log("nD", nD);  
+        nD.forEach(function(t, ind){
+          // console.log(t);
+          newHtml.push(
+            '<tr>', 
+            '<td id="key">' + nD[ind].type + '</td>',
+            '<td id="value">' + nD[ind].freq + '</td>', 
+            '<td id="value">' + perc[ind] + '</td>', 
+            '</tr>')
+        })
+        newHtml.push('</table>');
+        // console.log("mousemove", nD[0]);
         tooltip
           // .attr("transform", "translate(" + xPosition + "," + yPosition + ")")
           .style("left", xPosition  + "px")
           .style("top", yPosition + "px")
           .style("display", "inline-block")
-          .html(nD[0].type + " " + nD[0].freq + "<br>"
-              + nD[1].type + " " + nD[1].freq + "<br>"
-              + nD[2].type + " " + nD[2].freq + "<br>"
-              + nD[3].type + " " + nD[3].freq + "<br>"
-              + nD[4].type + " " + nD[4].freq);
+          .html(newHtml.join("  "));
+          // .html('Number:' + d[1] + "<br>"
+          //     + "-----------" + "<br>"
+          //     + nD[0].type + " " + nD[0].freq + " "+ outPerc0 + "<br>"
+          //     + nD[1].type + " " + nD[1].freq + " "+ outPerc1+ "<br>"
+          //     + nD[2].type + " " + nD[2].freq + " "+ outPerc2+ "<br>"
+          //     + nD[3].type + " " + nD[3].freq + " "+ outPerc3+ "<br>"
+          //     + nD[4].type + " " + nD[4].freq + " "+ outPerc4);
+      
     }
     
     function mouseout(d){    // utility function to be called on mouseout.
@@ -953,8 +948,7 @@ function dashboard(id, fData, index, linkdata){
 
 </script>
 
-
-
+<!--switch group-->
 <script type="text/javascript">
   // code to run after the elements are created
   context.hotels.forEach(hotel => {
@@ -1071,6 +1065,50 @@ $(".btn-group > .btn").click(function(){
       }
   });
 </script>
+
+
+<!--load reviews-->
+<script type="text/javascript">
+  // read more contents from each review
+  $(function(){
+      $('.review_content').each(function(index,element){
+        var maxwidth=300;//设置最多显示的字数
+        var text_long=$(this).find("p[class = 'contents']").text();
+        var text_short = text_long.substring(0,maxwidth);
+        if(text_long.length>maxwidth){
+            $(this).find("p[class = 'contents']").html(text_short+"...");
+        };
+        var read_button = $(this).find('a');
+        read_button.click(function(){
+            if(read_button.text()==="Read More"){
+              read_button.parent().find("p[class = 'contents']").html(text_long);
+              read_button.text("Read Less");
+            } else if (read_button.text()==="Read Less"){
+              read_button.parent().find("p[class = 'contents']").html(text_short+"...");
+              read_button.text("Read More");
+            }
+        })
+      })
+  })
+
+// load 5 more reviews each click
+$(function(){
+  $('.reviews-members').each(function(index,element){
+    var count = 5;
+    var read_more = $(this).find("a[class^='loading-hotel']");
+    var all_reviews = $(this).find("div[class ='media']");
+    all_reviews.each(function(index,element){
+      $(this).css({"display":'none'});
+    }); 
+
+    all_reviews.slice(0,3).show();
+    read_more.click(function(){
+      count += 5;
+      all_reviews.slice(0,count).show();
+    })
+  })
+})
+  </script>
 
 </body>
 
