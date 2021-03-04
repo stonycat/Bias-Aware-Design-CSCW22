@@ -28,7 +28,7 @@
   <script src="https://kit.fontawesome.com/4421af3ebc.js" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://unpkg.com/parse/dist/parse.min.js"></script>
   <script type="text/javascript" src="https://unpkg.com/lodash@4.17.20/lodash.min.js"></script>
-  <script src="./parse.js"></script>
+  <script src="js/parse.js"></script>
 
 </head>
 
@@ -159,10 +159,12 @@
   <script>//data to backend
     parseAPI.init()
     function recordResult() {
+      
       parseAPI.saveResult(
-        {username: 'hello', q1: true, q2: false}, 
+        {username: 'hello, 3.3', q1: true, q2: false}, 
         {anything: 'you wanna add', numbers: 123, but: {better: 'not object'}} //not obj
       ) 
+      console.log("send msg to backend");
     }
   </script>
   <script>
