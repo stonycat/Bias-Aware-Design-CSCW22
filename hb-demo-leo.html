@@ -28,7 +28,9 @@
   <script src="https://kit.fontawesome.com/4421af3ebc.js" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://unpkg.com/parse/dist/parse.min.js"></script>
   <script type="text/javascript" src="https://unpkg.com/lodash@4.17.20/lodash.min.js"></script>
+
   <script src="js/parse.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/RubaXa/Sortable/Sortable.min.js"></script>
 
 </head>
 
@@ -41,18 +43,58 @@
     <div class="container">
       <h1>{{title}}</h1>
       <div class="body">
-        {{#each hotels as |hotel| }}
-          <h2 id="hotel-{{hotel.index}}">{{addone hotel.index}} {{hotel.name}}</h2>
-          <p>{{hotel.description}}</p>
-          <h5>Reviews:</h5>
-          {{#each hotel.reviews as |review|}}
-            <p>{{review.content}} {{review.rating}}</p>
-          {{/each}}
-          {{> reviewmodal hotel=hotel}}
-          <div id="vis-{{hotel.index}}"></div>
-        {{/each}}
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-picktop">
+          Picked Top 3
+        </button>
+        <div class="modal fade" id="modal-picktop" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Rearrange the hotels</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" id="picktop-modal-body">
+                
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="modal-picktop-save" type="button" class="btn btn-primary" onclick="recordOrder()">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" onclick="sortHotels(['rating'], ['asc'])">
+          SortByRating
+        </button>
+        <button type="button" class="btn btn-primary" onclick="sortHotels(['name'], ['asc'])">
+          SortByName
+        </button>
+        <div id="body-hotel-list">
+          {{> hotellist hotels=hotels}}
+        </div>
       </div>
     </div>
+  </script>
+
+  <script id="hotellist-template" type="text/x-handlebars-template">
+    {{#each hotels as |hotel| }}
+      <h2 id="hotel-{{hotel.index}}">{{addone hotel.index}} {{hotel.name}}</h2>
+      {{#if hotel.checked}}
+        <input class="form-check-input" type="checkbox" value="" id="checkbox-hotel-{{hotel.index}}" onchange="pickHotel({{hotel.index}})" checked>
+      {{else}}
+        <input class="form-check-input" type="checkbox" value="" id="checkbox-hotel-{{hotel.index}}" onchange="pickHotel({{hotel.index}})">
+      {{/if}}
+      <p>{{hotel.description}}</p>
+      <h5>Reviews:</h5>
+      {{#each hotel.reviews as |review|}}
+        <p>{{review.content}} {{review.rating}}</p>
+      {{/each}}
+      {{> reviewmodal hotel=hotel}}
+      <div id="vis-{{hotel.index}}"></div>
+    {{/each}}
   </script>
 
   <script id="modal-template" type="text/x-handlebars-template">
@@ -102,6 +144,7 @@
     hotels: [{ 
         name: 'Hotel A',
         description: 'Hotel A is a 5-star luxury hotel.',
+        rating: 3.5,
         reviews: [{
           content: "It's good!",
           rating: 5
@@ -129,6 +172,106 @@
       }, {
         name: 'Hotel B',
         description: 'Hotel B is a 3-star economy hotel.',
+        rating: 3,
+        reviews: [{
+          content: "It's ok!",
+          rating: 4
+        },
+        {
+          content: "Price is cheap, but not comfortable!",
+          rating: 2
+        }
+        ],
+        data: [
+          { a: 'A', b: 91 },
+          { a: 'B', b: 63 },
+          { a: 'C', b: 101 },
+          { a: 'D', b: 38 },
+          { a: 'E', b: 53 },
+          { a: 'F', b: 65 },
+          { a: 'G', b: 97 },
+          { a: 'H', b: 29 },
+          { a: 'I', b: 62 }
+        ]
+      }, {
+        name: 'Hotel F',
+        description: 'Hotel B is a 3-star economy hotel.',
+        rating: 4,
+        reviews: [{
+          content: "It's ok!",
+          rating: 4
+        },
+        {
+          content: "Price is cheap, but not comfortable!",
+          rating: 2
+        }
+        ],
+        data: [
+          { a: 'A', b: 91 },
+          { a: 'B', b: 63 },
+          { a: 'C', b: 101 },
+          { a: 'D', b: 38 },
+          { a: 'E', b: 53 },
+          { a: 'F', b: 65 },
+          { a: 'G', b: 97 },
+          { a: 'H', b: 29 },
+          { a: 'I', b: 62 }
+        ]
+      }, {
+        checked: true,
+        name: 'Hotel C',
+        description: 'Hotel B is a 3-star economy hotel.',
+        rating: 5,
+        reviews: [{
+          content: "It's ok!",
+          rating: 4
+        },
+        {
+          content: "Price is cheap, but not comfortable!",
+          rating: 2
+        }
+        ],
+        data: [
+          { a: 'A', b: 91 },
+          { a: 'B', b: 63 },
+          { a: 'C', b: 101 },
+          { a: 'D', b: 38 },
+          { a: 'E', b: 53 },
+          { a: 'F', b: 65 },
+          { a: 'G', b: 97 },
+          { a: 'H', b: 29 },
+          { a: 'I', b: 62 }
+        ]
+      }, {
+        checked: true,
+        name: 'Hotel D',
+        description: 'Hotel B is a 3-star economy hotel.',
+        rating: 2,
+        reviews: [{
+          content: "It's ok!",
+          rating: 4
+        },
+        {
+          content: "Price is cheap, but not comfortable!",
+          rating: 2
+        }
+        ],
+        data: [
+          { a: 'A', b: 91 },
+          { a: 'B', b: 63 },
+          { a: 'C', b: 101 },
+          { a: 'D', b: 38 },
+          { a: 'E', b: 53 },
+          { a: 'F', b: 65 },
+          { a: 'G', b: 97 },
+          { a: 'H', b: 29 },
+          { a: 'I', b: 62 }
+        ]
+      }, {
+        checked: true,
+        name: 'Hotel E',
+        description: 'Hotel B is a 3-star economy hotel.',
+        rating: 1,
         reviews: [{
           content: "It's ok!",
           rating: 4
@@ -158,13 +301,32 @@
   </script>
   <script>//data to backend
     parseAPI.init()
-    function recordResult() {
+      function recordResult() {
       
-      parseAPI.saveResult(
-        {username: 'hello, 3.3', q1: true, q2: false}, 
-        {anything: 'you wanna add', numbers: 123, but: {better: 'not object'}} //not obj
-      ) 
+        parseAPI.saveResult(
+          {username: 'hello, 3.3', q1: true, q2: false}, 
+          {anything: 'you wanna add', numbers: 123, but: {better: 'not object'}} //not obj
+        ) 
       console.log("send msg to backend");
+    }
+  </script>
+  <script>
+    function pickHotel(hotelIndex) {
+      var hotel = _.find(context.hotels, {index: hotelIndex});
+      hotel.checked = !hotel.checked
+    }
+  </script>
+  <script>
+    var source = document.getElementById("hotellist-template").innerHTML;
+    var hotellistTemplate = Handlebars.compile(source);
+
+    function sortHotels(attrs, orders) {
+      var sorted = _.orderBy(context.hotels, attrs, orders);
+      console.log(sorted);
+      var rendered = hotellistTemplate({hotels: sorted});
+      // console.log(rendered); // Debug
+      document.getElementById(`body-hotel-list`).innerHTML = rendered;
+      embedVis();
     }
   </script>
   <script>
@@ -183,8 +345,10 @@
   <script>
     // Funcations to modify content
     Handlebars.registerHelper('addone', value => value + 1);
+    Handlebars.registerHelper('isEqual', (value, equalTo) => value === equalTo);
 
     // Partials, like a component
+    Handlebars.registerPartial('hotellist', document.getElementById("hotellist-template").innerHTML);
     Handlebars.registerPartial('reviewmodal', document.getElementById("modal-template").innerHTML);
     Handlebars.registerPartial('reviewlist', document.getElementById("reviewlist-template").innerHTML);
 
@@ -196,30 +360,67 @@
     document.getElementById('handlebars-rendering-target').innerHTML = rendered;
   </script>
 
+  <script id="reorderinglist-template" type="text/x-handlebars-template">
+    {{#if (isEqual items.length 3)}}
+      <ul class="list-group" id="reorderingitems">
+        {{#each items as |item|}}
+          <li class="list-group-item">{{item.name}}</li>
+        {{/each}}
+      </ul>
+    {{else}}
+      You have picked {{items.length}} hotels. Please pick 3 hotels first.
+    {{/if}}
+  </script>
+
+  <script>
+    var source = document.getElementById("reorderinglist-template").innerHTML;
+    var reorderinglistTemplate = Handlebars.compile(source);
+
+    $('#modal-picktop').on('shown.bs.modal', function (e) {
+      var topHotels = _.filter(context.hotels, {checked: true});
+      var rendered = reorderinglistTemplate({items: topHotels})
+      document.getElementById('picktop-modal-body').innerHTML = rendered;
+      if (topHotels.length === 3) {
+        var reorderingitems = document.getElementById('reorderingitems');
+        Sortable.create(reorderingitems, { animation: 100, group: 'list-1', draggable: '.list-group-item', handle: '.list-group-item', sort: true, filter: '.sortable-disabled', chosenClass: 'active' });
+        $('#modal-picktop-save').prop('disabled', false);
+      } else {
+        $('#modal-picktop-save').prop('disabled', true);
+      }
+    })
+
+    function recordOrder() {
+      var items = $('#reorderingitems li').map(function(){return $(this).text()}).get();
+      console.log(items)
+    }
+  </script>
   <script type="text/javascript">
     // code to run after the elements are created
-    context.hotels.forEach(hotel => {
-      var vegaSpec = {
-        $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
-        description: 'A simple bar chart with embedded data.',
-        data: { values: hotel.data },
-        mark: 'bar',
-        encoding: {
-          x: {
-            field: 'a',
-            type: 'ordinal'
-          },
-          y: {
-            field: 'b',
-            type: 'quantitative'
+    function embedVis () {
+      context.hotels.forEach(hotel => {
+        var vegaSpec = {
+          $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
+          description: 'A simple bar chart with embedded data.',
+          data: { values: hotel.data },
+          mark: 'bar',
+          encoding: {
+            x: {
+              field: 'a',
+              type: 'ordinal'
+            },
+            y: {
+              field: 'b',
+              type: 'quantitative'
+            }
           }
         }
-      }
-      vegaEmbed('#vis-' + hotel.index, vegaSpec)
-      $('#modal-' + hotel.index).on('shown.bs.modal', function (e) {
-        vegaEmbed('#modal-vis-' + hotel.index, vegaSpec)
+        vegaEmbed('#vis-' + hotel.index, vegaSpec)
+        $('#modal-' + hotel.index).on('shown.bs.modal', function (e) {
+          vegaEmbed('#modal-vis-' + hotel.index, vegaSpec)
+        })
       })
-    })
+    }
+    embedVis()
   </script>
 </body>
 
