@@ -885,7 +885,7 @@ function dashboard(id, fData, index, linkdata){
         
         // call the update function of histogram with new data.
         hG.update(fData.map(function(v){ 
-            return [v.State,v.freq[d.type]];}),segColor(d.type));
+            return [v.State,v.freq2[d.type]];}),segColor(d.type));
     }
     //Utility function to be called on mouseout a pie slice.
     function mouseout(d){
