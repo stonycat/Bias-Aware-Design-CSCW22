@@ -171,28 +171,9 @@ h1, h2, h3, h4, h5, h6 {
 .modal-lg {
   max-width: 75%;
 }
-.axisRed text{
-  fill: red;
-}  
-.toolTip {
-  position: absolute;
-  display: none;
-  min-width: 40px;
-  height: auto;
-  background-color: white;
-  opacity: 0.9;
-  border: solid;
-  border-width: 1px;
-  padding: 4px;
-  pointer-events: none;
-  /* text-align: center; */
-  border-radius: 5px;		
-  font: 12px sans-serif;	
-  font-style: rgb(245, 245, 245);	
-}
-.toolTip text{
-  fill:red;
-}
+
+
+
 /* ------- */
 /* The switch - the box around the slider */
 .switch {
@@ -280,3 +261,32 @@ input:checked + .slider .off
 {display: none;}
 
 /*--------- END --------*/
+
+.fa-question-circle:hover {
+  color: #0275d8;
+  /* cursor: pointer; */
+}
+.toolTipBar {
+  position: absolute;
+  display: none;
+  min-width: 40px;
+  height: auto;
+  background-color: white;
+  opacity: 0.9;
+  border: solid;
+  border-width: 1px;
+  padding: 4px;
+  pointer-events: none;
+  /* text-align: center; */
+  border-radius: 5px;		
+  font: 12px sans-serif;	
+  font-style: rgb(245, 245, 245);	
+}
+
+
+
+/* path:hover {
+
+  stroke: rgb(79, 79, 79);
+  transition-delay: 0;
+} */
