@@ -230,13 +230,13 @@ input:checked + .slider:before {
 }
 
 /* Rounded sliders */
-/* .slider.round {
+.slider.round {
   border-radius: 34px;
-} */
+} 
 
-/* .slider.round:before {
+.slider.round:before {
   border-radius: 50%;
-} */
+}
 /*------ ADDED CSS ---------*/
 .on
 {
@@ -298,4 +298,8 @@ height: 1.25rem;
 #rpicktop-modal-body {
   font: 12px sans-serif;	
   font-style: rgb(0, 0, 0);	
+}
+
+input[type=checkbox] {
+  transform: scale(2.2);
 }

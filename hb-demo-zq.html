@@ -16,21 +16,15 @@
   <!-- Bootstrap4 core JavaScript
   ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
+
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
     integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
     crossorigin="anonymous"></script>
   <script>window.jQuery || document.write('<script src="js/jquery-slim.min.js"><\/script>')</script>
   <script src="https://d3js.org/d3.v4.js"></script>
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>  
+  <script src="js/sankey.js"></script>
   <script src="js/parse.js"></script>
   <script type="text/javascript" src="https://unpkg.com/parse/dist/parse.min.js"></script>
-  <script src="js/holder.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/RubaXa/Sortable/Sortable.min.js"></script>
-  <script src="js/sankey.js"></script>
-  <script src="https://kit.fontawesome.com/4421af3ebc.js" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="https://unpkg.com/lodash@4.17.20/lodash.min.js"></script>
 
   <script src="js/data/emoData15.js"></script>
   <script src="js/data/contriData15.js"></script>
@@ -74,15 +68,15 @@
           </div>
         </div>
       </header>
-
+<!-- Imagine that you are going on vacation to London, a city you have never been to.  -->
       <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
         <div class="col-md-12 px-0">
           <h1 class="display-5 font-italic">Task Design</h1>
-          <p class="lead">Imagine that you are going on vacation to New York, a city you have never been to. 
-            Now you need to book a hotel online in advance. 
-            Here we provide some 4-stars hotels for you to choose from.</p>
-          <!-- <p class="lead mb-0"><a href="#" class="text-white font-weight-bold">Continue reading...</a></p> -->
+          <p class="lead">
+            The 15 hotels selected according to the given conditions are shown below.</p>
+            Please refer to the user feedback to select the top 3 hotels you would like to stay at most and give your reasons.
         </div>
+        <br>
         <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#modal-picktop">
           Picked Top 3
         </button>
@@ -132,7 +126,7 @@
         <div class="card flex-md-row mb-4 box-shadow h-md-280">
           <!--choose hotels-->
           {{#if hotel.checked}}
-          <input class="form-check-input" type="checkbox" value="" 
+          <input class="form-check-input selectHotel" type="checkbox" value="" 
             id="checkbox-hotel-{{hotel.index}}" onchange="pickHotel({{hotel.index}})" checked>
           {{else}}
           <input class="form-check-input" type="checkbox" value="" 
@@ -214,23 +208,25 @@
           </div>
 
           <div class="modal-body">
-            <div class="btn-group btn-group-sm" id ="groupButton{{hotel.index}}" role="group" aria-label="Basic example"></div>
-            <label class="switch" id="switchBox{{hotel.index}}" style="display:inline-block;">
-              <input type="checkbox" onclick="filterOnOff({{hotel.index}})" checked>
-              <div class="slider"></div>
-            </label>
-            <h6 id="filterText{{hotel.index}}" style="display:inline-block;">Filtering is enabled</h6>
+            <!-- <div class="btn-group btn-group-sm" id ="groupButton{{hotel.index}}" role="group" aria-label="Basic example"></div> -->
             
-            <i class="fa fa-question-circle" data-toggle="tooltip" 
-                title="You can filter reviews by clicking on elements of the chart"></i>
             <div id="modal-vis-{{hotel.index}}"></div>
-            <!--filter button-->
-            <!-- <button type="button" class="btn btn-primary" onclick="filterReviews({{hotel.index}}, {})">close</button> -->
-            <!--filter button-->
+            <div style="padding-left:30px; padding-top:20px;">
+              <label class="switch" id="switchBox{{hotel.index}}" style="display:inline-block;">
+                <input type="checkbox" onclick="filterOnOff({{hotel.index}})" checked>
+                <div class="slider round"></div>
+              </label> &nbsp;
+              <h6 id="filterText{{hotel.index}}" style="display:inline-block;">Filtering is enabled</h6>
+              <i class="fa fa-question-circle" data-toggle="tooltip" 
+                title="You can filter reviews by clicking on elements of the chart"></i>
+            </div>
+            
               <div class="tab-pane fade active show" id="pills-reviews" role="tabpanel" aria-labelledby="pills-reviews-tab">
                 <div class="bg-white rounded shadow-sm p-4 mb-4 restaurant-detailed-ratings-and-reviews">
-                  <h5 class="mb-1">All Reviews</h5>
-                    <h6 id="filterResultTxt{{hotel.index}}"></h6>
+                  
+                  <h5 class="mb-1" style="display: inline-block;">All Reviews</h5> &nbsp;
+                  <a href="#" class="text-muted" style="display: inline-block;" onclick="filterReviews({{hotel.index}}, {})">Show all</a>
+                    <h6 id="filterResultTxt{{hotel.index}}" style="padding-bottom: 10px;" class="text-muted"></h6>
                     <div class="reviews-members pt-4 pb-4">
                       <!--replace block-->
                         <div id="modal-reviews-{{hotel.index}}">
@@ -267,14 +263,14 @@
 <script id="reviewlist-template" type="text/x-handlebars-template">
   {{#each reviews as |review|}}  
     <div class="media" id=review-{{hotel.index}}>
-        <a href="#"><img alt="Avatar" src="user-img.png" class="mr-3 rounded-pill" 
+        <a><img alt="Avatar" src="user-img.png" class="mr-3 rounded-pill" 
         style="border-radius: 50rem; width: 56px;
           height: 56px;"></a>
         <div class="media-body">
           <div class="reviews-members-header">
-            <h6 class="mb-1"><a class="text-black" href="#">{{review.user_name}}</a></h6>
+            <h6 class="mb-1"><a class="text-primary">{{review.user_name}}</a></h6>
             <p class="mb-1 text-muted">{{review.user_wrote_time}}</p>
-            <p class="mb-1 text-muted">{{review.polarity}}</p>
+            <!-- <p class="mb-1 text-muted">Emotional polarity: {{review.polarity}}</p> -->
             <small>Contributions: {{review.contriNum}} &nbsp; &nbsp; &nbsp; Helpful number: {{review.helpfulNum}}</small> 
             <div class="rating">
               {{#ifEquals review.currentRating '5.0'}}
@@ -310,9 +306,8 @@
               {{#each review.keywords as |word|}} 
                 <span class="badge">{{word}}</span> 
               {{/each}}</p> -->
-              <p>category #
-                {{#each review.categories as |word|}} 
-                <span class="badge">{{word}}</span> 
+              <p>{{#each review.categories as |word|}} 
+                <span class="badge bg-primary text-light">{{word}}</span> 
                 {{/each}}</p>
             </div>
         </div>
@@ -335,6 +330,8 @@
       var rendered = reviewlistTemplate({reviews});
       // console.log(rendered); // Debug
       document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
+      loadSingleReview();
+      // loadMoreReviews();
     }
 
     function filterCategory(hotelIndex, filterParams) {
@@ -396,7 +393,8 @@
 
       var rendered = reviewlistTemplate({reviews});
       document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
-
+      loadSingleReview();
+      // loadMoreReviews();
     }
 
     function filter2Criteria(hotelIndex, filterParams1, filterParams2) {
@@ -455,20 +453,44 @@
       showNumFilter(hotelIndex, reviews.length);
       var rendered = reviewlistTemplate({reviews});
       document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
+
+      loadSingleReview();
+      // loadMoreReviews();
     }
 
     function showNumFilter(index, num) {
       var txtDiv = document.getElementById('filterResultTxt'+ index);
-      txtDiv.innerHTML = "Here are " + num + " reviews that meet the criteria";
+      if (num > 1) {
+        txtDiv.innerHTML = "( " + num + " reviews)";
+      } else {
+        txtDiv.innerHTML = "( " + num + " review)";
+      }
+      
     }
 
     function filterOnOff(index) {
-      var curF = document.getElementById('filterText'+ index);
+      var curF = document.getElementById('filterText' + index);
       if (curF.innerHTML == "Filtering is enabled"){
+        //close
         curF.innerHTML = "Filtering is disabled";
+        d3.selectAll("rect").on('click',null);
+        d3.selectAll(".arc").on('click',null);
+        // $('.arc').prop('disabled',true);
+        // $('rect').prop('disabled',true);
       } else {
+        //open
         curF.innerHTML = "Filtering is enabled";
+        d3.select("svg").remove();
+        var legendRemove = $("#legend" + index);
+        legendRemove.remove();
+        var bg = $("#groupButton" + index);
+        bg.remove();
+
+        embedVis();
+        groupClick();
       }
+
+
 
     }
 
@@ -514,6 +536,9 @@
       // console.log(rendered); // Debug
       document.getElementById(`body-hotel-list`).innerHTML = rendered;
       embedVis();
+      groupClick();
+      loadSingleReview();
+      loadMoreReviews();
     }
     
 </script>
@@ -675,11 +700,14 @@ function dashboard(id, fData, index, linkdata){
             else {return 2*hGDim.h/3 - y(d[1]); }
           })
           .attr('fill',barColor)
+          .attr("id", function(d){
+            return "barRect-" + d[0];
+          })
           .on("mouseover", mouseover)
           .on('mousemove', mousemove)
           .on("mouseout", mouseout)
           .on("click", function(d) { 
-            var filterObj = {}
+            var filterObj = {};
             if (d[0] == "5"){
               var filterObj = {currentRating: "5.0"};
             } else if(d[0] == "4"){
@@ -691,8 +719,9 @@ function dashboard(id, fData, index, linkdata){
             } else if(d[0] == "1"){
               var filterObj = {currentRating: "1.0"};
             }
-            $(this).css('border-color', 'lime');
-            filterReviews(index, filterObj)
+            // d3.select(this).attr("stroke", "#883C44");
+            // d3.select(this).attr("stroke-width", 2);
+            filterReviews(index, filterObj);
           });
 
       //Create the frequency labels above the rectangles.
@@ -975,10 +1004,15 @@ function dashboard(id, fData, index, linkdata){
     // create the first column for each segment.
     tr.append("td").append("svg").attr("width", '16').attr("height", '16').append("rect")
         .attr("width", '16').attr("height", '16')
+        .attr("id", function(d){
+            return "legendRect-" + d.type;
+          })
         .attr("fill",function(d){ return segColor(d.type); })
         .on("mouseover", mouseover).on("mouseout",mouseout)
         .on("click", function(d) { 
             filterCategory(index, d.type);
+            // d3.select(this).attr("stroke", "black");
+            // d3.select(this).attr("stroke-width", 5);
           });
       
     // create the second column for each segment.
@@ -1275,8 +1309,13 @@ function embedVis() {
     
     // var buttonDiv = document.getElementById("modal-button-" + hotel.index);
     // buttonDiv.class = 'row';
-
-    var buttonGroup = document.getElementById('groupButton' + hotel.index);
+    
+    var buttonGroup = document.createElement('div');
+    buttonGroup.classList.add("btn-group", "btn-group-sm");
+    buttonGroup.id = "groupButton" + hotel.index;
+    buttonGroup.setAttribute("role", "group");
+    buttonGroup.setAttribute("aria-label", "Basic example");
+    // var buttonGroup = document.getElementById('groupButton' + hotel.index);
     buttonGroup.style.paddingLeft = '30px';
     buttonGroup.style.paddingRight = '30px';
     
@@ -1309,9 +1348,9 @@ function embedVis() {
     
     visDiv.appendChild(dashboardDiv);
     visDiv.appendChild(legendDiv);
-    // buttonDiv.appendChild(buttonGroup);
+    visDiv.appendChild(buttonGroup);
     // buttonDiv.appendChild(filterBox);
-    // buttonDiv.insertAdjacentElement('beforebegin', buttonGroup);
+    visDiv.insertAdjacentElement('beforebegin', buttonGroup);
     
     var hotelCategoryData = JSON.parse(JSON.stringify(hotelEmoAll[hotel.index]));
     
@@ -1321,67 +1360,71 @@ function embedVis() {
 
   })
 }
+
 embedVis();
 </script>
 <script>
-$(".btn-group > .btn").click(function(){
-      $(".btn-group > .btn").removeClass("active");
-      $(this).addClass("active");
-      // console.log(this.id);
-      
-      if (this.id.includes('Contri')) {
-        // console.log("switch contri");
-        var curInd = this.id.replace('buttonContri', '');
-        var contriLoad = JSON.parse(JSON.stringify(hotelContriAll[curInd]));
-        var removeLegend = document.getElementById('legend' + curInd);
-        removeLegend.innerHTML = '';
-        var removeBar = document.getElementById('dashboard' + curInd);
-        removeBar.innerHTML = '';
+  function groupClick() {
+    $(".btn-group > .btn").click(function(){
+          $(".btn-group > .btn").removeClass("active");
+          $(this).addClass("active");
+          // console.log(this.id);
+          
+          if (this.id.includes('Contri')) {
+            // console.log("switch contri");
+            var curInd = this.id.replace('buttonContri', '');
+            var contriLoad = JSON.parse(JSON.stringify(hotelContriAll[curInd]));
+            var removeLegend = document.getElementById('legend' + curInd);
+            removeLegend.innerHTML = '';
+            var removeBar = document.getElementById('dashboard' + curInd);
+            removeBar.innerHTML = '';
 
-        dashboard('#dashboard'+ curInd, contriLoad, curInd, linkNumAll[curInd]);
-        
-      } 
-      else if (this.id.includes('Emo')) {
-        // console.log("switch emo");
-        var curInd = this.id.replace('buttonEmo', '');
-        var emoLoad = JSON.parse(JSON.stringify(hotelEmoAll[curInd]));
-        var removeLegend = document.getElementById('legend' + curInd);
-        removeLegend.innerHTML = '';
-        var removeBar = document.getElementById('dashboard' + curInd);
-        removeBar.innerHTML = '';
+            dashboard('#dashboard'+ curInd, contriLoad, curInd, linkNumAll[curInd]);
+            
+          } 
+          else if (this.id.includes('Emo')) {
+            // console.log("switch emo");
+            var curInd = this.id.replace('buttonEmo', '');
+            var emoLoad = JSON.parse(JSON.stringify(hotelEmoAll[curInd]));
+            var removeLegend = document.getElementById('legend' + curInd);
+            removeLegend.innerHTML = '';
+            var removeBar = document.getElementById('dashboard' + curInd);
+            removeBar.innerHTML = '';
 
-        dashboard('#dashboard'+ curInd, emoLoad, curInd, linkNumAll[curInd]);
-      }
-      else if (this.id.includes('Helpfulv')) {
-        // console.log("switch Helpfulv");
-        var curInd = this.id.replace('buttonHelpfulv', '');
-        var helpfulvLoad = JSON.parse(JSON.stringify(hotelHelpfulAll[curInd]));
-        var removeLegend = document.getElementById('legend' + curInd);
-        removeLegend.innerHTML = '';
-        var removeBar = document.getElementById('dashboard' + curInd);
-        removeBar.innerHTML = '';
+            dashboard('#dashboard'+ curInd, emoLoad, curInd, linkNumAll[curInd]);
+          }
+          else if (this.id.includes('Helpfulv')) {
+            // console.log("switch Helpfulv");
+            var curInd = this.id.replace('buttonHelpfulv', '');
+            var helpfulvLoad = JSON.parse(JSON.stringify(hotelHelpfulAll[curInd]));
+            var removeLegend = document.getElementById('legend' + curInd);
+            removeLegend.innerHTML = '';
+            var removeBar = document.getElementById('dashboard' + curInd);
+            removeBar.innerHTML = '';
 
-        dashboard('#dashboard'+ curInd, helpfulvLoad, curInd, linkNumAll[curInd]);
-      }
-      else if (this.id.includes('Keywords')) {
-        // console.log("switch aspects");
-        var curInd = this.id.replace('buttonKeywords', '');
-        var keywordsLoad = JSON.parse(JSON.stringify(hotelWordsAll[curInd]));
-        var removeLegend = document.getElementById('legend' + curInd);
-        removeLegend.innerHTML = '';
-        var removeBar = document.getElementById('dashboard' + curInd);
-        removeBar.innerHTML = '';
+            dashboard('#dashboard'+ curInd, helpfulvLoad, curInd, linkNumAll[curInd]);
+          }
+          else if (this.id.includes('Keywords')) {
+            // console.log("switch aspects");
+            var curInd = this.id.replace('buttonKeywords', '');
+            var keywordsLoad = JSON.parse(JSON.stringify(hotelWordsAll[curInd]));
+            var removeLegend = document.getElementById('legend' + curInd);
+            removeLegend.innerHTML = '';
+            var removeBar = document.getElementById('dashboard' + curInd);
+            removeBar.innerHTML = '';
 
-        dashboard('#dashboard'+ curInd, keywordsLoad, curInd, linkNumAll[curInd]);
-      }
-  });
+            dashboard('#dashboard'+ curInd, keywordsLoad, curInd, linkNumAll[curInd]);
+          }
+      });
+    }
+    groupClick();
 </script>
 
 
 <!--load reviews-->
 <script type="text/javascript">
   // read more contents from each review
-  $(function(){
+  function loadSingleReview(){
       $('.review_content').each(function(index,element){
         var maxwidth=300;//设置最多显示的字数
         var text_long=$(this).find("p[class = 'contents']").text();
@@ -1400,25 +1443,27 @@ $(".btn-group > .btn").click(function(){
             }
         })
       })
-  })
-
+  }
+  
 // load 5 more reviews each click
-$(function(){
-  $('.reviews-members').each(function(index,element){
-    var count = 5;
-    var read_more = $(this).find("a[class^='loading-hotel']");
-    var all_reviews = $(this).find("div[class ='media']");
-    all_reviews.each(function(index,element){
-      $(this).css({"display":'none'});
-    }); 
+  function loadMoreReviews() {
+    $('.reviews-members').each(function(index,element){
+      var count = 5;
+      var read_more = $(this).find("a[class^='loading-hotel']");
+      var all_reviews = $(this).find("div[class ='media']");
+      all_reviews.each(function(index,element){
+        $(this).css({"display":'none'});
+      }); 
 
-    all_reviews.slice(0,3).show();
-    read_more.click(function(){
-      count += 5;
-      all_reviews.slice(0,count).show();
+      all_reviews.slice(0,3).show();
+      read_more.click(function(){
+        count += 5;
+        all_reviews.slice(0,count).show();
+      })
     })
-  })
-})
+  }
+  loadSingleReview();
+  loadMoreReviews();
   </script>
   <script>//data to backend
     parseAPI.init()
@@ -1429,6 +1474,16 @@ $(function(){
       ) 
     }
   </script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>  
+
+  <script src="js/holder.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/RubaXa/Sortable/Sortable.min.js"></script>
+
+  <script src="https://kit.fontawesome.com/4421af3ebc.js" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://unpkg.com/lodash@4.17.20/lodash.min.js"></script>
 </body>
 
 </html>

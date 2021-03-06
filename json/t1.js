@@ -17,5 +17,5 @@ document.write("<script type='text/javascript' src='json/Travelodge_London_Vauxh
 
 var context = {
   //"hotels": [a1,b2,c3,d4,e5,f6,g7,h8,j10,k11,l12,m13,n14,o15,p16]
-   "hotels": [k11, g7, f6, l12, b2, o15, d4, a1, m13, c3, p16, e5, j10, n14, h8] 
+  "hotels": [k11, g7, f6, l12, b2, o15, d4, a1, m13, c3, p16, e5, j10, n14, h8] 
 }
