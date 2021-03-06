@@ -27,6 +27,7 @@
   <script src="js/parse.js"></script>
   <script type="text/javascript" src="https://unpkg.com/parse/dist/parse.min.js"></script>
   <script src="js/holder.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/RubaXa/Sortable/Sortable.min.js"></script>
   <script src="js/sankey.js"></script>
   <script src="https://kit.fontawesome.com/4421af3ebc.js" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://unpkg.com/lodash@4.17.20/lodash.min.js"></script>
@@ -82,73 +83,113 @@
             Here we provide some 4-stars hotels for you to choose from.</p>
           <!-- <p class="lead mb-0"><a href="#" class="text-white font-weight-bold">Continue reading...</a></p> -->
         </div>
+        <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#modal-picktop">
+          Picked Top 3
+        </button>
+        
+        <button type="button" class="btn btn-outline-primary btn-sm" onclick="sortHotels(['rating'], ['asc'])">
+          SortByRating
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" onclick="sortHotels(['name'], ['asc'])">
+          SortByName
+        </button>
       </div>
       <!--Header end-->   
-
-        <!--hotel card start-->
-        {{#each hotels as |hotel| }}
-        <div class="row mb-2">
-          <div class="col-md-12">
-            <div class="card flex-md-row mb-4 box-shadow h-md-280">
-              <img class="card-img-left flex-auto d-none d-md-block" data-src={{hotel.img}} alt="Card image cap">
-              <div class="card-body d-flex flex-column align-items-start">
-              <h4>
-                <a class="text-dark font-serif" id="hotel-{{hotel.index}}" href="#">#{{addone hotel.index}} {{hotel.name}}</a>
-              </h4>
-                <!-- <h4 class="mb-0">
-                <a class="text-dark" id="hotel-{{hotel.index}}" href="#">{{hotel.name}}</a>
-              </h4> -->
-              <div class="mb-1 text-muted">{{hotel.price}}</div>
-              <div class="rating">
-                {{#ifEquals hotel.rating '5.0'}}
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                {{/ifEquals}}
-                {{#ifEquals hotel.rating '4.5'}}
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-                {{/ifEquals}}
-                {{#ifEquals hotel.rating '4.0'}}
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="far fa-star"></i>
-                {{/ifEquals}}
-                {{#ifEquals hotel.rating '3.5'}}
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-                <i class="far fa-star"></i>
-                {{/ifEquals}}
-                {{#ifEquals hotel.rating '3.0'}}
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="far fa-star"></i>
-                <i class="far fa-star"></i>
-                {{/ifEquals}}
-              </div>
-              <p><i class="fas fa-user"></i> {{hotel.ratingNum}} </p>
-              {{> reviewmodal hotel=hotel}}
-
-              </div><!--card-body1 end-->
-            </div><!--card1 end flex-md-row mb-4 box-shadow h-md-280-->
-          </div><!--hotel1 end col-md-12-->
-        </div><!--row mb-2 end-->
-        {{/each}}<!--hotel card end-->
-
-
+        <div id="body-hotel-list">
+          {{> hotellist hotels=hotels}}
+        </div>
       </div><!--container end-->
     </div><!--body end-->
-    
+    <!--rank card -->
+    <div class="modal fade" id="modal-picktop" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel">Rearrange the hotels</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="picktop-modal-body">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button id="modal-picktop-save" type="button" class="btn btn-primary" onclick="recordOrder()">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--rank card -->
+  </script>
+
+
+  <script id="hotellist-template" type="text/x-handlebars-template">
+    <!--hotel card start-->
+    {{#each hotels as |hotel| }}
+    <div class="row mb-2">
+      <div class="col-md-12">
+        <div class="card flex-md-row mb-4 box-shadow h-md-280">
+          <!--choose hotels-->
+          {{#if hotel.checked}}
+          <input class="form-check-input" type="checkbox" value="" 
+            id="checkbox-hotel-{{hotel.index}}" onchange="pickHotel({{hotel.index}})" checked>
+          {{else}}
+          <input class="form-check-input" type="checkbox" value="" 
+            id="checkbox-hotel-{{hotel.index}}" onchange="pickHotel({{hotel.index}})">
+          {{/if}}
+          <!--choose hotels-->
+          <img class="card-img-left flex-auto d-none d-md-block" data-src={{hotel.img}} alt="Card image cap">
+          <div class="card-body d-flex flex-column align-items-start">
+          <h4>
+            <a class="text-dark font-serif" id="hotel-{{hotel.index}}" href="#">#{{addone hotel.index}} {{hotel.name}}</a>
+          </h4>
+          <div class="mb-1 text-muted">{{hotel.price}}</div>
+          <div class="rating">
+            {{#ifEquals hotel.rating '5.0'}}
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            {{/ifEquals}}
+            {{#ifEquals hotel.rating '4.5'}}
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+            {{/ifEquals}}
+            {{#ifEquals hotel.rating '4.0'}}
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+            {{/ifEquals}}
+            {{#ifEquals hotel.rating '3.5'}}
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+            <i class="far fa-star"></i>
+            {{/ifEquals}}
+            {{#ifEquals hotel.rating '3.0'}}
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+            <i class="far fa-star"></i>
+            {{/ifEquals}}
+          </div>
+          <p><i class="fas fa-user"></i> {{hotel.ratingNum}} </p>
+          {{> reviewmodal hotel=hotel}}
+
+          </div><!--card-body1 end-->
+        </div><!--card1 end flex-md-row mb-4 box-shadow h-md-280-->
+      </div><!--hotel1 end col-md-12-->
+    </div><!--row mb-2 end-->
+    {{/each}}<!--hotel card end-->
   </script>
 
   <script id="modal-template" type="text/x-handlebars-template">
@@ -428,11 +469,29 @@
     }
 
 </script>
+
 <script>
   $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();   
   });
-  </script>
+</script>
+
+
+<!--sort part-->
+<script>
+    var source = document.getElementById("hotellist-template").innerHTML;
+    var hotellistTemplate = Handlebars.compile(source);
+
+    function sortHotels(attrs, orders) {
+      var sorted = _.orderBy(context.hotels, attrs, orders);
+      console.log(sorted);
+      var rendered = hotellistTemplate({hotels: sorted});
+      // console.log(rendered); // Debug
+      document.getElementById(`body-hotel-list`).innerHTML = rendered;
+      embedVis();
+    }
+    
+</script>
 
 <!--handlebar-->
 <script>
@@ -441,8 +500,11 @@
   Handlebars.registerHelper('ifEquals', function(arg1, arg2, options){ //show user rating
     return (arg1 == arg2) ? options.fn(this):options.inverse(this);
   });
+  Handlebars.registerHelper('isEqual', (value, equalTo) => value === equalTo);
+
 
   // Partials, like a component
+  Handlebars.registerPartial('hotellist', document.getElementById("hotellist-template").innerHTML);
   Handlebars.registerPartial('reviewmodal', document.getElementById("modal-template").innerHTML);
   Handlebars.registerPartial('reviewlist', document.getElementById("reviewlist-template").innerHTML);
   // Code to render data into template
@@ -453,6 +515,52 @@
   document.getElementById('handlebars-rendering-target').innerHTML = rendered;
 </script>
 
+
+
+<!--rank part-->
+<script>
+  function pickHotel(hotelIndex) {
+    var hotel = _.find(context.hotels, {index: hotelIndex});
+    hotel.checked = !hotel.checked
+  }
+</script>
+
+<script id="reorderinglist-template" type="text/x-handlebars-template">
+  {{#if (isEqual items.length 3)}}
+    <ul class="list-group" id="reorderingitems">
+      {{#each items as |item|}}
+        <li class="list-group-item">{{item.name}}</li>
+      {{/each}}
+    </ul>
+  {{else}}
+    You have picked {{items.length}} hotels. Please pick 3 hotels first.
+  {{/if}}
+</script>
+
+<script>
+  var source = document.getElementById("reorderinglist-template").innerHTML;
+  var reorderinglistTemplate = Handlebars.compile(source);
+
+  $('#modal-picktop').on('shown.bs.modal', function (e) {
+    var topHotels = _.filter(context.hotels, {checked: true});
+    // console.log(topHotels);
+    var rendered = reorderinglistTemplate({items: topHotels});
+    // console.log(rendered);
+    document.getElementById('picktop-modal-body').innerHTML = rendered;
+    if (topHotels.length === 3) {
+      var reorderingitems = document.getElementById('reorderingitems');
+      Sortable.create(reorderingitems, { animation: 100, group: 'list-1', draggable: '.list-group-item', handle: '.list-group-item', sort: true, filter: '.sortable-disabled', chosenClass: 'active' });
+      $('#modal-picktop-save').prop('disabled', false);
+    } else {
+      $('#modal-picktop-save').prop('disabled', true);
+    }
+  })
+
+  function recordOrder() {
+    var items = $('#reorderingitems li').map(function(){return $(this).text()}).get();
+    console.log(items)
+  }
+</script>
 
 <!-- vis script -->
 <script> 
@@ -1121,6 +1229,7 @@ function dashboard(id, fData, index, linkdata){
 <!--switch group-->
 <script type="text/javascript">
   // code to run after the elements are created
+function embedVis() {
   context.hotels.forEach(hotel => {
     // var visHTML = '<div id="modal-vis-" '+ hotel.index +' >';
     var visDiv = document.getElementById("modal-vis-" + hotel.index);
@@ -1179,7 +1288,8 @@ function dashboard(id, fData, index, linkdata){
     dashboard('#dashboard'+ hotel.index, hotelCategoryData, hotel.index, linkNumAll[hotel.index]);
 
   })
-  
+}
+embedVis();
 </script>
 <script>
 $(".btn-group > .btn").click(function(){
