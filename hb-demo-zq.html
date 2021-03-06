@@ -87,11 +87,11 @@
           Picked Top 3
         </button>
         
-        <button type="button" class="btn btn-outline-primary btn-sm" onclick="sortHotels(['rating'], ['asc'])">
+        <!-- <button type="button" class="btn btn-outline-primary btn-sm" onclick="sortHotels(['rating'], ['asc'])">
           SortByRating
-        </button>
+        </button> -->
         <button type="button" class="btn btn-outline-primary btn-sm" onclick="sortHotels(['name'], ['asc'])">
-          SortByName
+          Sort Randomly
         </button>
       </div>
       <!--Header end-->   
@@ -469,6 +469,7 @@
       } else {
         curF.innerHTML = "Filtering is enabled";
       }
+
     }
 
 </script>
@@ -485,10 +486,31 @@
     var source = document.getElementById("hotellist-template").innerHTML;
     var hotellistTemplate = Handlebars.compile(source);
 
+    function shuffle(array) {
+      var currentIndex = array.length, temporaryValue, randomIndex;
+
+      // While there remain elements to shuffle...
+      while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+
+      return array;
+    }
+    
     function sortHotels(attrs, orders) {
-      var sorted = _.orderBy(context.hotels, attrs, orders);
-      console.log(sorted);
-      var rendered = hotellistTemplate({hotels: sorted});
+      // console.log(attrs, orders);
+      // var sorted = _.orderBy(context.hotels, attrs, orders);
+      shuffle(context.hotels);
+      var sortedRandomly =  context.hotels;
+      var rendered = hotellistTemplate({hotels: sortedRandomly});
       // console.log(rendered); // Debug
       document.getElementById(`body-hotel-list`).innerHTML = rendered;
       embedVis();
@@ -669,7 +691,7 @@ function dashboard(id, fData, index, linkdata){
             } else if(d[0] == "1"){
               var filterObj = {currentRating: "1.0"};
             }
-            
+            $(this).css('border-color', 'lime');
             filterReviews(index, filterObj)
           });
 
@@ -834,7 +856,6 @@ function dashboard(id, fData, index, linkdata){
 
     function mouseover(d){  // utility function to be called on mouseover.
       //tooltip
-
       tooltip.style('display', 'inline');
       
       // grey pie
@@ -856,7 +877,7 @@ function dashboard(id, fData, index, linkdata){
     }
 
     function  mousemove(d) {
-        var xPosition = d3.mouse(this)[0] + 40;//d3.event.pageX;
+        var xPosition = d3.mouse(this)[0] + 50;//d3.event.pageX;
         var yPosition = d3.mouse(this)[1] + 5;    //d3.event.pageY;
         var st = fData.filter(function(s){ return s.State == d[0];})[0],
             nD = d3.keys(st.freq).map(function(s){ return {type:s, freq:st.freq[s]};});
@@ -996,8 +1017,15 @@ function dashboard(id, fData, index, linkdata){
         $('.arc').not('#arc-' + d.type).css({fill: "#CDD0D3"});
         
         // call the update function of histogram with new data.
-        hG.update(fData.map(function(v){ 
+        var aspectsList = ['food', 'facility', 'surroundings', 'service', 'companion', 'travelling_purpose'];
+        if (aspectsList.includes(d.type)) {
+          hG.update(fData.map(function(v){ 
             return [v.State,v.freq2[d.type]];}),segColor(d.type));
+        } else {
+          hG.update(fData.map(function(v){ 
+            return [v.State,v.freq[d.type]];}),segColor(d.type));
+        }
+        
     }
     //Utility function to be called on mouseout a pie slice.
     function mouseout(d){
