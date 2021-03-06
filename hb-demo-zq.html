@@ -9,7 +9,7 @@
   <!-- Bootstrap4 core CSS -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/hotel.css" rel="stylesheet">
-  <!-- <link href="css/slider.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
 
 
@@ -139,7 +139,8 @@
             id="checkbox-hotel-{{hotel.index}}" onchange="pickHotel({{hotel.index}})">
           {{/if}}
           <!--choose hotels-->
-          <img class="card-img-left flex-auto d-none d-md-block" data-src={{hotel.img}} alt="Card image cap">
+          
+          <img class="card-img-left flex-auto d-none d-md-block" src={{hotel.img}} alt="Card image cap">
           <div class="card-body d-flex flex-column align-items-start">
           <h4>
             <a class="text-dark font-serif" id="hotel-{{hotel.index}}" href="#">#{{addone hotel.index}} {{hotel.name}}</a>
@@ -186,6 +187,8 @@
           {{> reviewmodal hotel=hotel}}
 
           </div><!--card-body1 end-->
+
+
         </div><!--card1 end flex-md-row mb-4 box-shadow h-md-280-->
       </div><!--hotel1 end col-md-12-->
     </div><!--row mb-2 end-->
@@ -523,6 +526,7 @@
     var hotel = _.find(context.hotels, {index: hotelIndex});
     hotel.checked = !hotel.checked
   }
+  
 </script>
 
 <script id="reorderinglist-template" type="text/x-handlebars-template">

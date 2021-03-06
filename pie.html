@@ -1,65 +1,64 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<style>
-
-path {
-  fill: #ccc;
-  stroke: #333;
-  stroke-width: 1.5px;
-  transition: fill 250ms linear;
-  transition-delay: 150ms;
-}
-
-path:hover {
-  fill: #999;
-  stroke: #000;
-  transition-delay: 0;
-}
-
-</style>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery UI Checkboxradio - Default functionality</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "input" ).checkboxradio();
+  } );
+  </script>
+</head>
 <body>
-<script src="//d3js.org/d3.v3.min.js"></script>
-<script>
-
-var data = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
-
-var width = 960,
-    height = 500;
-
-var outerRadius = height / 2 - 20,
-    innerRadius = 0,
-    cornerRadius = 10;
-
-var pie = d3.layout.pie();
-    // .padAngle(.02);
-
-var arc = d3.svg.arc()
-    .padRadius(outerRadius)
-    .innerRadius(innerRadius);
-
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-  .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-svg.selectAll("path")
-    .data(pie(data))
-  .enter().append("path")
-    .each(function(d) { d.outerRadius = outerRadius - 20; })
-    .attr("d", arc)
-    .on("mouseover", arcTween(outerRadius, 0))
-    .on("mouseout", arcTween(outerRadius - 20, 150));
-
-function arcTween(outerRadius, delay) {
-  
-  return function() {
-    
-    d3.select(this).transition().delay(delay).attrTween("d", function(d) {
-      var i = d3.interpolate(d.outerRadius, outerRadius);
-      return function(t) { d.outerRadius = i(t); return arc(d); };
-    });
-  };
-}
-
-</script>
+<div class="widget">
+  <h1>Checkbox and radio button widgets</h1>
+ 
+  <h2>Radio Group</h2>
+  <fieldset>
+    <legend>Select a Location: </legend>
+    <label for="radio-1">New York</label>
+    <input type="radio" name="radio-1" id="radio-1">
+    <label for="radio-2">Paris</label>
+    <input type="radio" name="radio-1" id="radio-2">
+    <label for="radio-3">London</label>
+    <input type="radio" name="radio-1" id="radio-3">
+  </fieldset>
+ 
+  <h2>Checkbox</h2>
+  <fieldset>
+    <legend>Hotel Ratings: </legend>
+    <label for="checkbox-1">2 Star</label>
+    <input type="checkbox" name="checkbox-1" id="checkbox-1">
+    <label for="checkbox-2">3 Star</label>
+    <input type="checkbox" name="checkbox-2" id="checkbox-2">
+    <label for="checkbox-3">4 Star</label>
+    <input type="checkbox" name="checkbox-3" id="checkbox-3">
+    <label for="checkbox-4">5 Star</label>
+    <input type="checkbox" name="checkbox-4" id="checkbox-4">
+  </fieldset>
+ 
+  <h2>Checkbox nested in label</h2>
+  <fieldset>
+    <legend>Bed Type: </legend>
+    <label for="checkbox-nested-1">2 Double
+      <input type="checkbox" name="checkbox-nested-1" id="checkbox-nested-1">
+    </label>
+    <label for="checkbox-nested-2">2 Queen
+      <input type="checkbox" name="checkbox-nested-2" id="checkbox-nested-2">
+    </label>
+    <label for="checkbox-nested-3">1 Queen
+      <input type="checkbox" name="checkbox-nested-3" id="checkbox-nested-3">
+    </label>
+    <label for="checkbox-nested-4">1 King
+      <input type="checkbox" name="checkbox-nested-4" id="checkbox-nested-4">
+    </label>
+  </fieldset>
+</div>
+ 
+ 
+</body>
+</html>
