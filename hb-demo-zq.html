@@ -27,6 +27,12 @@
   <script type="text/javascript" src="https://unpkg.com/parse/dist/parse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/RubaXa/Sortable/Sortable.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.0/jquery.cookie.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>  
+  <script src="js/holder.min.js"></script>
+  <script src="https://kit.fontawesome.com/4421af3ebc.js" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://unpkg.com/lodash@4.17.20/lodash.min.js"></script>
 
   <script src="js/data/emoData15.js"></script>
   <script src="js/data/contriData15.js"></script>
@@ -290,7 +296,6 @@
       hotel.index = i;
     })
   }
-
   countInd ();
 </script>
   
@@ -630,31 +635,6 @@
   {{/if}}
 </script>
 
-<script>
-  var source = document.getElementById("reorderinglist-template").innerHTML;
-  var reorderinglistTemplate = Handlebars.compile(source);
-  
-  $('#modal-picktop').on('shown.bs.modal', function (e) {
-      console.log("run?");
-      var topHotels = _.filter(context.hotels, {checked: true});
-      console.log("top3:", topHotels);
-      var rendered = reorderinglistTemplate({items: topHotels});
-      // console.log(rendered);
-      document.getElementById('picktop-modal-body').innerHTML = rendered;
-      if (topHotels.length === 3) {
-        var reorderingitems = document.getElementById('reorderingitems');
-        Sortable.create(reorderingitems, { animation: 100, group: 'list-1', draggable: '.list-group-item', handle: '.list-group-item', sort: true, filter: '.sortable-disabled', chosenClass: 'active' });
-        $('#modal-picktop-save').prop('disabled', false);
-      } else {
-        $('#modal-picktop-save').prop('disabled', true);
-      }
-  });
-
-  function recordOrder() {
-    var items = $('#reorderingitems li').map(function(){return $(this).text()}).get();
-    console.log(items);
-  }
-</script>
 
 <!-- vis script -->
 <script> 
@@ -1509,7 +1489,8 @@ embedVis();
   loadSingleReview();
   loadMoreReviews();
   </script>
-  <script>//data to backend
+
+<script>//data to backend
     parseAPI.init()
     function recordResult() {
       parseAPI.saveResult(
@@ -1519,15 +1500,34 @@ embedVis();
     }
   </script>
 
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>  
 
-  <script src="js/holder.min.js"></script>
+<!--rank 2-->
+<script>
+  var source = document.getElementById("reorderinglist-template").innerHTML;
+  var reorderinglistTemplate = Handlebars.compile(source);
+  
+  $('#modal-picktop').on('shown.bs.modal', function (e) {
+      console.log("run?");
+      var topHotels = _.filter(context.hotels, {checked: true});
+      console.log("top3:", topHotels);
+      var rendered = reorderinglistTemplate({items: topHotels});
+      // console.log(rendered);
+      document.getElementById('picktop-modal-body').innerHTML = rendered;
+      if (topHotels.length === 3) {
+        var reorderingitems = document.getElementById('reorderingitems');
+        Sortable.create(reorderingitems, { animation: 100, group: 'list-1', draggable: '.list-group-item', handle: '.list-group-item', sort: true, filter: '.sortable-disabled', chosenClass: 'active' });
+        $('#modal-picktop-save').prop('disabled', false);
+      } else {
+        $('#modal-picktop-save').prop('disabled', true);
+      }
+  });
 
+  function recordOrder() {
+    var items = $('#reorderingitems li').map(function(){return $(this).text()}).get();
+    console.log(items);
+  }
+</script>
 
-  <script src="https://kit.fontawesome.com/4421af3ebc.js" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="https://unpkg.com/lodash@4.17.20/lodash.min.js"></script>
 </body>
 
 </html>
