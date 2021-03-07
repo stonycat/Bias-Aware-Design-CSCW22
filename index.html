@@ -133,8 +133,8 @@
       </div><!--container end-->
     </div><!--body end-->
     <!--rank card -->
-    <div class="modal fade" id="modal-picktop" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
+    <div class="modal fade bd-example-modal-lg" id="modal-picktop" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="modalLabel">Drag to rank these hotels</h5>
@@ -146,8 +146,9 @@
 
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button id="modal-picktop-save" type="button" class="btn btn-primary" onclick="recordOrder()">Save changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close without Save</button>
+            <button id="modal-picktop-save" type="button" class="btn btn-primary" data-dismiss="modal" onclick="recordOrder()">Save and Close</button>
+            <button id="modal-picktop-save" type="button" class="btn btn-warning" onclick="recordOrder()">Save and Submit</button>
           </div>
         </div>
       </div>
@@ -366,7 +367,7 @@
       // console.log(hotelIndex, filterParams);
       var reviews = _.filter(context.hotels[hotelIndex].reviews, filterParams);
       console.log("filtered reviews: ", reviews);
-      showNumFilter(hotelIndex, reviews.length);
+      showNumFilter(hotelIndex, reviews.length, filterParams, "none");
       var rendered = reviewlistTemplate({reviews});
       // console.log(rendered); // Debug
       document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
@@ -428,7 +429,7 @@
 
       });
       // console.log("show reviews", reviews, reviews.length);
-      showNumFilter(hotelIndex, reviews.length);
+      showNumFilter(hotelIndex, reviews.length, filterParams, "none");
 
       var rendered = reviewlistTemplate({reviews});
       document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
@@ -489,7 +490,7 @@
           return keywords.includes(filterParams1) && x.currentRating == barId.toString();
         }
       });
-      showNumFilter(hotelIndex, reviews.length);
+      showNumFilter(hotelIndex, reviews.length, filterParams1, filterParams2);
       var rendered = reviewlistTemplate({reviews});
       document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
 
@@ -497,14 +498,20 @@
       // loadMoreReviews();
     }
 
-    function showNumFilter(index, num) {
+    function showNumFilter(index, num, para1, para2) {
+      // console.log("filter", para1, para2);
       var txtDiv = document.getElementById('filterResultTxt'+ index);
-      if (num > 1) {
-        txtDiv.innerHTML = "( " + num + " reviews)";
+      if (para2 == "none"){
+        if (typeof para1 == 'object') {
+          // console.log(para1);
+          txtDiv.innerHTML = num + " reviews of user rating " + para1['currentRating'];
+        } else {
+          txtDiv.innerHTML = num + " reviews of the selected category: \'" + para1 + "\'";
+        }
       } else {
-        txtDiv.innerHTML = "( " + num + " review)";
+          txtDiv.innerHTML = num + " reviews of the selected category: \'" +  para1 + "\' under user rating " 
+              + parseFloat(para2.split("Id")[1]).toFixed(1);
       }
-      
     }
 
     function filterOnOff(index) {
@@ -525,11 +532,10 @@
         var bg = $("#groupButton" + index);
         bg.remove();
 
-        embedVis();
+        // embedVis();
+        embedSingleVis(index);
         groupClick();
       }
-
-
     }
 
 </script>
@@ -632,6 +638,7 @@
 
 <!-- vis script -->
 <script> 
+
 function dashboard(id, fData, index, linkdata){
     // console.log(fData[0]['freq']);
     var barColor = "#8d99ae";//'steelblue';
@@ -741,6 +748,7 @@ function dashboard(id, fData, index, linkdata){
             // d3.select(this).attr("stroke-width", 2);
             // console.log(index);
             filterReviews(index, filterObj);
+            //bar listen click
           });
 
       //Create the frequency labels above the rectangles.
@@ -856,7 +864,7 @@ function dashboard(id, fData, index, linkdata){
       .attr('transform', function(d,i){ // have been transformed by d.x d.y
         return 'translate('+d.dy/2+',' + 0 + ')';// just change d.x
       })
-      .attr("class","pie")
+      .attr("class","pie") //pie
       .attr("id", function(d){
         return "pieId" + d.pieId;
       })
@@ -864,7 +872,7 @@ function dashboard(id, fData, index, linkdata){
       .data(function(d){return pie(d.pieData);})
       .enter()
     .append("path") 
-      .attr("class", "arc")
+      .attr("class", "arc") //<path>
       .attr("id", function(d){
         return "arc-" + d.data.type;
       }).each(function(d) { d.outerRadius = outerRadius - 5; })
@@ -877,6 +885,7 @@ function dashboard(id, fData, index, linkdata){
       .on("click", function(d){
         var barId = $(this).parent().attr('id');
         filter2Criteria(index, d.data.type, barId);
+        //listen
       });
 
               
@@ -891,7 +900,9 @@ function dashboard(id, fData, index, linkdata){
     //   sankey.relayout();
     //   link.attr("d", sankeyPath);
     // }
-    function arcTween(outerRadius, delay) {
+    function arcTween(outerRadius, delay) { //listen arc
+      //listen
+
       return function() {
         // console.log("change");
         d3.select(this).transition().delay(delay).attrTween("d", function(d) {
@@ -922,6 +933,8 @@ function dashboard(id, fData, index, linkdata){
       // var st = fData.filter(function(s){ return s.State == d[0];})[0],
       //     nD = d3.keys(st.freq).map(function(s){ return {type:s, freq:st.freq[s]};});
       // leg.update(nD);
+
+      //bar listen mouseover
     }
 
     function  mousemove(d) {
@@ -1032,6 +1045,7 @@ function dashboard(id, fData, index, linkdata){
             filterCategory(index, d.type);
             // d3.select(this).attr("stroke", "black");
             // d3.select(this).attr("stroke-width", 5);
+            //listen
           });
       
     // create the second column for each segment.
@@ -1064,7 +1078,7 @@ function dashboard(id, fData, index, linkdata){
         var tempperc = d.freq/d3.sum(aD.map(function(v){ return v.freq; }));
         return d3.format(".2%")(tempperc.toFixed(4));
     }
-    function mouseover(d){
+    function mouseover(d){ //legend mouse
         //grey all pies, focus on the bars
         // $('.arc').not('#arc-' + d.type).find("path").css({fill: "#CDD0D3"});
         $('.arc').not('#arc-' + d.type).css({fill: "#CDD0D3"});
@@ -1078,7 +1092,8 @@ function dashboard(id, fData, index, linkdata){
           hG.update(fData.map(function(v){ 
             return [v.State,v.freq[d.type]];}),segColor(d.type));
         }
-        
+        //listen
+
     }
     //Utility function to be called on mouseout a pie slice.
     function mouseout(d){
@@ -1380,6 +1395,70 @@ function embedVis() {
   })
 }
 
+function embedSingleVis(index) {
+
+    var visDiv = document.getElementById("modal-vis-" + index);
+    visDiv.className = 'row';
+    
+    var dashboardDiv = document.createElement('div');
+    dashboardDiv.id = 'dashboard' + index;
+    
+    var legendDiv = document.createElement('div');
+    legendDiv.id = 'legend' + index;
+    
+    // var buttonDiv = document.getElementById("modal-button-" + hotel.index);
+    // buttonDiv.class = 'row';
+    
+    var buttonGroup = document.createElement('div');
+    buttonGroup.classList.add("btn-group", "btn-group-sm");
+    buttonGroup.id = "groupButton" + index;
+    buttonGroup.setAttribute("role", "group");
+    buttonGroup.setAttribute("aria-label", "Basic example");
+    // var buttonGroup = document.getElementById('groupButton' + hotel.index);
+    buttonGroup.style.paddingLeft = '30px';
+    buttonGroup.style.paddingRight = '30px';
+    
+    // var checkBox = document.getElementsByClassName('checkBox' + hotel.index);
+    // checkBox.style.height = '8px';
+    // checkBox.style.width = '12px';
+    
+    var buttonEmo = document.createElement('button');
+    buttonEmo.classList.add("btn", "btn-outline-primary", "active");
+    buttonEmo.id = 'buttonEmo' + index;
+    buttonEmo.innerHTML = 'Emotion';
+    var buttonContri = document.createElement('button');
+    buttonContri.classList.add("btn", "btn-outline-primary");
+    buttonContri.id = 'buttonContri' + index;
+    buttonContri.innerHTML = 'Contribution';
+    var buttonHelpfulv = document.createElement('button');
+    buttonHelpfulv.classList.add("btn", "btn-outline-primary");
+    buttonHelpfulv.id = 'buttonHelpfulv' + index;
+    buttonHelpfulv.innerHTML = 'Helpful votes';
+    var buttonKeywords = document.createElement('button');
+    buttonKeywords.classList.add("btn", "btn-outline-primary");
+    buttonKeywords.id = 'buttonKeywords' + index;
+    buttonKeywords.innerHTML = 'Aspects';
+    
+    buttonGroup.appendChild(buttonEmo);
+    buttonGroup.appendChild(buttonContri);
+    buttonGroup.appendChild(buttonHelpfulv);
+    buttonGroup.appendChild(buttonKeywords);
+    
+    
+    visDiv.appendChild(dashboardDiv);
+    visDiv.appendChild(legendDiv);
+    visDiv.appendChild(buttonGroup);
+    // buttonDiv.appendChild(filterBox);
+    visDiv.insertAdjacentElement('beforebegin', buttonGroup);
+    
+    var hotelCategoryData = JSON.parse(JSON.stringify(hotelEmoAll[index]));
+    
+    //switch function
+
+    dashboard('#dashboard'+ index, hotelCategoryData, index, linkNumAll[index]);
+}
+
+
 embedVis();
 </script>
 <script>
@@ -1436,7 +1515,8 @@ embedVis();
           }
       });
     }
-    groupClick();
+    
+  groupClick();
 </script>
 
 
