@@ -137,7 +137,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="modalLabel">Rearrange the hotels</h5>
+            <h5 class="modal-title" id="modalLabel">Drag to rank these hotels</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -534,11 +534,7 @@
 
 </script>
 
-<script>
-  $(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();   
-  });
-</script>
+
 
 
 <!--sort part-->
@@ -565,11 +561,11 @@
     //   return array;
     // }
     function sortHotels(attrs, orders) {
-      var attrList = [['name'], ['rating'], ['ratingNum'], ['img'], ['price']];
+      var attrList = [['name'], ['rating'], ['ratingNum'], ['price']];
       var orderList = [['desc'], ['asc']];
       var attrs = attrList[Math.floor(Math.random() * attrList.length)];
       var orders = orderList[Math.floor(Math.random() * orderList.length)];
-      console.log(attrs, orders);
+      // console.log(attrs, orders);
       var sortedByName = _.orderBy(context.hotels, attrs, orders);
       // shuffle(context.hotels);
       // var sortedRandomly =  context.hotels;
@@ -1523,7 +1519,15 @@ embedVis();
     console.log(items);
   }
 </script>
+<script>
+  $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+  });
 
+  $(function () {
+        $("[data-toggle='tooltip']").tooltip();
+    });
+</script>
 </body>
 
 </html>
