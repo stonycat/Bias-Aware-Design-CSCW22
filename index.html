@@ -365,7 +365,6 @@
     function filterReviews(hotelIndex, filterParams) {
       // console.log(hotelIndex, filterParams);
       var reviews = _.filter(context.hotels[hotelIndex].reviews, filterParams);
-      console.log("cur index: ", hotelIndex);
       console.log("filtered reviews: ", reviews);
       showNumFilter(hotelIndex, reviews.length);
       var rendered = reviewlistTemplate({reviews});
@@ -376,7 +375,6 @@
     }
 
     function filterCategory(hotelIndex, filterParams) {
-      console.log(filterParams);
       
       var reviews = _.filter(context.hotels[hotelIndex].reviews, function(x){
         var numContri = x.contriNum.split(" ")[0];
@@ -429,7 +427,7 @@
         }
 
       });
-      console.log("show reviews", reviews, reviews.length);
+      // console.log("show reviews", reviews, reviews.length);
       showNumFilter(hotelIndex, reviews.length);
 
       var rendered = reviewlistTemplate({reviews});
@@ -744,7 +742,7 @@ function dashboard(id, fData, index, linkdata){
             }
             // d3.select(this).attr("stroke", "#883C44");
             // d3.select(this).attr("stroke-width", 2);
-            console.log(index);
+            // console.log(index);
             filterReviews(index, filterObj);
           });
 
@@ -1507,9 +1505,7 @@ embedVis();
   var reorderinglistTemplate = Handlebars.compile(source);
   
   $('#modal-picktop').on('shown.bs.modal', function (e) {
-      console.log("run?");
       var topHotels = _.filter(context.hotels, {checked: true});
-      console.log("top3:", topHotels);
       var rendered = reorderinglistTemplate({items: topHotels});
       // console.log(rendered);
       document.getElementById('picktop-modal-body').innerHTML = rendered;
