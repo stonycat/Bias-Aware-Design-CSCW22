@@ -26,6 +26,7 @@
   <script src="js/parse.js"></script>
   <script type="text/javascript" src="https://unpkg.com/parse/dist/parse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/RubaXa/Sortable/Sortable.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.0/jquery.cookie.min.js"></script>
 
   <script src="js/data/emoData15.js"></script>
   <script src="js/data/contriData15.js"></script>
@@ -51,6 +52,34 @@
 <body>
   <!-- Empty element, will be filled in the content by the code below -->
   <div id="handlebars-rendering-target"></div>
+
+  <!-- <div class="modal fade" id="zqmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    $(document).ready(function() {
+        if ($.cookie('pop') == null) {
+            $('#zqmodal').modal('show');
+            $.cookie('pop', '1');
+        }
+    });
+  </script> -->
 
   <script id="entry-template" type="text/x-handlebars-template">
     {{!-- Template, mixing html with handlebars syntax --}}
@@ -605,7 +634,6 @@
   var source = document.getElementById("reorderinglist-template").innerHTML;
   var reorderinglistTemplate = Handlebars.compile(source);
   
-
   $('#modal-picktop').on('shown.bs.modal', function (e) {
       console.log("run?");
       var topHotels = _.filter(context.hotels, {checked: true});
