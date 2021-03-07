@@ -519,7 +519,7 @@
       } else {
         //open
         curF.innerHTML = "Filtering is enabled";
-        d3.select("svg").remove();
+        d3.select("#svg-" + index).remove();
         var legendRemove = $("#legend" + index);
         legendRemove.remove();
         var bg = $("#groupButton" + index);
@@ -687,6 +687,7 @@ function dashboard(id, fData, index, linkdata){
       //create svg for histogram.
       var barY = 2*hGDim.h/3 + 1;
       var hGsvg = d3.select(id).append("svg")
+          .attr("id", "svg-" + index)
           .attr("width", hGDim.w + hGDim.l + hGDim.r)
           .attr("height", hGDim.h + hGDim.t).append("g")
           .attr("transform", "translate(" + hGDim.l + "," + hGDim.t + ")");
