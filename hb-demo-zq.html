@@ -25,6 +25,7 @@
   <script src="js/sankey.js"></script>
   <script src="js/parse.js"></script>
   <script type="text/javascript" src="https://unpkg.com/parse/dist/parse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/RubaXa/Sortable/Sortable.min.js"></script>
 
   <script src="js/data/emoData15.js"></script>
   <script src="js/data/contriData15.js"></script>
@@ -77,16 +78,18 @@
             Please refer to the user feedback to select the top 3 hotels you would like to stay at most and give your reasons.
         </div>
         <br>
-        <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#modal-picktop">
-          Picked Top 3
-        </button>
-        
-        <!-- <button type="button" class="btn btn-outline-primary btn-sm" onclick="sortHotels(['rating'], ['asc'])">
-          SortByRating
-        </button> -->
-        <button type="button" class="btn btn-outline-primary btn-sm" onclick="sortHotels(['name'], ['asc'])">
-          Sort Randomly
-        </button>
+          <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#modal-picktop">
+            Picked Top 3
+          </button>
+          <!-- <button type="button" class="btn btn-outline-primary btn-sm" onclick="sortHotels(['rating'], ['asc'])">
+            SortByRating
+          </button> -->
+          <button type="button" class="btn btn-outline-primary btn-sm" onclick="sortHotels(['name'], ['asc'])">
+            Reorder hotels
+          </button>
+          <!-- <div class="form-group col-md-2" style="display: inline-block;">
+            <input type="email" class="form-control form-control-sm" id="inputEmail3" placeholder="Your ID">
+          </div> -->
       </div>
       <!--Header end-->   
         <div id="body-hotel-list">
@@ -251,12 +254,15 @@
 
 <!--count index-->
 
-
 <script>
   // compute hotel.index
-  context.hotels.forEach((hotel, i) => {
-    hotel.index = i;
-  })
+  function countInd (){
+    context.hotels.forEach((hotel, i) => {
+      hotel.index = i;
+    })
+  }
+
+  countInd ();
 </script>
   
 <!--reviews--> 
@@ -325,7 +331,8 @@
     function filterReviews(hotelIndex, filterParams) {
       // console.log(hotelIndex, filterParams);
       var reviews = _.filter(context.hotels[hotelIndex].reviews, filterParams);
-      // console.log("show reviews", reviews);
+      console.log("cur index: ", hotelIndex);
+      console.log("filtered reviews: ", reviews);
       showNumFilter(hotelIndex, reviews.length);
       var rendered = reviewlistTemplate({reviews});
       // console.log(rendered); // Debug
@@ -491,7 +498,6 @@
       }
 
 
-
     }
 
 </script>
@@ -508,33 +514,40 @@
     var source = document.getElementById("hotellist-template").innerHTML;
     var hotellistTemplate = Handlebars.compile(source);
 
-    function shuffle(array) {
-      var currentIndex = array.length, temporaryValue, randomIndex;
+    // function shuffle(array) {
+    //   var currentIndex = array.length, temporaryValue, randomIndex;
 
-      // While there remain elements to shuffle...
-      while (0 !== currentIndex) {
+    //   // While there remain elements to shuffle...
+    //   while (0 !== currentIndex) {
 
-        // Pick a remaining element...
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
+    //     // Pick a remaining element...
+    //     randomIndex = Math.floor(Math.random() * currentIndex);
+    //     currentIndex -= 1;
 
-        // And swap it with the current element.
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-      }
+    //     // And swap it with the current element.
+    //     temporaryValue = array[currentIndex];
+    //     array[currentIndex] = array[randomIndex];
+    //     array[randomIndex] = temporaryValue;
+    //   }
 
-      return array;
-    }
-    
+    //   return array;
+    // }
     function sortHotels(attrs, orders) {
-      // console.log(attrs, orders);
-      // var sorted = _.orderBy(context.hotels, attrs, orders);
-      shuffle(context.hotels);
-      var sortedRandomly =  context.hotels;
-      var rendered = hotellistTemplate({hotels: sortedRandomly});
-      // console.log(rendered); // Debug
+      var attrList = [['name'], ['rating'], ['ratingNum'], ['img'], ['price']];
+      var orderList = [['desc'], ['asc']];
+      var attrs = attrList[Math.floor(Math.random() * attrList.length)];
+      var orders = orderList[Math.floor(Math.random() * orderList.length)];
+      console.log(attrs, orders);
+      var sortedByName = _.orderBy(context.hotels, attrs, orders);
+      // shuffle(context.hotels);
+      // var sortedRandomly =  context.hotels;
+      // console.log(sortedByName);
+      var rendered = hotellistTemplate({hotels: sortedByName});
       document.getElementById(`body-hotel-list`).innerHTML = rendered;
+
+      context.hotels.forEach((hotel, i) => {
+        hotel.index = i;
+      });
       embedVis();
       groupClick();
       loadSingleReview();
@@ -571,7 +584,7 @@
 <script>
   function pickHotel(hotelIndex) {
     var hotel = _.find(context.hotels, {index: hotelIndex});
-    hotel.checked = !hotel.checked
+    hotel.checked = !hotel.checked;
   }
   
 </script>
@@ -591,25 +604,27 @@
 <script>
   var source = document.getElementById("reorderinglist-template").innerHTML;
   var reorderinglistTemplate = Handlebars.compile(source);
+  
 
   $('#modal-picktop').on('shown.bs.modal', function (e) {
-    var topHotels = _.filter(context.hotels, {checked: true});
-    // console.log(topHotels);
-    var rendered = reorderinglistTemplate({items: topHotels});
-    // console.log(rendered);
-    document.getElementById('picktop-modal-body').innerHTML = rendered;
-    if (topHotels.length === 3) {
-      var reorderingitems = document.getElementById('reorderingitems');
-      Sortable.create(reorderingitems, { animation: 100, group: 'list-1', draggable: '.list-group-item', handle: '.list-group-item', sort: true, filter: '.sortable-disabled', chosenClass: 'active' });
-      $('#modal-picktop-save').prop('disabled', false);
-    } else {
-      $('#modal-picktop-save').prop('disabled', true);
-    }
-  })
+      console.log("run?");
+      var topHotels = _.filter(context.hotels, {checked: true});
+      console.log("top3:", topHotels);
+      var rendered = reorderinglistTemplate({items: topHotels});
+      // console.log(rendered);
+      document.getElementById('picktop-modal-body').innerHTML = rendered;
+      if (topHotels.length === 3) {
+        var reorderingitems = document.getElementById('reorderingitems');
+        Sortable.create(reorderingitems, { animation: 100, group: 'list-1', draggable: '.list-group-item', handle: '.list-group-item', sort: true, filter: '.sortable-disabled', chosenClass: 'active' });
+        $('#modal-picktop-save').prop('disabled', false);
+      } else {
+        $('#modal-picktop-save').prop('disabled', true);
+      }
+  });
 
   function recordOrder() {
     var items = $('#reorderingitems li').map(function(){return $(this).text()}).get();
-    console.log(items)
+    console.log(items);
   }
 </script>
 
@@ -721,6 +736,7 @@ function dashboard(id, fData, index, linkdata){
             }
             // d3.select(this).attr("stroke", "#883C44");
             // d3.select(this).attr("stroke-width", 2);
+            console.log(index);
             filterReviews(index, filterObj);
           });
 
@@ -1480,7 +1496,7 @@ embedVis();
   <script src="js/bootstrap.min.js"></script>  
 
   <script src="js/holder.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/RubaXa/Sortable/Sortable.min.js"></script>
+
 
   <script src="https://kit.fontawesome.com/4421af3ebc.js" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://unpkg.com/lodash@4.17.20/lodash.min.js"></script>
