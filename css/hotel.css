@@ -143,15 +143,15 @@ h1, h2, h3, h4, h5, h6 {
 
   .half:before {
     position: relative;
-    z-index: 9;
+    /* z-index: 9; */
     width: 47%;
     display: block;
     overflow: hidden;
   }
   .half:after {
     content: '\e006';
-    position: absolute;
-    z-index: 8;
+    /* position: absolute; */
+    /* z-index: 8; */
     color: #bdc3c7;
     top: 0;
     left: 0;
