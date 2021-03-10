@@ -218,7 +218,6 @@
           { a: 'I', b: 62 }
         ]
       }, {
-        checked: true,
         name: 'Hotel C',
         description: 'Hotel B is a 3-star economy hotel.',
         rating: 5,
@@ -243,7 +242,6 @@
           { a: 'I', b: 62 }
         ]
       }, {
-        checked: true,
         name: 'Hotel D',
         description: 'Hotel B is a 3-star economy hotel.',
         rating: 2,
@@ -268,7 +266,6 @@
           { a: 'I', b: 62 }
         ]
       }, {
-        checked: true,
         name: 'Hotel E',
         description: 'Hotel B is a 3-star economy hotel.',
         rating: 1,
@@ -297,6 +294,10 @@
 
     context.hotels.forEach((hotel, i) => {
       hotel.index = i
+      hotel.id = _.camelCase(hotel.name)
+      hotel.reason = window.localStorage.getItem(`reason-${hotel.id}`)
+      hotel.checked = JSON.parse(window.localStorage.getItem(`checked-${hotel.id}`)) === true
+      hotel.order = JSON.parse(window.localStorage.getItem(`order-${hotel.id}`))
     })
   </script>
   <script>//data to backend
@@ -311,9 +312,14 @@
     }
   </script>
   <script>
-    function pickHotel(hotelIndex) {
-      var hotel = _.find(context.hotels, {index: hotelIndex});
+    function pickHotel(index) {
+      var hotel = _.find(context.hotels, {index: index});
       hotel.checked = !hotel.checked
+      if (!hotel.checked) {
+        hotel.order = -1
+        window.localStorage.setItem(`order-${hotel.id}`, hotel.order);
+      }
+      window.localStorage.setItem(`checked-${hotel.id}`, hotel.checked);
     }
   </script>
   <script>
@@ -338,7 +344,7 @@
       var reviews = _.filter(context.hotels[hotelIndex].reviews, filterParams)
       console.log(reviews);
       var rendered = reviewlistTemplate({reviews});
-      console.log(rendered); // Debug
+      // console.log(rendered); // Debug
       document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
     }
   </script>
@@ -364,7 +370,16 @@
     {{#if (isEqual items.length 3)}}
       <ul class="list-group" id="reorderingitems">
         {{#each items as |item|}}
-          <li class="list-group-item">{{item.name}}</li>
+          <li class="list-group-item" data-item-id="{{item.id}}">
+            {{item.name}}
+            <p>
+              <textarea
+                id="textarea-reason-{{item.index}}"
+                placeholder="State your reason for chosing this hotel and its order by more than 30 words."
+                onkeyup="textareaOnChange({{item.index}})"
+              >{{item.reason}}</textarea>
+            </p>
+          </li>
         {{/each}}
       </ul>
     {{else}}
@@ -378,19 +393,36 @@
 
     $('#modal-picktop').on('shown.bs.modal', function (e) {
       var topHotels = _.filter(context.hotels, {checked: true});
+      topHotels = _.orderBy(topHotels, hotel => hotel.order === -1 ? 100 : hotel.order)
       var rendered = reorderinglistTemplate({items: topHotels})
       document.getElementById('picktop-modal-body').innerHTML = rendered;
       if (topHotels.length === 3) {
         var reorderingitems = document.getElementById('reorderingitems');
-        Sortable.create(reorderingitems, { animation: 100, group: 'list-1', draggable: '.list-group-item', handle: '.list-group-item', sort: true, filter: '.sortable-disabled', chosenClass: 'active' });
+        Sortable.create(reorderingitems, { animation: 100, group: 'list-1', draggable: '.list-group-item', handle: '.list-group-item', sort: true, filter: '.sortable-disabled', chosenClass: 'active', onSort: onReorderingListSort});
         $('#modal-picktop-save').prop('disabled', false);
       } else {
         $('#modal-picktop-save').prop('disabled', true);
       }
     })
 
+    function onReorderingListSort() {
+      var items = $('#reorderingitems li').map(function(){return $(this).attr('data-item-id')}).get();
+      context.hotels.forEach(hotel => {
+        hotel.order = items.indexOf(hotel.id)
+        window.localStorage.setItem(`order-${hotel.id}`, hotel.order);
+      })
+    }
+
+    function textareaOnChange(index) {
+      var hotel = _.find(context.hotels, {index: index});
+      var reason = $(`#textarea-reason-${index}`).val();
+      hotel.reason = reason;
+      window.localStorage.setItem(`reason-${hotel.id}`, reason);
+      console.log(hotel, reason);
+    }
+
     function recordOrder() {
-      var items = $('#reorderingitems li').map(function(){return $(this).text()}).get();
+      var items = $('#reorderingitems li').map(function(){return $(this).attr('data-item-id')}).get();
       console.log(items)
     }
   </script>
