@@ -169,7 +169,7 @@ h1, h2, h3, h4, h5, h6 {
 .sr-only { margin-left: 5px;overflow: visible;clip: auto; }
 
 .modal-lg {
-  max-width: 75%;
+  max-width: 80%;
 }
 
 
@@ -303,3 +303,5 @@ height: 1.25rem;
 input[type=checkbox] {
   transform: scale(2.2);
 }
+
+

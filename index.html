@@ -30,6 +30,7 @@
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>  
+
   <script src="js/holder.min.js"></script>
   <script src="https://kit.fontawesome.com/4421af3ebc.js" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://unpkg.com/lodash@4.17.20/lodash.min.js"></script>
@@ -59,38 +60,41 @@
   <!-- Empty element, will be filled in the content by the code below -->
   <div id="handlebars-rendering-target"></div>
 
-  <!-- <div class="modal fade" id="zqmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <script type="text/javascript">
-    $(document).ready(function() {
-        if ($.cookie('pop') == null) {
-            $('#zqmodal').modal('show');
-            $.cookie('pop', '1');
-        }
+<script>
+  function txtRemove(el, index) {
+    var element = el;
+    var par = el.parentElement;
+    element.remove();
+    // <textarea id="form10" class="md-textarea form-control" rows="3"></textarea>
+    var txtBox = document.createElement('textarea');
+    txtBox.classList.add("textarea", "form-control");
+    txtBox.id = "textarea" + index;
+    txtBox.setAttribute("placeholder", "reason(>30 words)");
+    txtBox.setAttribute("style", "min-width: 100%");
+
+    var textSingle = document.createElement('small');
+    textSingle.innerHTML = "&nbsp;No&nbsp;record";
+    textSingle.style.color = "red";
+
+    var submitButton = document.createElement('button');
+    submitButton.classList.add("btn", "btn-outline-success", "btn-sm");
+    submitButton.id = 'submitTxt' + index;
+    submitButton.innerHTML = "submit";
+    
+    par.appendChild(txtBox);
+    par.appendChild(submitButton);
+    par.appendChild(textSingle);
+
+    submitButton.addEventListener("click", function() {
+      console.log(this.id);
+      textSingle.innerHTML = "&nbsp;Recorded!";
+      textSingle.style.color = "green";
     });
-  </script> -->
-
-
+  }
+</script>
 
 <!--rank card -->
-<div class="modal fade bd-example-modal-lg" id="modal-picktop" style="z-index: 1051 !important;"
+<div class="modal fade bd-example-modal-lg" id="modal-picktop" 
 tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
 <div class="modal-dialog modal-lg" role="document">
   <div class="modal-content">
@@ -111,122 +115,94 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
   </div>
 </div>
 </div>
-<!--rank card -->
+
 <!--rank part-->
 <script id="reorderinglist-template" type="text/x-handlebars-template">
+  
   {{#if (isEqual items.length 3)}}
     <ul class="list-group" id="reorderingitems">
       {{#each items as |item|}}
         <li class="list-group-item">
           <h6 class="updateInd">Top {{addone @index}}</h6>
           <div class="col-md-12">
-            <div class="card flex-md-row mb-1 box-shadow h-md-220">
-              <img class="card-img-left flex-auto d-none d-md-block" src={{item.smallImg}} alt="Card image cap">
-              <div class="card-body d-flex flex-column align-items-start">
-              <h6>
-                <a class="text-dark font-serif" id="hotel-{{item.index}}" href="#">{{item.name}}</a>
-              </h6>
-              <h6 class="mb-1 text-muted">{{item.price}}</h6>
-              <h6><i class="fas fa-user"></i> {{item.ratingNum}} </h6>
-              <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                <div class="btn-group mr-2" role="group" aria-label="First group">
+              <div class="card flex-md-row mb-1 box-shadow h-md-220">
+                
+                <img class="card-img-left flex-auto d-none d-md-block" src={{item.smallImg}} alt="Card image cap">
+                
+                <div class="card-body d-flex flex-column align-items-start">    
+                  <div class="col-sm-7">
+                  <h6><a class="text-dark font-serif" id="hotel-{{item.index}}" href="#">{{item.name}}</a></h6>
+                  <h6 class="mb-1 text-muted">{{item.price}}</h6>
+                  <h6><i class="fas fa-user"></i> {{item.ratingNum}} </h6>
                   <button type="button" class="btn btn-outline-primary btn-sm" 
-                    href="#modal-{{hotel.index}}" id="viewFeedbackButton{{item.index}}" 
+                    id="viewFeedbackButton{{item.index}}" 
                     data-toggle="modal" data-target="#modal-{{item.index}}">
-                    View user feedback
+                    User feedback
                   </button>
+                    {{> reviewmodal item=item}}
+                  </div>
                 </div>
-                <div class="btn-group" role="group" aria-label="Second group">
-                  <button type="button" class="btn btn-outline-success btn-sm" 
-                  id="recordButton{{item.index}}" 
-                  data-toggle="modal" data-target="#reasonBox">
-                    Record reasons
-                  </button>
+                <div class="col-sm-5">
+                  <p style="color:red">Write down your reason:</p>
+                  <textarea id="reasontxt"{{itme.index}}, placeholder="your reason" 
+                    style="min-width: 100%; min-height: 50%;">
+                  </textarea>
+                  <p class="text-muted">words count (min 20 words)</p>
+                  
                 </div>
               </div>
-              {{> reviewmodal item=item}}
-              </div>
-            </div>
           </div>
+          
         </li>
       {{/each}}
     </ul>
   {{else}}
     You have picked {{items.length}} hotels. Please pick 3 hotels first.
   {{/if}}
-
-  <!--reasons modal-->
-  <div class="modal fade bd-example-modal-lg" id="reasonBox" 
-    tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        ...text
-      </div>
-    </div>
-  </div>
-<!--reasons modal-->
-</script>
-
-<script>
-  function txtRemove(el, index) {
-    var element = el;
-    var par = el.parentElement;
-    element.remove();
-    var txtBox = document.createElement('input');
-    txtBox.classList.add("form-control", "form-control-sm");
-    txtBox.id = "inputReason" + index;
-    txtBox.setAttribute("type", "email");
-    txtBox.setAttribute("placeholder", "Your reason(>30 words)");
-    var submitButton = document.createElement('button');
-    submitButton.classList.add("btn", "btn-outline-success", "btn-sm");
-    submitButton.id = 'submitTxt' + index;
-    submitButton.innerHTML = "submit";
-
-    par.appendChild(txtBox);
-    par.appendChild(submitButton);
-  }
-</script>
-<script>
-  var source = document.getElementById("reorderinglist-template").innerHTML;
-  var reorderinglistTemplate = Handlebars.compile(source);
   
-  $('#modal-picktop').on('shown.bs.modal', function (e) {
-      var topHotels = _.filter(context.hotels, {checked: true});
-      var rendered = reorderinglistTemplate({items: topHotels});
-      // console.log(rendered);
-      document.getElementById('picktop-modal-body').innerHTML = rendered;
-      if (topHotels.length === 3) {
-        var reorderingitems = document.getElementById('reorderingitems');
-        Sortable.create(reorderingitems, { 
-          animation: 100, 
-          group: 'list-1', 
-          draggable: '.list-group-item', 
-          handle: '.list-group-item', 
-          sort: true, 
-          filter: '.sortable-disabled', 
-          chosenClass: 'active',
-          onUpdate: function(evt) { 
-            var eles = document.getElementsByClassName("updateInd");
-            for (var i=0;i<eles.length;i++)
-            { 
-              var index = i+1
-              eles[i].innerText = "Top " + index;
-              // console.log(eles[i].innerText);
-            }
-          }
-        });
-        $('#modal-picktop-save').prop('disabled', false);
-      } else {
-        $('#modal-picktop-save').prop('disabled', true);
-      }
-  });
-
-  function recordOrder() {
-    var items = $('#reorderingitems li').map(function(){return $(this).text()}).get();
-    console.log(items);
-  }
+  
 </script>
-
+<!--sortable-->
+<script>
+    var source = document.getElementById("reorderinglist-template").innerHTML;
+    var reorderinglistTemplate = Handlebars.compile(source);
+    
+    $('#modal-picktop').on('shown.bs.modal', function (e) {
+        var topHotels = _.filter(context.hotels, {checked: true});
+        var rendered = reorderinglistTemplate({items: topHotels});
+        // console.log(rendered);
+        document.getElementById('picktop-modal-body').innerHTML = rendered;
+        if (topHotels.length === 3) {
+          var reorderingitems = document.getElementById('reorderingitems');
+          Sortable.create(reorderingitems, { 
+            animation: 100, 
+            group: 'list-1', 
+            draggable: '.list-group-item', 
+            handle: '.list-group-item', 
+            sort: true, 
+            filter: '.sortable-disabled', 
+            chosenClass: 'active',
+            onUpdate: function(evt) { 
+              var eles = document.getElementsByClassName("updateInd");
+              for (var i=0;i<eles.length;i++)
+              { 
+                var index = i+1
+                eles[i].innerText = "Top " + index;
+                // console.log(eles[i].innerText);
+              }
+            }
+          });
+          $('#modal-picktop-save').prop('disabled', false);
+        } else {
+          $('#modal-picktop-save').prop('disabled', true);
+        }
+    });
+  
+    function recordOrder() {
+      var items = $('#reorderingitems li').map(function(){return $(this).text()}).get();
+      console.log(items);
+    }
+</script>
 
 
 <!--task design-->
@@ -243,7 +219,7 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="col-4 text-center">
         </div>
         <div class="col-4 d-flex justify-content-end align-items-center">
-          <a class="btn btn-sm btn-outline-secondary" href="#">Consent Form</a>
+          <a class="btn btn-sm btn-outline-secondary" href="#">Task Introduction</a>
         </div>
       </div>
     </header>
@@ -342,13 +318,11 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
           <p><i class="fas fa-user"></i> {{hotel.ratingNum}} </p>
           <!-- Button trigger modal -->
           <button type="button" class="btn btn-outline-primary btn-sm" id="viewFeedbackButton{{hotel.index}}" data-toggle="modal" data-target="#modal-{{hotel.index}}">
-            View user feedback
+            User feedback
           </button>
           {{> reviewmodal hotel=hotel}}
 
           </div><!--card-body1 end-->
-
-
         </div><!--card1 end flex-md-row mb-4 box-shadow h-md-280-->
       </div><!--hotel1 end col-md-12-->
     </div><!--row mb-2 end-->
@@ -359,7 +333,7 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
 <script id="modal-template" type="text/x-handlebars-template">
     {{!-- Modal template, using partial --}}
     <!-- Modal -->
-    <div class="modal fade bd-example-modal-lg" id="modal-{{hotel.index}}" style="z-index: 1052 !important;"
+    <div class="modal fade bd-example-modal-lg" id="modal-{{hotel.index}}" style="z-index: 1052;"
         tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -371,9 +345,9 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
           </div>
 
           <div class="modal-body">
-            <!-- <div class="btn-group btn-group-sm" id ="groupButton{{hotel.index}}" role="group" aria-label="Basic example"></div> -->
             
             <div id="modal-vis-{{hotel.index}}"></div>
+
             <div style="padding-left:30px; padding-top:20px;">
               <label class="switch" id="switchBox{{hotel.index}}" style="display:inline-block;">
                 <input type="checkbox" onclick="filterOnOff({{hotel.index}})" checked>
@@ -411,6 +385,7 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
       </div>
     </div><!--model fade end-->
 </script>
+
 
 <!--pickHotel put here-->
 <script>
@@ -677,24 +652,6 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     var source = document.getElementById("hotellist-template").innerHTML;
     var hotellistTemplate = Handlebars.compile(source);
 
-    // function shuffle(array) {
-    //   var currentIndex = array.length, temporaryValue, randomIndex;
-
-    //   // While there remain elements to shuffle...
-    //   while (0 !== currentIndex) {
-
-    //     // Pick a remaining element...
-    //     randomIndex = Math.floor(Math.random() * currentIndex);
-    //     currentIndex -= 1;
-
-    //     // And swap it with the current element.
-    //     temporaryValue = array[currentIndex];
-    //     array[currentIndex] = array[randomIndex];
-    //     array[randomIndex] = temporaryValue;
-    //   }
-
-    //   return array;
-    // }
     function sortHotels(attrs, orders) {
       var attrList = [['name'], ['rating'], ['ratingNum'], ['price']];
       var orderList = [['desc'], ['asc']];
@@ -719,6 +676,7 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     
 </script>
 
+
 <!--handlebar-->
 <script>
   // Funcations to modify content
@@ -728,12 +686,14 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
   });
   Handlebars.registerHelper('isEqual', (value, equalTo) => value === equalTo);
   
-
-
   // Partials, like a component
+  // Handlebars.registerPartial('reasonmodal', document.getElementById("reason-template").innerHTML);
+
   Handlebars.registerPartial('hotellist', document.getElementById("hotellist-template").innerHTML);
   Handlebars.registerPartial('reviewmodal', document.getElementById("modal-template").innerHTML);
   Handlebars.registerPartial('reviewlist', document.getElementById("reviewlist-template").innerHTML);
+  
+
   // Code to render data into template
   var source = document.getElementById("entry-template").innerHTML;
   var template = Handlebars.compile(source);
@@ -1567,6 +1527,7 @@ function embedSingleVis(index) {
 
 embedVis();
 </script>
+
 <!--switch button-->
 <script>
   function groupClick() {
@@ -1692,9 +1653,7 @@ embedVis();
       $("[data-toggle='tooltip']").tooltip();
   });
 
-  $('#pickTopButton').click(function(){
-    $('#modal-picktop').modal({show:true});
-  });
+
 </script>
 
 
