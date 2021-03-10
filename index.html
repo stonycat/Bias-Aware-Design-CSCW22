@@ -183,15 +183,15 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             filter: '.sortable-disabled', 
             chosenClass: 'active',
             onSort: onReorderingListSort,
-            // onUpdate: function(evt) { 
-            //   var eles = document.getElementsByClassName("updateInd");
-            //   for (var i=0;i<eles.length;i++)
-            //   { 
-            //     var index = i+1
-            //     eles[i].innerText = "Top " + index;
-            //     // console.log(eles[i].innerText);
-            //   }
-            // }
+            onUpdate: function(evt) { 
+              var eles = document.getElementsByClassName("updateInd");
+              for (var i=0;i<eles.length;i++)
+              { 
+                var index = i+1
+                eles[i].innerText = "Top " + index;
+                // console.log(eles[i].innerText);
+              }
+            }
           });
           $('#modal-picktop-save').prop('disabled', false);
         } else {
@@ -212,12 +212,12 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
       var reason = $(`#textarea-reason-${index}`).val();
       hotel.reason = reason;
       window.localStorage.setItem(`reason-${hotel.id}`, reason);
-      console.log(hotel, reason);
+      // console.log(hotel, reason);
     }
 
     function recordOrder() {
       var items = $('#reorderingitems li').map(function(){return $(this).attr('data-item-id')}).get();
-      console.log(items);
+      // console.log(items);
     }
 </script>
 

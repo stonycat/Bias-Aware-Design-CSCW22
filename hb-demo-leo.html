@@ -393,7 +393,7 @@
 
     $('#modal-picktop').on('shown.bs.modal', function (e) {
       var topHotels = _.filter(context.hotels, {checked: true});
-      topHotels = _.orderBy(topHotels, hotel => hotel.order === -1 ? 100 : hotel.order)
+      topHotels = _.orderBy(topHotels, hotel => hotel.order === -1 ? 100 : hotel.order);
       var rendered = reorderinglistTemplate({items: topHotels})
       document.getElementById('picktop-modal-body').innerHTML = rendered;
       if (topHotels.length === 3) {
