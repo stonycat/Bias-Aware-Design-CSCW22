@@ -65,11 +65,10 @@
     var element = el;
     var par = el.parentElement;
     element.remove();
-    // <textarea id="form10" class="md-textarea form-control" rows="3"></textarea>
     var txtBox = document.createElement('textarea');
     txtBox.classList.add("textarea", "form-control");
     txtBox.id = "textarea" + index;
-    txtBox.setAttribute("placeholder", "reason(>30 words)");
+    // txtBox.setAttribute("placeholder", "reason(>30 words)");
     txtBox.setAttribute("style", "min-width: 100%");
 
     var textSingle = document.createElement('small');
@@ -109,7 +108,7 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close without Save</button>
-      <button id="modal-picktop-save" type="button" class="btn btn-primary" data-dismiss="modal" onclick="recordOrder()">Save and Close</button>
+      <!-- <button id="modal-picktop-save" type="button" class="btn btn-primary" data-dismiss="modal" onclick="recordOrder()">Save and Close</button> -->
       <button id="modal-picktop-save" type="button" class="btn btn-success" onclick="recordOrder()">Save and Submit</button>
     </div>
   </div>
@@ -120,9 +119,9 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
 <script id="reorderinglist-template" type="text/x-handlebars-template">
   
   {{#if (isEqual items.length 3)}}
-    <ul class="list-group" id="reorderingitems">
+    <ul class="list-group" id="reorderingitems" data-item-id="{{item.id}}">
       {{#each items as |item|}}
-        <li class="list-group-item">
+        <li class="list-group-item" data-item-id="{{item.id}}">
           <h6 class="updateInd">Top {{addone @index}}</h6>
           <div class="col-md-12">
               <div class="card flex-md-row mb-1 box-shadow h-md-220">
@@ -144,9 +143,8 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
                 </div>
                 <div class="col-sm-5">
                   <p style="color:red">Write down your reason:</p>
-                  <textarea id="reasontxt"{{itme.index}}, placeholder="your reason" 
-                    style="min-width: 100%; min-height: 50%;">
-                  </textarea>
+                  <textarea id=textarea-reason-{{item.index}} style="min-width: 100%;" rows="3" 
+                  onkeyup="textareaOnChange({{item.index}})">{{item.reason}}</textarea>
                   <p class="text-muted">words count (min 20 words)</p>
                   
                 </div>
@@ -169,6 +167,8 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     
     $('#modal-picktop').on('shown.bs.modal', function (e) {
         var topHotels = _.filter(context.hotels, {checked: true});
+        // webstorage order
+        topHotels = _.orderBy(topHotels, hotel => hotel.order === -1 ? 100 : hotel.order);
         var rendered = reorderinglistTemplate({items: topHotels});
         // console.log(rendered);
         document.getElementById('picktop-modal-body').innerHTML = rendered;
@@ -182,24 +182,41 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             sort: true, 
             filter: '.sortable-disabled', 
             chosenClass: 'active',
-            onUpdate: function(evt) { 
-              var eles = document.getElementsByClassName("updateInd");
-              for (var i=0;i<eles.length;i++)
-              { 
-                var index = i+1
-                eles[i].innerText = "Top " + index;
-                // console.log(eles[i].innerText);
-              }
-            }
+            onSort: onReorderingListSort,
+            // onUpdate: function(evt) { 
+            //   var eles = document.getElementsByClassName("updateInd");
+            //   for (var i=0;i<eles.length;i++)
+            //   { 
+            //     var index = i+1
+            //     eles[i].innerText = "Top " + index;
+            //     // console.log(eles[i].innerText);
+            //   }
+            // }
           });
           $('#modal-picktop-save').prop('disabled', false);
         } else {
           $('#modal-picktop-save').prop('disabled', true);
         }
     });
-  
+
+    function onReorderingListSort() {
+      var items = $('#reorderingitems li').map(function(){return $(this).attr('data-item-id')}).get();
+      context.hotels.forEach(hotel => {
+        hotel.order = items.indexOf(hotel.id)
+        window.localStorage.setItem(`order-${hotel.id}`, hotel.order);
+      })
+    }
+
+    function textareaOnChange(index) {
+      var hotel = _.find(context.hotels, {index: index});
+      var reason = $(`#textarea-reason-${index}`).val();
+      hotel.reason = reason;
+      window.localStorage.setItem(`reason-${hotel.id}`, reason);
+      console.log(hotel, reason);
+    }
+
     function recordOrder() {
-      var items = $('#reorderingitems li').map(function(){return $(this).text()}).get();
+      var items = $('#reorderingitems li').map(function(){return $(this).attr('data-item-id')}).get();
       console.log(items);
     }
 </script>
@@ -389,9 +406,15 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
 
 <!--pickHotel put here-->
 <script>
-  function pickHotel(hotelIndex) {
-    var hotel = _.find(context.hotels, {index: hotelIndex});
+  function pickHotel(index) {
+    var hotel = _.find(context.hotels, {index: index});
     hotel.checked = !hotel.checked;
+    if (!hotel.checked) {
+        hotel.order = -1
+        window.localStorage.setItem(`order-${hotel.id}`, hotel.order);
+      }
+    window.localStorage.setItem(`checked-${hotel.id}`, hotel.checked);
+
   }
 </script>
 
@@ -401,6 +424,11 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
   function countInd (){
     context.hotels.forEach((hotel, i) => {
       hotel.index = i;
+      hotel.id = _.camelCase(hotel.name);
+      hotel.reason = window.localStorage.getItem(`textarea-reason-${hotel.id}`); //add reason
+      hotel.checked = JSON.parse(window.localStorage.getItem(`checked-${hotel.id}`)) === true;
+      hotel.order = JSON.parse(window.localStorage.getItem(`order-${hotel.id}`));
+
     })
   }
   countInd ();
@@ -1407,21 +1435,15 @@ function embedVis() {
     var legendDiv = document.createElement('div');
     legendDiv.id = 'legend' + hotel.index;
     
-    // var buttonDiv = document.getElementById("modal-button-" + hotel.index);
-    // buttonDiv.class = 'row';
     
     var buttonGroup = document.createElement('div');
     buttonGroup.classList.add("btn-group", "btn-group-sm");
     buttonGroup.id = "groupButton" + hotel.index;
     buttonGroup.setAttribute("role", "group");
     buttonGroup.setAttribute("aria-label", "Basic example");
-    // var buttonGroup = document.getElementById('groupButton' + hotel.index);
     buttonGroup.style.paddingLeft = '30px';
     buttonGroup.style.paddingRight = '30px';
     
-    // var checkBox = document.getElementsByClassName('checkBox' + hotel.index);
-    // checkBox.style.height = '8px';
-    // checkBox.style.width = '12px';
     
     var buttonEmo = document.createElement('button');
     buttonEmo.classList.add("btn", "btn-outline-primary", "active");
