@@ -297,6 +297,8 @@
 
     context.hotels.forEach((hotel, i) => {
       hotel.index = i
+      hotel.id = _.camelCase(hotel.name)
+      hotel.reason = window.localStorage.getItem(`reason-${hotel.id}`)
     })
   </script>
   <script>//data to backend
@@ -364,7 +366,16 @@
     {{#if (isEqual items.length 3)}}
       <ul class="list-group" id="reorderingitems">
         {{#each items as |item|}}
-          <li class="list-group-item">{{item.name}}</li>
+          <li class="list-group-item" data-item-name="{{item.name}}">
+            {{item.name}}
+            <p>
+              <textarea
+                id="textarea-reason-{{item.index}}"
+                placeholder="State your reason for chosing this hotel and its order by more than 30 words."
+                onkeyup="textareaOnChange({{item.index}})"
+              >{{item.reason}}</textarea>
+            </p>
+          </li>
         {{/each}}
       </ul>
     {{else}}
@@ -389,8 +400,16 @@
       }
     })
 
+    function textareaOnChange(index) {
+      var hotel = _.find(context.hotels, {index});
+      var reason = $(`#textarea-reason-${index}`).val();
+      hotel.reason = reason;
+      window.localStorage.setItem(`reason-${hotel.id}`, reason);
+      console.log(hotel, reason);
+    }
+
     function recordOrder() {
-      var items = $('#reorderingitems li').map(function(){return $(this).text()}).get();
+      var items = $('#reorderingitems li').map(function(){return $(this).attr('data-item-name')}).get();
       console.log(items)
     }
   </script>
