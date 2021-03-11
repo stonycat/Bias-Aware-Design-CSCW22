@@ -369,7 +369,7 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
 
             <div style="padding-left:30px; padding-top:20px;">
               <label class="switch" id="switchBox{{hotel.index}}" style="display:inline-block;">
-                <input type="checkbox" onclick="filterOnOff({{hotel.index}});recordClickResult(this);" checked>
+                <input type="checkbox" id="filterCheckBox{{hotel.index}}" onclick="filterOnOff({{hotel.index}});recordClickResult(this);" checked>
                 <div class="slider round"></div>
               </label> &nbsp;
               <h6 id="filterText{{hotel.index}}" style="display:inline-block;">Filtering is enabled</h6>
@@ -1019,10 +1019,6 @@ function dashboard(id, fData, index, linkdata){
     //   sankey.relayout();
     //   link.attr("d", sankeyPath);
     // }
-
-
-
-
 
     function arcTween(outerRadius, delay) { 
       return function() {
