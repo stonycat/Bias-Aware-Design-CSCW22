@@ -110,7 +110,7 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
       <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="recordClickResult(this)">Close without Save</button>
       <!-- <button id="modal-picktop-save" type="button" class="btn btn-primary" data-dismiss="modal" onclick="recordOrder()">Save and Close</button> -->
       <button id="modal-picktop-save" type="button" 
-        class="btn btn-success" onclick="recordOrder();recordClickResult(this);">Save and Submit</button>
+        class="btn btn-success" onclick="recordOrder();recordClickSave();">Save and Submit</button>
     </div>
   </div>
 </div>
@@ -136,7 +136,7 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
                   <h6><i class="fas fa-user"></i> {{item.ratingNum}} </h6>
                   <button type="button" class="btn btn-outline-primary btn-sm" 
                     id="viewFeedbackButton{{item.index}}" 
-                    data-toggle="modal" data-target="#modal-{{item.index}}" onclick="recordClickResult(this);recordClickResult(this);">
+                    data-toggle="modal" data-target="#modal-{{item.index}}" onclick="recordClickResult(this)">
                     User feedback
                   </button>
                     {{> reviewmodal item=item}}
@@ -212,6 +212,7 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
       var hotel = _.find(context.hotels, {index: index});
       var reason = $(`#textarea-reason-${index}`).val();
       hotel.reason = reason;
+      window.localStorage.setItem(`item-{{@index}}`, index);
       window.localStorage.setItem(`reason-${hotel.id}`, reason);
       // console.log(hotel, reason);
     }
@@ -478,7 +479,7 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             </div>
             <div class = "review_content">
               <p class = "contents">{{review.content}}</p>
-              <a href = "##" class = "readmore" onclick = "recordClickReadAll({{@index}})">Read More</a>
+              <a href = "#" class = "readmore" onclick = "recordClickReadMore({{@index}}， {{hotel.index}})">Read More</a>
               <!-- <p>Keywords # 
               {{#each review.keywords as |word|}} 
                 <span class="badge">{{word}}</span> 
@@ -1549,15 +1550,22 @@ function embedSingleVis(index) {
     buttonHelpfulv.classList.add("btn", "btn-outline-primary");
     buttonHelpfulv.id = 'buttonHelpfulv' + index;
     buttonHelpfulv.innerHTML = 'Helpful votes';
+
     var buttonKeywords = document.createElement('button');
     buttonKeywords.classList.add("btn", "btn-outline-primary");
     buttonKeywords.id = 'buttonKeywords' + index;
     buttonKeywords.innerHTML = 'Aspects';
+
+    // var buttonKeywords2 = document.createElement('button');
+    // buttonKeywords2.classList.add("btn", "btn-outline-primary");
+    // buttonKeywords2.id = 'buttonKeywords2' + index;
+    // buttonKeywords2.innerHTML = 'keywords';
     
     buttonGroup.appendChild(buttonEmo);
     buttonGroup.appendChild(buttonContri);
     buttonGroup.appendChild(buttonHelpfulv);
     buttonGroup.appendChild(buttonKeywords);
+    // buttonGroup.appendChild(buttonKeywords2);
     
     
     visDiv.appendChild(dashboardDiv);
@@ -1696,14 +1704,13 @@ embedVis();
     }
 
 
-    function recordClickReadAll(indexReview) {
+    function recordClickReadMore(indexReview,hotelInd) {
       
-      parseAPI.saveClickReadAll(
-        // {ID: 'user id', Button: $(this).attr('id')},
-        {ID: 'user id', Button: 'Read All', username: 'hello, 3.3', q1: true, q2: false, Hotel: indexReview}, 
+      parseAPI.saveClickReadMore(
+        {ID: 'user id', Button: 'Read More', username: 'hello, 3.3', q1: true, q2: false, Hotel: hotelInd, ReviewNum: (indexReview+1)}, 
         {anything: 'type: Click', numbers: 123, but: {better: 'not object'}} //not obj
       ) 
-      console.log("ClickReadAll", indexReview);
+      console.log("ClickReadMore", indexReview,hotelInd);
     }
 
     function recordClickViz(el, index) {
@@ -1715,7 +1722,33 @@ embedVis();
       ) 
       console.log( "ClickButton ", el.id, index);
     }
+    function recordClickSave() {
+      var review01= $("textarea:eq(0)").val();
+      var review02= $('textarea:eq(1)').val();
+      var review03= $('textarea:eq(2)').val();
+      var reviews=[review01,review02,review03];
 
+      var reviewId01 = $("textarea:eq(0)").attr('id');
+      var hotelNum01  = reviewId01.split('-').pop();
+      hotelNum01 = parseInt(hotelNum01.split('-').pop());
+
+      var reviewId02 = $("textarea:eq(1)").attr('id');
+      var hotelNum02  = reviewId02.split('-').pop();
+      hotelNum02 = parseInt(hotelNum02.split('-').pop());
+
+      var reviewId03 = $("textarea:eq(2)").attr('id');
+      var hotelNum03  = reviewId03.split('-').pop();
+      hotelNum03 = parseInt(hotelNum03.split('-').pop());
+      var hotelNums = [hotelNum01,hotelNum02,hotelNum03];
+
+      for(var i=0; i<3;i++){
+        parseAPI.saveReason(
+        {ID: 'user id',  username: 'hello, 3.3', q1: true, q2: false, Hotel: hotelNums[i] , Reason:reviews[i],Ranking: (i+1) }, 
+        {anything: 'type: Save Reasons', numbers: 123, but: {better: 'not object'}} //not obj
+      ) 
+      }
+      console.log("recordClickSave");
+    }
     function RecordOver_b(button, hotelInd) {
       
       parseAPI.saveMouseOver(
@@ -1760,7 +1793,61 @@ embedVis();
 
 </script>
 
-
+<script>
+  //scroll down/up
+    parseAPI.init()
+    var time = null;
+    window.onmousewheel = document.onmousewheel = function(e){
+        if (time) {
+            clearTimeout(time)
+        }
+        time = setTimeout( () => {
+          e = e || window.event;
+          var length = e.deltaY;
+          console.log(length);  
+          if (e.wheelDelta) {               
+              if (e.wheelDelta > 0) { //Chrome / IE
+                  console.log("scroll up");
+                  parseAPI.saveScroll(
+                  {username: 'hello, 3.3', q1: true, q2: false, Length: ''+length}, 
+                  {anything: 'scroll up', numbers: 123, but: {better: 'not object'}} 
+                )
+                  console.log("send msg to backend");   
+              }  
+              if (e.wheelDelta < 0) { 
+                  console.log("scroll down");
+                  parseAPI.saveScroll(
+                  {username: 'hello, 3.3', q1: true, q2: false, Length: ''+length}, 
+                  {anything: 'scroll down', numbers: 123, but: {better: 'not object'}} 
+                )
+                  console.log("send msg to backend");  
+              }
+          }
+          else if (e.detail) {  //Firefox]
+              if (e.detail < 0) { 
+                console.log("scroll up");
+                  parseAPI.saveScroll(
+                  {username: 'hello, 3.3', q1: true, q2: false, Length: ''+length}, 
+                  {anything: 'scroll up'+length, numbers: 123, but: {better: 'not object'}} 
+                )
+                  console.log("send msg to backend"); 
+              }  
+              if (e.detail > 0) { 
+                console.log("scroll down");
+                  parseAPI.saveScroll(
+                  {username: 'hello, 3.3', q1: true, q2: false, Length: ''+length}, 
+                  {anything: 'scroll down'+length, numbers: 123, but: {better: 'not object'}} 
+                )
+                  console.log("send msg to backend");  
+              }  
+              
+          }  
+          
+          time = null
+        }, 200)
+    }
+  
+  </script>
 <!--tooltip of ?-->
 <script>
   $(document).ready(function(){

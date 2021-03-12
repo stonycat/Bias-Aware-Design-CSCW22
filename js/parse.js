@@ -30,6 +30,7 @@ window.parseAPI = {
         return result.save()
     },
 
+
     saveClickResult: (obj,metaInfo) =>{
       const Result = Parse.Object.extend('Data') //change name open new data sheet
 
@@ -83,7 +84,9 @@ window.parseAPI = {
     return result.save()
 
 },
-saveClickReadAll: (obj,metaInfo) =>{
+
+
+saveReason: (obj,metaInfo) =>{
   const Result = Parse.Object.extend('Data') //change name open new data sheet
 
   const result = new Result()
@@ -98,6 +101,37 @@ saveClickReadAll: (obj,metaInfo) =>{
   result.set('Button', obj.Button)
   result.set('ID', obj.ID)
   result.set('Hotel', obj.Hotel)
+  result.set('Reason',obj.Reason)
+  result.set('Ranking',obj.Ranking)
+  // result.set('anything', obj.anything)
+  // result.set('numbers', obj.number)
+  // result.set('but', obj.but)
+
+  _.forEach(metaInfo, (v, k) => {
+    result.set(k, v)
+  })
+
+  return result.save()
+
+},
+
+
+saveClickReadMore: (obj,metaInfo) =>{
+  const Result = Parse.Object.extend('Data') //change name open new data sheet
+
+  const result = new Result()
+  const acl = new Parse.ACL()
+  acl.setPublicWriteAccess(false)
+  acl.setPublicReadAccess(false)
+  result.setACL(acl)
+
+  result.set('username', obj.username)
+  result.set('q1', obj.q1)
+  result.set('q2', obj.q2)
+  result.set('Button', obj.Button)
+  result.set('ID', obj.ID)
+  result.set('Hotel', obj.Hotel)
+  result.set('ReviewNum',obj.ReviewNum)
   // result.set('anything', obj.anything)
   // result.set('numbers', obj.number)
   // result.set('but', obj.but)
@@ -199,6 +233,7 @@ saveClickReadAll: (obj,metaInfo) =>{
       result.set('username', obj.username)
       result.set('q1', obj.q1)
       result.set('q2', obj.q2)
+      result.set('Length', obj.Length)
 
       _.forEach(metaInfo, (v, k) => {
         result.set(k, v)
@@ -207,26 +242,26 @@ saveClickReadAll: (obj,metaInfo) =>{
       return result.save()
 
     },
-    saveTime: (obj,metaInfo) =>{
-      const Result = Parse.Object.extend('Data') //change name open new data sheet
+    // saveTime: (obj,metaInfo) =>{
+    //   const Result = Parse.Object.extend('Data') //change name open new data sheet
 
-      const result = new Result()
-      const acl = new Parse.ACL()
-      acl.setPublicWriteAccess(false)
-      acl.setPublicReadAccess(false)
-      result.setACL(acl)
+    //   const result = new Result()
+    //   const acl = new Parse.ACL()
+    //   acl.setPublicWriteAccess(false)
+    //   acl.setPublicReadAccess(false)
+    //   result.setACL(acl)
 
-      result.set('username', obj.username)
-      result.set('q1', obj.q1)
-      result.set('q2', obj.q2)
+    //   result.set('username', obj.username)
+    //   result.set('q1', obj.q1)
+    //   result.set('q2', obj.q2)
 
-      _.forEach(metaInfo, (v, k) => {
-        result.set(k, v)
-      })  
+    //   _.forEach(metaInfo, (v, k) => {
+    //     result.set(k, v)
+    //   })  
 
-      return result.save()
+    //   return result.save()
 
-    }
+    // }
 
     
   }
