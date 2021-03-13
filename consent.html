@@ -103,7 +103,7 @@
                   <input type="radio" id="customRadioInline2" name="Radio" class="custom-control-input" checked="">
                   <label class="custom-control-label" for="customRadioInline2">Disagree</label>
                 </div>
-              <button type="submit" class="btn btn-primary" onclick="nextFunc()">Next</button> 
+              <button type="button" class="btn btn-primary" onclick="nextFunc()">Next</button> 
             </form>
           </div>
         </div>
@@ -120,8 +120,8 @@
       var val = document.getElementById("customRadioInline2").checked;
 
       if (!val) {
-        // console.log("jump");
-        window.location = "https://atie.leoyuholo.com/";
+        console.log("jump");
+        window.location.assign("https://atie.leoyuholo.com/");
         
       } else {
         alert("You need to agree the consent to proceed.");
