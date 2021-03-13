@@ -283,6 +283,24 @@ input:checked + .slider .off
   font-style: rgb(245, 245, 245);	
 }
 
+.toolTipPie {
+  position: absolute;
+  z-index: 10;
+  display: none;
+  min-width: 40px;
+  height: auto;
+  background-color: white;
+  opacity: 0.9;
+  border: solid;
+  border-width: 1px;
+  padding: 4px;
+  pointer-events: none;
+  /* text-align: center; */
+  border-radius: 5px;		
+  font: 12px sans-serif;	
+  font-style: rgb(245, 245, 245);	
+}
+
 
 .custom-control-label::before, 
 .custom-control-label::after {

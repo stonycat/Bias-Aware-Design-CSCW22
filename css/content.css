@@ -1,0 +1,15 @@
+/*!
+ * Start Bootstrap - Blog Post (https://startbootstrap.com/template/blog-post)
+ * Copyright 2013-2020 Start Bootstrap
+ * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-blog-post/blob/master/LICENSE)
+ */
+body {
+  padding-top: 56px;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family:  "Playfair Display", serif;
+
+}
+p {
+  font-family:  "Playfair Display", serif;
+}

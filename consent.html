@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Booking Hotel</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="css/content.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Consent Form for Participation in Research</a>
+
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <div class="row">
+
+      <!-- Post Content Column -->
+      <div class="col-lg-12">
+
+        <!-- Title -->
+        <h2 class="mt-3">Welcome to Our Study on Awareness-raising and Testing</h2>
+
+        <!-- Author -->
+        <p class="lead">
+          Investigator:
+          <a>ZHU Qian</a>
+        </p>
+
+        <hr>
+
+        <!-- Date/Time -->
+        
+        <h6 class="text-muted">Address: Rm 4203, Department of Computer Science and Engineering, 
+          the Hong Kong University of Science and Technology, Clear Water Bay, Kowloon, Hong Kong</h6>
+        <h6 class="text-muted">Email: qzhual@connect.ust.hk</h6>
+        <hr>
+
+        <!-- Post Content -->
+        <p class="lead">In this study, we will ask you to complete a task of booking hotel online and answer the questions in the follow-up questionnaire.</p>
+        <hr>
+        
+
+        <h5 style="font-weight: bold;">Purpose of this Study</h5>
+
+        <h6>The purpose of this study is to evaluate users' decisions, 
+          behaviors, and perceptions of different rating designs when they are booking hotels online.</h6>
+
+        <h5 style="font-weight: bold;">Procedures</h5>
+        <h6>Participation in this study will consist of the following four phases.</h6>
+        <h6><span style="font-weight: bold;">1. </span>You will read an introduction about the task of booking a hotel base on a hypothetical story.</h6>
+        <h6><span style="font-weight: bold;">2. </span>You will browse the 15 hotels provided by us and learn about them in detail by browsing each hotel's ratings and reviews.</h6>
+        <h6><span style="font-weight: bold;">3. </span>You will need to choose top 3 hotels from them that you want to stay at, rank them and explain the decision you make.</h6>
+        <h6><span style="font-weight: bold;">4. </span>You will be asked several additional questions after you submit your ranking result and reasons in the Phase 3.</h6>
+        
+        <h5 style="font-weight: bold;">Participant Requirement</h5>
+        <h6>Participants need to have experience on booking hotels online and are not familiar with local hotels in London.</h6>
+        
+        <h5 style="font-weight: bold;">Data Collected</h5>
+        <h6>We will not ask for your real name and contact information.</h6>
+        <h6>We will collect your answers to every question in the study.</h6>
+        <h6>We will collect your operations (e.g. mouse moving and clicking) for analysis
+          We may publish research reports that include your result but your data will be anonymous.</h6>
+
+        <h5 style="font-weight: bold;">Voluntary Consent</h5>
+        <h6>Participation in this study is voluntary. You are free to withdraw or discontinue participation at any time.</h6>
+          
+        <h5 style="font-weight: bold;">Compensation & Costs</h5>
+        <h6>Each participant will paid after successfully finishing the study.</h6>
+        <h6>There will be no cost to you if you participate in this study.</h6>
+        <hr>
+
+        <!-- Comments Form -->
+        <div class="card my-12">
+          <h5 class="card-header">Your Consent</h5>
+          <div class="card-body">
+            <form>
+              <p style="color:brown">I voluntarily participate in this study and understand that the collected data will be used for academic research purposes.
+                I allow researchers to use my data while protecting my privacy.</p>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="customRadioInline1" name="Radio" class="custom-control-input">
+                  <label class="custom-control-label" for="customRadioInline1">Agree</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="customRadioInline2" name="Radio" class="custom-control-input" checked="">
+                  <label class="custom-control-label" for="customRadioInline2">Disagree</label>
+                </div>
+              <button type="submit" class="btn btn-primary" onclick="nextFunc()">Next</button> 
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <script>
+
+    function nextFunc() {
+      var val = document.getElementById("customRadioInline2").checked;
+      // console.log(val);
+      if (!val) {
+        console.log("jump");
+        window.location = "http://stackoverflow.com";
+        
+      } else {
+        alert("You need to agree the consent to proceed.");
+      }
+    }
+  </script>
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>  
+
+</body>
+
+</html>

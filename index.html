@@ -32,6 +32,7 @@
   <script src="js/bootstrap.min.js"></script>  
 
   <script src="js/holder.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script> -->
   <script src="https://kit.fontawesome.com/4421af3ebc.js" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://unpkg.com/lodash@4.17.20/lodash.min.js"></script>
 
@@ -803,8 +804,8 @@ function dashboard(id, fData, index, linkdata){
       var y = d3.scaleLinear().range([barY, 0])// v3 d3.scale.linear().range([hGDim.h, 0])
               .domain([0, d3.max(fD, function(d) { return d[1]; })]);
 
-      var tooltip = d3.select(id).append("div").attr("class", "toolTipBar");
-
+      var tooltipBar = d3.select(id).append("div").attr("class", "toolTipBar");
+      var tooltipPie = d3.select(id).append("div").attr("class", "toolTipPie");
       // Create bars for histogram to contain rectangles and freq labels.
       var bars = hGsvg.selectAll(".bar").data(fD).enter()
               .append("g").attr("class", "bar");
@@ -825,9 +826,9 @@ function dashboard(id, fData, index, linkdata){
           .attr("id", function(d){
             return "barRect-" + d[0];
           })
-          .on("mouseover", mouseover)
-          .on('mousemove', mousemove)
-          .on("mouseout", mouseout)
+          .on("mouseover", barMouseover)
+          .on('mousemove', barMousemove)
+          .on("mouseout", barMouseout)
           .on("click", function(d) { 
             var filterObj = {};
             if (d[0] == "5"){
@@ -862,11 +863,14 @@ function dashboard(id, fData, index, linkdata){
       var minNodeY = Math.min(nLdata.links[0].value, nLdata.links[1].value,
         nLdata.links[2].value,nLdata.links[3].value,nLdata.links[4].value);
 
+
       // console.log(minNodeY, maxNodeY);
       var pieSankey = hGsvg.append("g").attr("class", "sankeyPie")
           .attr("width", hGDim.w + hGDim.l + hGDim.r)
           .attr("height", hGDim.h/5)
           .attr("transform", "translate(" + 0 + "," + barY + ")");
+        
+      // pieSankey.call(tooltipPie);
 
       var sankey = d3.sankey()
         .nodeWidth(5) // node.dx = nodeWidth
@@ -879,6 +883,8 @@ function dashboard(id, fData, index, linkdata){
           .nodes(nLdata.nodes)
           .links(nLdata.links)
           .layout(32); // what is this? iterations
+
+      
 
       var link = pieSankey.append("g").selectAll(".link").data(nLdata.links)
           .enter().append("path")
@@ -980,31 +986,13 @@ function dashboard(id, fData, index, linkdata){
         })
       // .on("mouseover", arcTween(42, 0))
       // .on("mouseout",  arcTween(37, 150))
-      .on("mouseover", function(d){
-        RecordOver_arc(d.data.type, this, index);
-        // return function() {
-          d3.select(this).transition().delay(0).attrTween("d", function(d) {
-            var i = d3.interpolate(d.outerRadius, 42);
-            // console.log(d.outerRadius, outerRadius);
-            return function(t) { d.outerRadius = i(t); return arc(d); };
-          });
-        // };
-        // arcTween(42, 0);
-      }).on("mouseout", function(d){
-        RecordOut_arc(d.data.type, this, index);
-        // return function() {
-          d3.select(this).transition().delay(150).attrTween("d", function(d) {
-            var i = d3.interpolate(d.outerRadius, 37);
-            // console.log(d.outerRadius, outerRadius);
-            return function(t) { d.outerRadius = i(t); return arc(d); };
-          });
-        // };
-        // arcTween(37, 150);
-      })
+      .on("mouseover", pieMouseover)
+      .on("mousemove", pieMousemove)
+      .on("mouseout", pieMouseout)
       .on("click", function(d){
         var barId = $(this).parent().attr('id');
         filter2Criteria(index, d.data.type, barId);
-        //listen
+        //listen pie
         recordClickViz(this, index);
       });
 
@@ -1014,6 +1002,7 @@ function dashboard(id, fData, index, linkdata){
           .style("font-size", "15px")
           .attr("transform", "translate(0," + 2*hGDim.h/3 + ")")
           .call(d3.axisBottom().tickSize(0).scale(x));
+
     // function dragmove(d) {
     //   //d3.select(this).attr("transform", "translate(" + d.x + "," + (d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))) + ")");
     //   d3.select(this).attr("transform", "translate(" + (d.x = Math.max(0, Math.min(hGDim.w - d.dy, d3.event.x))) + "," + d.y + ")");
@@ -1031,9 +1020,63 @@ function dashboard(id, fData, index, linkdata){
         });
       };
     }
-    function mouseover(d){  // utility function to be called on mouseover.
+
+    function pieMouseover(d) {
+      tooltipPie.style('display', 'inline');
+
+      RecordOver_arc(d.data.type, this, index);
+        // return function() {
+        d3.select(this).transition().delay(0).attrTween("d", function(d) {
+          var i = d3.interpolate(d.outerRadius, 42);
+          // console.log(d.outerRadius, outerRadius);
+          return function(t) { d.outerRadius = i(t); return arc(d); };
+        });
+    }
+
+    function pieMousemove(d) {
+      // console.log(this);
+      var xP = d3.event.pageX - this.getBoundingClientRect().x + 80;
+      var yP = d3.event.pageY - this.getBoundingClientRect().y;
+      console.log("pie:", xP, yP); 
+      var barNum  = this.parentElement.id.split("pieId")[1];
+      var st = fData.filter(function(s){ return s.State == barNum;});
+      
+      var perc = d.value/st[0].total;
+      perc = d3.format(".2%")(perc.toFixed(4));
+      var newHtml = [];
+      newHtml.push('<table><small style="color:blue"> Click to filter review</small>');
+      newHtml.push(
+            '<tr>', 
+            '<td id="key">' + d.data.type + '</td>',
+            '<td id="value">' + d.data.value + '</td>', 
+            '<td id="value">' + perc + '</td>', 
+            '</tr></table>');
+
+      tooltipPie
+        .style("left", xP  + "px")
+        .style("top", yP + "px")
+        .style("display", "inline-block")
+        .html(newHtml.join(" "));
+      // tooltipPie.html(d)
+      //   .style("left", d  + "px")
+      //   .style("top", d + "px");
+    }
+
+    function pieMouseout(d) {
+      tooltipPie.style('display', 'none');
+
+      RecordOut_arc(d.data.type, this, index);
+        // return function() {
+        d3.select(this).transition().delay(150).attrTween("d", function(d) {
+          var i = d3.interpolate(d.outerRadius, 37);
+          // console.log(d.outerRadius, outerRadius);
+          return function(t) { d.outerRadius = i(t); return arc(d); };
+        });
+    }
+
+    function barMouseover(d){  // utility function to be called on mouseover.
       //tooltip
-      tooltip.style('display', 'inline');
+      tooltipBar.style('display', 'inline');
       RecordOver_b(this, index);
       // grey pie
       var curPieId = parseInt(d[0]);
@@ -1055,9 +1098,11 @@ function dashboard(id, fData, index, linkdata){
       //bar listen mouseover
     }
 
-    function  mousemove(d) {
-        var xPosition = d3.mouse(this)[0] + 50;//d3.event.pageX;
+    function  barMousemove(d) {
+        var xPosition = d3.mouse(this)[0] + 50;   //d3.event.pageX;
         var yPosition = d3.mouse(this)[1] + 5;    //d3.event.pageY;
+        // console.log("bar:", xPosition, yPosition);
+
         var st = fData.filter(function(s){ return s.State == d[0];})[0],
             nD = d3.keys(st.freq).map(function(s){ return {type:s, freq:st.freq[s]};});
         var perc = [];
@@ -1067,7 +1112,8 @@ function dashboard(id, fData, index, linkdata){
         })
 
         var newHtml = [];
-        newHtml.push('<table><h6>' + d[1] +'</h6>');
+        newHtml.push('<table><h6>' + d[1] + ' ' 
+          + '<small style="color:blue"> Click to filter review</small></h6>');
         // console.log("nD", nD);  
         nD.forEach(function(t, ind){
           // console.log(t);
@@ -1080,7 +1126,7 @@ function dashboard(id, fData, index, linkdata){
         })
         newHtml.push('</table>');
         // console.log("mousemove", nD[0]);
-        tooltip
+        tooltipBar
           // .attr("transform", "translate(" + xPosition + "," + yPosition + ")")
           .style("left", xPosition  + "px")
           .style("top", yPosition + "px")
@@ -1096,9 +1142,9 @@ function dashboard(id, fData, index, linkdata){
         
     }
     
-    function mouseout(d){    // utility function to be called on mouseout.
+    function barMouseout(d){    // utility function to be called on mouseout.
         //tooltip
-        tooltip.style('display', 'none');
+        tooltipBar.style('display', 'none');
         //remove grey
         var curPieId = parseInt(d[0]);
         // console.log("moveout", curPieId);
