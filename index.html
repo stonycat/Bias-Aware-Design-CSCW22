@@ -1037,7 +1037,7 @@ function dashboard(id, fData, index, linkdata){
       // console.log(this);
       var svg = this.closest('svg');
       var xP = d3.event.pageX - svg.getBoundingClientRect().x;
-      var yP = d3.event.pageY - svg.getBoundingClientRect().y;
+      var yP = d3.event.pageY - svg.getBoundingClientRect().y - window.scrollY;
       console.log("pie:", xP, yP, d3.event.pageX, d3.event.pageY, ); 
       var barNum  = this.parentElement.id.split("pieId")[1];
       var st = fData.filter(function(s){ return s.State == barNum;});
