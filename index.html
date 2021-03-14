@@ -823,6 +823,7 @@ function dashboard(id, fData, index, linkdata){
       // var xP = d3.event.pageX - this.getBoundingClientRect().x + 80;
       // var yP = d3.event.pageY - this.getBoundingClientRect().y;
       console.log("pie:", xP, yP); 
+
       var barNum  = this.parentElement.id.split("pieId")[1];
       var st = fData.filter(function(s){ return s.State == barNum;});
       
