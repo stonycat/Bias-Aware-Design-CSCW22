@@ -22,23 +22,25 @@
     crossorigin="anonymous"></script>
   <script>window.jQuery || document.write('<script src="js/jquery-slim.min.js"><\/script>')</script>
   <script src="https://d3js.org/d3.v4.js"></script>
-  <script src="js/sankey.js"></script>
   <script src="js/parse.js"></script>
   <script type="text/javascript" src="https://unpkg.com/parse/dist/parse.min.js"></script>
+  <script src="js/js-code/parse-part.js"></script>
+
+  <script src="js/sankey.js"></script>
+  
   <script src="https://cdn.jsdelivr.net/gh/RubaXa/Sortable/Sortable.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.0/jquery.cookie.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>  
-
   <script src="js/holder.min.js"></script>
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script> -->
   <script src="https://kit.fontawesome.com/4421af3ebc.js" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://unpkg.com/lodash@4.17.20/lodash.min.js"></script>
 
-  <script src="js/data/emoData15.js"></script>
-  <script src="js/data/contriData15.js"></script>
-  <script src="js/data/keyword15.js"></script>
+  <script src="json/data/emoData15.js"></script>
+  <script src="json/data/contriData15.js"></script>
+  <script src="json/data/keyword15.js"></script>
   <script src="json/Alhambra_Hotel_95_4.0.js"></script>
   <script src="json/Chelsea_Guest_House_93_4.0.js"></script>
   <script src="json/Ibis_London_Blackfriars_Hotel_90_4.0.js"></script>
@@ -55,43 +57,19 @@
   <script src="json/Travelodge_London_Greenwich_High_Road_99_4.0.js"></script>
   <script src="json/Travelodge_London_Vauxhall_Hotel_95_4.0.js"></script>
   <script type="text/javascript" src="json/t1.js"></script> 
+  <!-- <script>
+    $(window).on('load', function() {
+      $('#taskIntro').modal('show');
+    });
+    </script> -->
 </head>
 
 <body onload="sortHotels(['name'], ['asc'])">
   <!-- Empty element, will be filled in the content by the code below -->
   <div id="handlebars-rendering-target"></div>
 
-<script>
-  function txtRemove(el, index) {
-    var element = el;
-    var par = el.parentElement;
-    element.remove();
-    var txtBox = document.createElement('textarea');
-    txtBox.classList.add("textarea", "form-control");
-    txtBox.id = "textarea" + index;
-    // txtBox.setAttribute("placeholder", "reason(>30 words)");
-    txtBox.setAttribute("style", "min-width: 100%");
 
-    var textSingle = document.createElement('small');
-    textSingle.innerHTML = "&nbsp;No&nbsp;record";
-    textSingle.style.color = "red";
 
-    var submitButton = document.createElement('button');
-    submitButton.classList.add("btn", "btn-outline-success", "btn-sm");
-    submitButton.id = 'submitTxt' + index;
-    submitButton.innerHTML = "submit";
-    
-    par.appendChild(txtBox);
-    par.appendChild(submitButton);
-    par.appendChild(textSingle);
-
-    submitButton.addEventListener("click", function() {
-      console.log(this.id);
-      textSingle.innerHTML = "&nbsp;Recorded!";
-      textSingle.style.color = "green";
-    });
-  }
-</script>
 
 <!--rank card -->
 <div class="modal fade bd-example-modal-lg" id="modal-picktop" 
@@ -119,7 +97,6 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
 
 <!--rank part-->
 <script id="reorderinglist-template" type="text/x-handlebars-template">
-  
   {{#if (isEqual items.length 3)}}
     <ul class="list-group" id="reorderingitems" data-item-id="{{item.id}}">
       {{#each items as |item|}}
@@ -162,68 +139,67 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
   
   
 </script>
+
 <!--sortable-->
 <script>
-    var source = document.getElementById("reorderinglist-template").innerHTML;
-    var reorderinglistTemplate = Handlebars.compile(source);
-    
-    $('#modal-picktop').on('shown.bs.modal', function (e) {
-        var topHotels = _.filter(context.hotels, {checked: true});
-        // webstorage order
-        topHotels = _.orderBy(topHotels, hotel => hotel.order === -1 ? 100 : hotel.order);
-        var rendered = reorderinglistTemplate({items: topHotels});
-        // console.log(rendered);
-        document.getElementById('picktop-modal-body').innerHTML = rendered;
-        if (topHotels.length === 3) {
-          var reorderingitems = document.getElementById('reorderingitems');
-          Sortable.create(reorderingitems, { 
-            animation: 100, 
-            group: 'list-1', 
-            draggable: '.list-group-item', 
-            handle: '.list-group-item', 
-            sort: true, 
-            filter: '.sortable-disabled', 
-            chosenClass: 'active',
-            onSort: onReorderingListSort,
-            onUpdate: function(evt) { 
-              var eles = document.getElementsByClassName("updateInd");
-              for (var i=0;i<eles.length;i++)
-              { 
-                var index = i+1
-                eles[i].innerText = "Top " + index;
-                // console.log(eles[i].innerText);
-              }
+  var source = document.getElementById("reorderinglist-template").innerHTML;
+  var reorderinglistTemplate = Handlebars.compile(source);
+  
+  $('#modal-picktop').on('shown.bs.modal', function (e) {
+      var topHotels = _.filter(context.hotels, {checked: true});
+      // webstorage order
+      topHotels = _.orderBy(topHotels, hotel => hotel.order === -1 ? 100 : hotel.order);
+      var rendered = reorderinglistTemplate({items: topHotels});
+      // console.log(rendered);
+      document.getElementById('picktop-modal-body').innerHTML = rendered;
+      if (topHotels.length === 3) {
+        var reorderingitems = document.getElementById('reorderingitems');
+        Sortable.create(reorderingitems, { 
+          animation: 100, 
+          group: 'list-1', 
+          draggable: '.list-group-item', 
+          handle: '.list-group-item', 
+          sort: true, 
+          filter: '.sortable-disabled', 
+          chosenClass: 'active',
+          onSort: onReorderingListSort,
+          onUpdate: function(evt) { 
+            var eles = document.getElementsByClassName("updateInd");
+            for (var i=0;i<eles.length;i++)
+            { 
+              var index = i+1
+              eles[i].innerText = "Top " + index;
             }
-          });
-          $('#modal-picktop-save').prop('disabled', false);
-        } else {
-          $('#modal-picktop-save').prop('disabled', true);
-        }
-    });
+          }
+        });
+        $('#modal-picktop-save').prop('disabled', false);
+      } else {
+        $('#modal-picktop-save').prop('disabled', true);
+      }
+  });
 
-    function onReorderingListSort() {
-      var items = $('#reorderingitems li').map(function(){return $(this).attr('data-item-id')}).get();
-      context.hotels.forEach(hotel => {
-        hotel.order = items.indexOf(hotel.id)
-        window.localStorage.setItem(`order-${hotel.id}`, hotel.order);
-      })
-    }
+  function onReorderingListSort() {
+    var items = $('#reorderingitems li').map(function(){return $(this).attr('data-item-id')}).get();
+    context.hotels.forEach(hotel => {
+      hotel.order = items.indexOf(hotel.id);
+      window.localStorage.setItem(`order-${hotel.id}`, hotel.order);
+    })
+  }
 
-    function textareaOnChange(index) {
-      var hotel = _.find(context.hotels, {index: index});
-      var reason = $(`#textarea-reason-${index}`).val();
-      hotel.reason = reason;
-      window.localStorage.setItem(`item-{{@index}}`, index);
-      window.localStorage.setItem(`reason-${hotel.id}`, reason);
-      // console.log(hotel, reason);
-    }
+  function textareaOnChange(index) {
+    var hotel = _.find(context.hotels, {index: index});
+    var reason = $(`#textarea-reason-${index}`).val();
+    hotel.reason = reason;
+    window.localStorage.setItem(`item-{{@index}}`, index);
+    window.localStorage.setItem(`reason-${hotel.id}`, reason);
+    // console.log(hotel, reason);
+  }
 
-    function recordOrder() {
-      var items = $('#reorderingitems li').map(function(){return $(this).attr('data-item-id')}).get();
-      // console.log(items);
-    }
+  function recordOrder() {
+    var items = $('#reorderingitems li').map(function(){return $(this).attr('data-item-id')}).get();
+    // console.log(items);
+  }
 </script>
-
 
 <!--task design-->
 <script id="entry-template" type="text/x-handlebars-template">
@@ -239,11 +215,11 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="col-4 text-center">
         </div>
         <div class="col-4 d-flex justify-content-end align-items-center">
-          <a class="btn btn-sm btn-outline-secondary" href="#">Task Introduction</a>
+          <a class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#taskIntro">Task Introduction</a>
         </div>
       </div>
     </header>
-<!-- Imagine that you are going on vacation to London, a city you have never been to.  -->
+
     <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
       <div class="col-md-12 px-0">
         <h1 class="display-5 font-italic">Task Design</h1>
@@ -257,15 +233,6 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
           data-toggle="modal" data-target="#modal-picktop" onclick="recordClickResult(this)">
           Picked Top 3
         </button>
-        <!-- <button type="button" class="btn btn-outline-primary btn-sm" onclick="sortHotels(['rating'], ['asc'])">
-          SortByRating
-        </button> -->
-        <!-- <button type="button" class="btn btn-outline-primary btn-sm" onclick="sortHotels(['name'], ['asc'])">
-          Reorder hotels
-        </button> -->
-        <!-- <div class="form-group col-md-2" style="display: inline-block;">
-          <input type="email" class="form-control form-control-sm" id="inputEmail3" placeholder="Your ID">
-        </div> -->
     </div>
     <!--Header end-->   
       <div id="body-hotel-list">
@@ -364,11 +331,9 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-
           <div class="modal-body">
             
             <div id="modal-vis-{{hotel.index}}"></div>
-
             <div style="padding-left:30px; padding-top:20px;">
               <label class="switch" id="switchBox{{hotel.index}}" style="display:inline-block;">
                 <input type="checkbox" id="filterCheckBox{{hotel.index}}" onclick="filterOnOff({{hotel.index}});recordClickResult(this);" checked>
@@ -381,7 +346,6 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             
               <div class="tab-pane fade active show" id="pills-reviews" role="tabpanel" aria-labelledby="pills-reviews-tab">
                 <div class="bg-white rounded shadow-sm p-4 mb-4 restaurant-detailed-ratings-and-reviews">
-                  
                   <h5 class="mb-1" style="display: inline-block;">All Reviews</h5> &nbsp;
                   <a href="#" class="text-muted" style="display: inline-block;" id="showAll{{hotel.index}}" onclick="filterReviews({{hotel.index}}, {});recordClickResult(this)">Show all</a>
                     <h6 id="filterResultTxt{{hotel.index}}" style="padding-bottom: 10px;" class="text-muted"></h6>
@@ -406,7 +370,6 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
       </div>
     </div><!--model fade end-->
 </script>
-
 
 <!--pickHotel put here-->
 <script>
@@ -498,183 +461,7 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
 <!--filter--> 
 <script>
   
-    var source = document.getElementById("reviewlist-template").innerHTML; //new list
-    var reviewlistTemplate = Handlebars.compile(source);
 
-    function filterReviews(hotelIndex, filterParams) {
-      // console.log(hotelIndex, filterParams);
-      var reviews = _.filter(context.hotels[hotelIndex].reviews, filterParams);
-      // console.log("filtered reviews: ", reviews);
-      showNumFilter(hotelIndex, reviews.length, filterParams, "none");
-      var rendered = reviewlistTemplate({reviews});
-      // console.log(rendered); // Debug
-      document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
-      loadSingleReview();
-      // loadMoreReviews();
-    }
-
-    function filterCategory(hotelIndex, filterParams) {
-      
-      var reviews = _.filter(context.hotels[hotelIndex].reviews, function(x){
-        var numContri = x.contriNum.split(" ")[0];
-        var numHelpfulv = x.helpfulNum.split(" ")[0];
-        var keywords = x.categories;
-        // console.log(keywords);
-        //Emo category
-        if (filterParams == 'extremelyPositive'){
-          return x.polarity >= 0.8;
-        } else if (filterParams == 'positive') {
-          return x.polarity > 0.2 && x.polarity < 0.8;
-        } else if (filterParams == 'neutral') {
-          return x.polarity >= -0.2 && x.polarity <= 0.2;
-        } else if (filterParams == 'negative') {
-          return x.polarity > -0.8 && x.polarity < -0.2;
-        } else if (filterParams == 'extremelyNegative') {
-          return x.polarity <= -0.8;
-        } 
-        //contribution
-        else if (filterParams == 'newReviewer'){
-          return numContri >= 1 && numContri <= 2;
-        } else if (filterParams == 'juniorReviewer') {
-          return numContri > 2 && numContri <= 10;
-        } else if (filterParams == 'reviewer') {
-          return numContri > 10 && numContri <= 20;
-        } else if (filterParams == 'seniorReviewer') {
-          return numContri > 20 && numContri <= 50;
-        } else if (filterParams == 'proReviewer') {
-          return numContri > 50 && numContri <= 100;
-        } else if (filterParams == 'topReviewer') {
-          return numContri > 100;
-        }
-        //helpful votes
-        else if (filterParams == 'newContributor'){
-          return numHelpfulv == 0;
-        } else if (filterParams == 'juniorContributor') {
-          return numHelpfulv >= 1 && numHelpfulv <= 10;
-        } else if (filterParams == 'contributor') {
-          return numHelpfulv > 10 && numHelpfulv <= 25;
-        } else if (filterParams == 'seniorContributor') {
-          return numHelpfulv > 25 && numHelpfulv <= 50;
-        } else if (filterParams == 'proContributor') {
-          return numHelpfulv > 50 && numHelpfulv <= 100;
-        } else if (filterParams == 'topContributor') {
-          return numHelpfulv > 100;
-        }
-        //keywords
-        else {
-          return keywords.includes(filterParams);
-        }
-
-      });
-      // console.log("show reviews", reviews, reviews.length);
-      showNumFilter(hotelIndex, reviews.length, filterParams, "none");
-
-      var rendered = reviewlistTemplate({reviews});
-      document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
-      loadSingleReview();
-      // loadMoreReviews();
-    }
-
-    function filter2Criteria(hotelIndex, filterParams1, filterParams2) {
-      var barId = parseFloat(filterParams2.split('pieId')[1]).toFixed(1);
-      // console.log(filterParams1, barId.toString());
-      var reviews = _.filter(context.hotels[hotelIndex].reviews, function(x){
-        var numContri = x.contriNum.split(" ")[0];
-        var numHelpfulv = x.helpfulNum.split(" ")[0];
-        var keywords = x.categories;
-        // console.log(x.currentRating, barId.toString());
-        //Emo category
-        if (filterParams1 == 'extremelyPositive'){
-          return x.polarity >= 0.8 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'positive') {
-          return x.polarity > 0.2 && x.polarity < 0.8 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'neutral') {
-          return x.polarity >= -0.2 && x.polarity <= 0.2 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'negative') {
-          return x.polarity > -0.8 && x.polarity < -0.2 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'extremelyNegative') {
-          return x.polarity <= -0.8 && x.currentRating == barId.toString();
-        } 
-         //contribution
-        else if (filterParams1 == 'newReviewer'){
-          return numContri >= 1 && numContri <= 2 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'juniorReviewer') {
-          return numContri > 2 && numContri <= 10 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'reviewer') {
-          return numContri > 10 && numContri <= 20 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'seniorReviewer') {
-          return numContri > 20 && numContri <= 50 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'proReviewer') {
-          return numContri > 50 && numContri <= 100 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'topReviewer') {
-          return numContri > 100 && x.currentRating == barId.toString(); 
-        }
-        //helpful votes
-        else if (filterParams1 == 'newContributor'){
-          return numHelpfulv == 0 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'juniorContributor') {
-          return numHelpfulv >= 1 && numHelpfulv <= 10 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'contributor') {
-          return numHelpfulv > 10 && numHelpfulv <= 25 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'seniorContributor') {
-          return numHelpfulv > 25 && numHelpfulv <= 50 && x.currentRating == barId.toString(); 
-        } else if (filterParams1 == 'proContributor') {
-          return numHelpfulv > 50 && numHelpfulv <= 100 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'topContributor') {
-          return numHelpfulv > 100 && x.currentRating == barId.toString();
-        }
-        //keywords
-        else {
-          return keywords.includes(filterParams1) && x.currentRating == barId.toString();
-        }
-      });
-      showNumFilter(hotelIndex, reviews.length, filterParams1, filterParams2);
-      var rendered = reviewlistTemplate({reviews});
-      document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
-
-      loadSingleReview();
-      // loadMoreReviews();
-    }
-
-    function showNumFilter(index, num, para1, para2) {
-      // console.log("filter", para1, para2);
-      var txtDiv = document.getElementById('filterResultTxt'+ index);
-      if (para2 == "none"){
-        if (typeof para1 == 'object') {
-          // console.log(para1);
-          txtDiv.innerHTML = num + " reviews of user rating " + para1['currentRating'];
-        } else {
-          txtDiv.innerHTML = num + " reviews of the selected category \'" + para1 + "\'";
-        }
-      } else {
-          txtDiv.innerHTML = num + " reviews of the selected category \'" +  para1 + "\' under user rating " 
-              + parseFloat(para2.split("Id")[1]).toFixed(1);
-      }
-    }
-
-    function filterOnOff(index) {
-      var curF = document.getElementById('filterText' + index);
-      if (curF.innerHTML == "Filtering is enabled"){
-        //close
-        curF.innerHTML = "Filtering is disabled";
-        d3.selectAll("rect").on('click',null);
-        d3.selectAll(".arc").on('click',null);
-        // $('.arc').prop('disabled',true);
-        // $('rect').prop('disabled',true);
-      } else {
-        //open
-        curF.innerHTML = "Filtering is enabled";
-        d3.select("#svg-" + index).remove();
-        var legendRemove = $("#legend" + index);
-        legendRemove.remove();
-        var bg = $("#groupButton" + index);
-        bg.remove();
-
-        // embedVis();
-        embedSingleVis(index);
-        groupClick();
-      }
-    }
 
 </script>
 
@@ -689,11 +476,7 @@ tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
       var orderList = [['desc'], ['asc']];
       var attrs = attrList[Math.floor(Math.random() * attrList.length)];
       var orders = orderList[Math.floor(Math.random() * orderList.length)];
-      // console.log(attrs, orders);
       var sortedByName = _.orderBy(context.hotels, attrs, orders);
-      // shuffle(context.hotels);
-      // var sortedRandomly =  context.hotels;
-      // console.log(sortedByName);
       var rendered = hotellistTemplate({hotels: sortedByName});
       document.getElementById(`body-hotel-list`).innerHTML = rendered;
 
@@ -1034,9 +817,11 @@ function dashboard(id, fData, index, linkdata){
     }
 
     function pieMousemove(d) {
-      // console.log(this);
-      var xP = d3.event.pageX - this.getBoundingClientRect().x + 80;
-      var yP = d3.event.pageY - this.getBoundingClientRect().y;
+      var svg = this.closest('svg');
+      var xP = d3.event.pageX - svg.getBoundingClientRect().x;
+      var yP = d3.event.pageY - svg.getBoundingClientRect().y - window.scrollY;
+      // var xP = d3.event.pageX - this.getBoundingClientRect().x + 80;
+      // var yP = d3.event.pageY - this.getBoundingClientRect().y;
       console.log("pie:", xP, yP); 
       var barNum  = this.parentElement.id.split("pieId")[1];
       var st = fData.filter(function(s){ return s.State == barNum;});
@@ -1050,13 +835,14 @@ function dashboard(id, fData, index, linkdata){
             '<td id="key">' + d.data.type + '</td>',
             '<td id="value">' + d.data.value + '</td>', 
             '<td id="value">' + perc + '</td>', 
-            '</tr></table>');
-
+            '</tr>');
+      newHtml.push('</table>');
       tooltipPie
+      //  .attr("transform", "translate(" + xPosition + "," + yPosition + ")")
         .style("left", xP  + "px")
         .style("top", yP + "px")
         .style("display", "inline-block")
-        .html(newHtml.join(" "));
+        .html(newHtml.join("  "));
       // tooltipPie.html(d)
       //   .style("left", d  + "px")
       //   .style("top", d + "px");
@@ -1259,22 +1045,19 @@ function dashboard(id, fData, index, linkdata){
           hG.update(fData.map(function(v){ 
             return [v.State,v.freq[d.type]];}),segColor(d.type));
         }
-        //listen
 
     }
     //Utility function to be called on mouseout a pie slice.
     function mouseout(d){
         RecordOut_b(this, index);
         $('.arc').css({fill: ""});
-        // call the update function of histogram with all data.
         hG.update(fData.map(function(v){
             return [v.State,v.total];}), barColor);
-    }
+      }
       return leg;
-    }
+    } 
 
     // calculate total frequency by segment for all state.
-
     if (Object.keys(fData[0]['freq']).includes("negative")){
         var tF = ['extremelyPositive','positive','neutral','negative','extremelyNegative'].map(function(d){ 
           return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
@@ -1283,21 +1066,20 @@ function dashboard(id, fData, index, linkdata){
     else if (Object.keys(fData[0]['freq']).includes("reviewer")) {
         var tF = ['newReviewer','juniorReviewer', 'reviewer','seniorReviewer',
         'proReviewer', 'topReviewer'].map(function(d){ 
-              return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
+            return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
         });    
     } else if (Object.keys(fData[0]['freq']).includes("contributor")) {
         var tF = ['newContributor', 'juniorContributor', 'contributor','seniorContributor',
         'proContributor', 'topContributor'].map(function(d){ 
-              return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
+            return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
         });    
     } else if (Object.keys(fData[0]['freq']).includes("food")) {
         var tF = ['food', 'facility', 'surroundings','service','companion', 
           'travelling_purpose'].map(function(d){ 
-              return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
+            return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
         });    
     }
       
-    
     // calculate total frequency by state for all segment.
     var sF = fData.map(function(d){return [d.State,d.total];});
 
@@ -1489,6 +1271,7 @@ function dashboard(id, fData, index, linkdata){
     //sankeyPie(linkDataEmo);
     var hG = histoGram(sF, linkDataEmo, tF), // create the histogram.
         leg= legend(tF, '#legend' + index);  // create the legend.
+    // console.log(sF);
 
 }
 
@@ -1627,7 +1410,6 @@ function embedSingleVis(index) {
     dashboard('#dashboard'+ index, hotelCategoryData, index, linkNumAll[index]);
 }
 
-
 embedVis();
 </script>
 
@@ -1735,109 +1517,7 @@ embedVis();
   loadMoreReviews();
 </script>
 
-<!-- parse -->
-<script>
-    parseAPI.init()
 
-    function recordClickResult(button) {
-      
-      parseAPI.saveClickResult(
-        // {ID: 'user id', Button: $(this).attr('id')},
-        {ID: 'user id', Button: button.id, username: 'hello, 3.3', q1: true, q2: false}, 
-        {anything: 'type: Click', numbers: 123, but: {better: 'not object'}} //not obj
-      ) 
-      console.log( "ClickButton ", button.id);
-    }
-
-
-    function recordClickReadMore(indexReview,hotelInd) {
-      
-      parseAPI.saveClickReadMore(
-        {ID: 'user id', Button: 'Read More', username: 'hello, 3.3', q1: true, q2: false, Hotel: hotelInd, ReviewNum: (indexReview+1)}, 
-        {anything: 'type: Click', numbers: 123, but: {better: 'not object'}} //not obj
-      ) 
-      console.log("ClickReadMore", indexReview,hotelInd);
-    }
-
-    function recordClickViz(el, index) {
-      
-      parseAPI.saveClickResult(
-        // {ID: 'user id', Button: $(this).attr('id')},
-        {ID: 'user id', Button: el.id, username: 'hello, 3.3'}, 
-        {anything: 'type: Click'} //not obj
-      ) 
-      console.log( "ClickButton ", el.id, index);
-    }
-    function recordClickSave() {
-      var review01= $("textarea:eq(0)").val();
-      var review02= $('textarea:eq(1)').val();
-      var review03= $('textarea:eq(2)').val();
-      var reviews=[review01,review02,review03];
-
-      var reviewId01 = $("textarea:eq(0)").attr('id');
-      var hotelNum01  = reviewId01.split('-').pop();
-      hotelNum01 = parseInt(hotelNum01.split('-').pop());
-
-      var reviewId02 = $("textarea:eq(1)").attr('id');
-      var hotelNum02  = reviewId02.split('-').pop();
-      hotelNum02 = parseInt(hotelNum02.split('-').pop());
-
-      var reviewId03 = $("textarea:eq(2)").attr('id');
-      var hotelNum03  = reviewId03.split('-').pop();
-      hotelNum03 = parseInt(hotelNum03.split('-').pop());
-      var hotelNums = [hotelNum01,hotelNum02,hotelNum03];
-
-      for(var i=0; i<3;i++){
-        parseAPI.saveReason(
-        {ID: 'user id',  username: 'hello, 3.3', q1: true, q2: false, Hotel: hotelNums[i] , Reason:reviews[i],Ranking: (i+1) }, 
-        {anything: 'type: Save Reasons', numbers: 123, but: {better: 'not object'}} //not obj
-      ) 
-      }
-      console.log("recordClickSave");
-    }
-    function RecordOver_b(button, hotelInd) {
-      
-      parseAPI.saveMouseOver(
-        // {ID: 'user id', Button: 'this.id'},
-        {ID: 'user id', Button: button.id, username: 'hello, 3.3', q1: true, q2: false, Hotel: hotelInd}, 
-        {anything: 'type: MouseOver', numbers: 123, but: {better: 'not object'}} //not obj
-      ) 
-      console.log("MouseOver", button.id, hotelInd);
-    }
-
-    function RecordOut_b(button, hotelInd) {
-      
-      parseAPI.saveMouseOut(
-        // {ID: 'user id', Button: 'this.id'}, 
-        {ID: 'user id', Button: button.id, username: 'hello, 3.3', q1: true, q2: false, Hotel: hotelInd}, 
-        {anything: 'type: MouseOut', numbers: 123, but: {better: 'not object'}} //not obj
-      ) 
-      console.log("MouseOut", button.id, hotelInd);
-
-    }
-
-    function RecordOver_arc(type, barId, hotelInd) {
-      
-      parseAPI.saveMouseOver(
-        // {ID: 'user id', Button: 'this.id'},
-        {ID: 'user id', Button: type, username: 'hello, 3.3', q1: true, q2: false, Hotel: hotelInd}, 
-        {anything: 'type: MouseOver', numbers: 123, but: {better: 'not object'}} //not obj
-      ) 
-      console.log("MouseOver", type,  barId.parentElement.id, hotelInd);
-    }
-
-    function RecordOut_arc(type,  barId, hotelInd) {
-      
-      parseAPI.saveMouseOut(
-        // {ID: 'user id', Button: 'this.id'}, 
-        {ID: 'user id', Button: type, username: 'hello, 3.3', q1: true, q2: false, Hotel: hotelInd}, 
-        {anything: 'type: MouseOut', numbers: 123, but: {better: 'not object'}} //not obj
-      ) 
-      console.log("MouseOut", type,  barId.parentElement.id, hotelInd);
-
-    }
-
-</script>
 
 <script>
   //scroll down/up
@@ -1855,7 +1535,7 @@ embedVis();
               if (e.wheelDelta > 0) { //Chrome / IE
                   console.log("scroll up");
                   parseAPI.saveScroll(
-                  {username: 'hello, 3.3', q1: true, q2: false, Length: ''+length}, 
+                  {username: 'hello, 3.3', q1: true, q2: false, Length: ''+ length}, 
                   {anything: 'scroll up', numbers: 123, but: {better: 'not object'}} 
                 )
                   console.log("send msg to backend");   
@@ -1908,8 +1588,36 @@ embedVis();
 </script>
 
 
+<div id="taskIntro" class="modal fade d-example-modal-lg">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title">Task Introduction</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <h6>Imagine that you are going on vacation to London, a city you have never been to. You will be in London for a few days. </h6>
+            <h6>Based on your budget and the average cost of London hotels, you screened all the hotels by price, hotel-class, etc. 
+              Now there are 15 hotels that meet the requirements. These hotels have similar prices, ratings and number of reviews. 
+            </h6>
+            <h5>Task:</h5>
+            
+            <h6><span style="font-weight: bold;">Phase 1: </span>You need to read the user feedback for each hotel carefully , including user ratings and review data, and make decisions 
+              <span style="color:#0275d8">primarily on this information</span>.</h6>
+            <h6>As shown in the image below, you can click the <span style="color:#0275d8">'User feedback'</span> button to see the details of each hotel.</h6> 
+            <img class="mx-auto d-md-block" style="height: 200px;" src="img/intro/intro-1.png" alt="Card image cap">
+            
+            
+            <br>
+            <button type="button" data-dismiss="modal" class="btn btn-outline-primary">Close</button>
+          </div>
+          
+      </div>
+  </div>
+</div>
 
 
+  <script src="js/js-code/filter.js"></script>
 </body>
 
 </html>
