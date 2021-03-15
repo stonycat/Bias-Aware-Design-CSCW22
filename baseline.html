@@ -4,11 +4,11 @@
 <head>
   <meta charset="utf-8">
 
-  <title>Booking Hotel-B</title>
+  <title>Booking Hotel-b</title>
 
   <!-- Bootstrap4 core CSS -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
-  <link href="css/hotel.css" rel="stylesheet">
+  <link href="css/baseline.css" rel="stylesheet">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
 
@@ -22,23 +22,21 @@
     crossorigin="anonymous"></script>
   <script>window.jQuery || document.write('<script src="js/jquery-slim.min.js"><\/script>')</script>
   <script src="https://d3js.org/d3.v4.js"></script>
-  
   <script src="js/sankey.js"></script>
-  <script src="js/parse.js"></script>
-  <script type="text/javascript" src="https://unpkg.com/parse/dist/parse.min.js"></script>
+
   <script src="https://cdn.jsdelivr.net/gh/RubaXa/Sortable/Sortable.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.0/jquery.cookie.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>  
-
   <script src="js/holder.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
   <script src="https://kit.fontawesome.com/4421af3ebc.js" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://unpkg.com/lodash@4.17.20/lodash.min.js"></script>
 
-  <script src="js/data/emoData15.js"></script>
-  <script src="js/data/contriData15.js"></script>
-  <script src="js/data/keyword15.js"></script>
+  <script src="json/data/emoData15.js"></script>
+  <script src="json/data/contriData15.js"></script>
+  <script src="json/data/keyword15.js"></script>
   <script src="json/Alhambra_Hotel_95_4.0.js"></script>
   <script src="json/Chelsea_Guest_House_93_4.0.js"></script>
   <script src="json/Ibis_London_Blackfriars_Hotel_90_4.0.js"></script>
@@ -59,934 +57,394 @@
     $(window).on('load', function() {
       $('#taskIntro').modal('show');
     });
-  </script> -->
+    </script> -->
 </head>
 
 <body onload="sortHotels(['name'], ['asc'])">
   <!-- Empty element, will be filled in the content by the code below -->
   <div id="handlebars-rendering-target"></div>
 
+  <!--rank card -->
+  <div class="modal fade bd-example-modal-lg" id="modal-picktop" 
+  tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabel">Drag to rank these hotels</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="picktop-modal-body">
 
-
-<script>
-  function txtRemove(el, index) {
-    var element = el;
-    var par = el.parentElement;
-    element.remove();
-    var txtBox = document.createElement('textarea');
-    txtBox.classList.add("textarea", "form-control");
-    txtBox.id = "textarea" + index;
-    // txtBox.setAttribute("placeholder", "reason(>30 words)");
-    txtBox.setAttribute("style", "min-width: 100%");
-
-    var textSingle = document.createElement('small');
-    textSingle.innerHTML = "&nbsp;No&nbsp;record";
-    textSingle.style.color = "red";
-
-    var submitButton = document.createElement('button');
-    submitButton.classList.add("btn", "btn-outline-success", "btn-sm");
-    submitButton.id = 'submitTxt' + index;
-    submitButton.innerHTML = "submit";
-    
-    par.appendChild(txtBox);
-    par.appendChild(submitButton);
-    par.appendChild(textSingle);
-
-    submitButton.addEventListener("click", function() {
-      console.log(this.id);
-      textSingle.innerHTML = "&nbsp;Recorded!";
-      textSingle.style.color = "green";
-    });
-  }
-</script>
-
-<!--rank card -->
-<div class="modal fade bd-example-modal-lg" id="modal-picktop" 
-tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-<div class="modal-dialog modal-lg" role="document">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title" id="modalLabel">Drag to rank these hotels</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body" id="picktop-modal-body">
-
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="recordClickResult(this)">Close without Save</button>
-      <!-- <button id="modal-picktop-save" type="button" class="btn btn-primary" data-dismiss="modal" onclick="recordOrder()">Save and Close</button> -->
-      <button id="modal-picktop-save" type="button" 
-        class="btn btn-success" onclick="recordOrder();recordClickSave();">Save and Submit</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="recordClickResult(this)">Close without Save</button>
+        <!-- <button id="modal-picktop-save" type="button" class="btn btn-primary" data-dismiss="modal" onclick="recordOrder()">Save and Close</button> -->
+        <button id="modal-picktop-save" type="button" 
+          class="btn btn-success" onclick="recordOrder();recordClickSave();">Save and Submit</button>
+      </div>
     </div>
   </div>
-</div>
-</div>
+  </div>
 
-<!--rank part-->
-<script id="reorderinglist-template" type="text/x-handlebars-template">
-  
-  {{#if (isEqual items.length 3)}}
-    <ul class="list-group" id="reorderingitems" data-item-id="{{item.id}}">
-      {{#each items as |item|}}
-        <li class="list-group-item" data-item-id="{{item.id}}">
-          <h6 class="updateInd">Top {{addone @index}}</h6>
-          <div class="col-md-12">
-              <div class="card flex-md-row mb-1 box-shadow h-md-220">
-                
-                <img class="card-img-left flex-auto d-none d-md-block" src={{item.smallImg}} alt="Card image cap">
-                
-                <div class="card-body d-flex flex-column align-items-start">    
-                  <div class="col-sm-7">
-                  <h6><a class="text-dark font-serif" id="hotel-{{item.index}}" href="#">{{item.name}}</a></h6>
-                  <h6 class="mb-1 text-muted">{{item.price}}</h6>
-                  <h6><i class="fas fa-user"></i> {{item.ratingNum}} </h6>
-                  <button type="button" class="btn btn-outline-primary btn-sm" 
-                    id="viewFeedbackButton{{item.index}}" 
-                    data-toggle="modal" data-target="#modal-{{item.index}}" onclick="recordClickResult(this)">
-                    User feedback
-                  </button>
-                    {{> reviewmodal item=item}}
+  <!--rank inside card-->
+  <script id="reorderinglist-template" type="text/x-handlebars-template">
+    {{#if (isEqual items.length 3)}}
+      <ul class="list-group" id="reorderingitems" data-item-id="{{item.id}}">
+        {{#each items as |item|}}
+          <li class="list-group-item" data-item-id="{{item.id}}">
+            <h6 class="updateInd">Top {{addone @index}}</h6>
+            <div class="col-md-12">
+                <div class="card flex-md-row mb-1 box-shadow h-md-220">
+                  
+                  <img class="card-img-left flex-auto d-none d-md-block" src={{item.smallImg}} alt="Card image cap">
+                  
+                  <div class="card-body d-flex flex-column align-items-start">    
+                    <div class="col-sm-7">
+                    <h6><a class="text-dark font-serif" id="hotel-{{item.index}}" href="#">{{item.name}}</a></h6>
+                    <h6 class="mb-1 text-muted">{{item.price}}</h6>
+                    <h6><i class="fas fa-user"></i> {{item.ratingNum}} </h6>
+                    <button type="button" class="btn btn-outline-primary btn-sm" 
+                      id="viewFeedbackButton{{item.index}}" 
+                      data-toggle="modal" data-target="#modal-{{item.index}}" onclick="recordClickResult(this)">
+                      User feedback
+                    </button>
+                      {{> reviewmodal item=item}}
+                    </div>
+                  </div>
+                  <div class="col-sm-5">
+                    <p style="color:red">Write down your reason:</p>
+                    <textarea id=textarea-reason-{{item.index}} style="min-width: 100%;" rows="3" 
+                    onkeyup="textareaOnChange({{item.index}})">{{item.reason}}</textarea>
+                    <p class="text-muted">words count (min 20 words)</p>
+                    
                   </div>
                 </div>
-                <div class="col-sm-5">
-                  <p style="color:red">Write down your reason:</p>
-                  <textarea id=textarea-reason-{{item.index}} style="min-width: 100%;" rows="3" 
-                  onkeyup="textareaOnChange({{item.index}})">{{item.reason}}</textarea>
-                  <p class="text-muted">words count (min 20 words)</p>
-                  
-                </div>
-              </div>
-          </div>
-          
-        </li>
-      {{/each}}
-    </ul>
-  {{else}}
-    You have picked {{items.length}} hotels. Please pick 3 hotels first.
-  {{/if}}
-  
-  
-</script>
-<!--sortable-->
-<script>
-    var source = document.getElementById("reorderinglist-template").innerHTML;
-    var reorderinglistTemplate = Handlebars.compile(source);
+            </div>
+            
+          </li>
+        {{/each}}
+      </ul>
+    {{else}}
+      You have picked {{items.length}} hotels. Please pick 3 hotels first.
+    {{/if}}
     
-    $('#modal-picktop').on('shown.bs.modal', function (e) {
-        var topHotels = _.filter(context.hotels, {checked: true});
-        // webstorage order
-        topHotels = _.orderBy(topHotels, hotel => hotel.order === -1 ? 100 : hotel.order);
-        var rendered = reorderinglistTemplate({items: topHotels});
-        // console.log(rendered);
-        document.getElementById('picktop-modal-body').innerHTML = rendered;
-        if (topHotels.length === 3) {
-          var reorderingitems = document.getElementById('reorderingitems');
-          Sortable.create(reorderingitems, { 
-            animation: 100, 
-            group: 'list-1', 
-            draggable: '.list-group-item', 
-            handle: '.list-group-item', 
-            sort: true, 
-            filter: '.sortable-disabled', 
-            chosenClass: 'active',
-            onSort: onReorderingListSort,
-            onUpdate: function(evt) { 
-              var eles = document.getElementsByClassName("updateInd");
-              for (var i=0;i<eles.length;i++)
-              { 
-                var index = i+1
-                eles[i].innerText = "Top " + index;
-                // console.log(eles[i].innerText);
-              }
-            }
-          });
-          $('#modal-picktop-save').prop('disabled', false);
-        } else {
-          $('#modal-picktop-save').prop('disabled', true);
-        }
+    
+  </script>
+
+  <!--task design-->
+  <script id="entry-template" type="text/x-handlebars-template">
+    {{!-- Template, mixing html with handlebars syntax --}}
+    <div class="body">
+      <div class="container">
+      <!-- <h1>{{title}}</h1> --> <!--Header-->
+      <header class="blog-header py-3">
+        <div class="row flex-nowrap justify-content-between align-items-center">
+          <div class="col-4 pt-1">
+            <a class="text-muted" href="#">Hotel Web</a>
+          </div>
+          <div class="col-4 text-center">
+          </div>
+          <div class="col-4 d-flex justify-content-end align-items-center">
+            <a class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#taskIntro">Task Introduction</a>
+          </div>
+        </div>
+      </header>
+
+      <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
+        <div class="col-md-12 px-0">
+          <h1 class="display-5 font-italic">Task Design</h1>
+          <p class="lead">
+            The 15 hotels selected according to the given conditions are shown below. 
+            Please refer to the user feedback to select the top 3 hotels (click on the checkbox) you would like to stay at the most. <br>
+            Rank them and give your reasons (under "Pick Top 3").</p>
+        </div>
+        <br>
+          <button type="button" class="btn btn-outline-success btn-sm" id="pickTopButton"
+            data-toggle="modal" data-target="#modal-picktop" onclick="recordClickResult(this)">
+            Picked Top 3
+          </button>
+      </div>
+      <!--Header end-->   
+        <div id="body-hotel-list">
+          {{> hotellist hotels=hotels}}
+        </div>
+      </div><!--container end-->
+    </div><!--body end-->
+  </script>
+
+  <!--hotel list -->
+  <script id="hotellist-template" type="text/x-handlebars-template">
+      <!--hotel card start-->
+      {{#each hotels as |hotel| }}
+      <div class="row mb-2">
+        <div class="col-md-12">
+          <div class="card flex-md-row mb-4 box-shadow h-md-280">
+            <!--choose hotels-->
+            {{#if hotel.checked}}
+            <input class="form-check-input selectHotel" type="checkbox" value="" 
+              id="checkbox-hotel-{{hotel.index}}" onchange="pickHotel({{hotel.index}})" checked>
+            {{else}}
+            <input class="form-check-input" type="checkbox" value="" 
+              id="checkbox-hotel-{{hotel.index}}" onchange="pickHotel({{hotel.index}})">
+            {{/if}}
+            <!--choose hotels-->
+            
+            <img class="card-img-left flex-auto d-none d-md-block" src={{hotel.img}} alt="Card image cap">
+            <div class="card-body d-flex flex-column align-items-start">
+            <h4>
+              <a class="text-dark font-serif" id="hotel-{{hotel.index}}" href="#">{{hotel.name}}</a>
+            </h4>
+            <div class="mb-1 text-muted">{{hotel.price}}</div>
+            <div class="rating">
+              {{#ifEquals hotel.rating '5.0'}}
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              {{/ifEquals}}
+              {{#ifEquals hotel.rating '4.5'}}
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+              {{/ifEquals}}
+              {{#ifEquals hotel.rating '4.0'}}
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+              {{/ifEquals}}
+              {{#ifEquals hotel.rating '3.5'}}
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+              <i class="far fa-star"></i>
+              {{/ifEquals}}
+              {{#ifEquals hotel.rating '3.0'}}
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+              <i class="far fa-star"></i>
+              {{/ifEquals}}
+            </div>
+            <p><i class="fas fa-user"></i> {{hotel.ratingNum}} </p>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-outline-primary btn-sm" id="viewFeedbackButton{{hotel.index}}" 
+              data-toggle="modal" data-target="#modal-{{hotel.index}}" onclick="recordClickResult(this)">
+              User feedback
+            </button>
+            {{> reviewmodal hotel=hotel}}
+
+            </div><!--card-body1 end-->
+          </div><!--card1 end flex-md-row mb-4 box-shadow h-md-280-->
+        </div><!--hotel1 end col-md-12-->
+      </div><!--row mb-2 end-->
+      {{/each}}<!--hotel card end-->
+  </script>
+
+  <!--vis+review modal-->
+  <script id="modal-template" type="text/x-handlebars-template">
+      {{!-- Modal template, using partial --}}
+      <!-- Modal -->
+      <div class="modal fade bd-example-modal-lg" id="modal-{{hotel.index}}" style="z-index: 1052;"
+          tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalCenterTitle">About Hotel {{hotel.name}}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              
+              <div id="modal-vis-{{hotel.index}}"></div>
+              
+                <div class="tab-pane fade active show" id="pills-reviews" role="tabpanel" aria-labelledby="pills-reviews-tab">
+                  <div class="bg-white rounded shadow-sm p-4 mb-4 restaurant-detailed-ratings-and-reviews">
+                    <h5 class="mb-1" style="display: inline-block;">All Reviews</h5> &nbsp;
+                    <a href="#" class="text-muted" style="display: inline-block;" id="showAll{{hotel.index}}" onclick="filterReviews({{hotel.index}}, {});recordClickResult(this)">Show all</a>
+                      <h6 id="filterResultTxt{{hotel.index}}" style="padding-bottom: 10px;" class="text-muted"></h6>
+                      <div class="reviews-members pt-4 pb-4">
+                        <!--replace block-->
+                          <div id="modal-reviews-{{hotel.index}}">
+                            {{> reviewlist reviews=hotel.reviews}}
+                          </div>
+                        <!--replace-->
+                        <a href="#" class = "loading-hotel-{{hotel.index}}">Load More</a>
+                      </div>               
+                    </div>
+                  </div>
+            </div><!--modal-body end-->
+          <!-- </div> -->
+            
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+            </div>
+          </div>
+        </div>
+      </div><!--model fade end-->
+  </script>
+
+
+
+  <!--tooltip of ?-->
+  <script>
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();   
     });
 
-    function onReorderingListSort() {
-      var items = $('#reorderingitems li').map(function(){return $(this).attr('data-item-id')}).get();
-      context.hotels.forEach(hotel => {
-        hotel.order = items.indexOf(hotel.id)
-        window.localStorage.setItem(`order-${hotel.id}`, hotel.order);
-      })
-    }
-
-    function textareaOnChange(index) {
-      var hotel = _.find(context.hotels, {index: index});
-      var reason = $(`#textarea-reason-${index}`).val();
-      hotel.reason = reason;
-      window.localStorage.setItem(`item-{{@index}}`, index);
-      window.localStorage.setItem(`reason-${hotel.id}`, reason);
-      // console.log(hotel, reason);
-    }
-
-    function recordOrder() {
-      var items = $('#reorderingitems li').map(function(){return $(this).attr('data-item-id')}).get();
-      // console.log(items);
-    }
-</script>
-
-
-<!--task design-->
-<script id="entry-template" type="text/x-handlebars-template">
-  {{!-- Template, mixing html with handlebars syntax --}}
-  <div class="body">
-    <div class="container">
-    <!-- <h1>{{title}}</h1> --> <!--Header-->
-    <header class="blog-header py-3">
-      <div class="row flex-nowrap justify-content-between align-items-center">
-        <div class="col-4 pt-1">
-          <a class="text-muted" href="#">Hotel Web</a>
-        </div>
-        <div class="col-4 text-center">
-        </div>
-        <div class="col-4 d-flex justify-content-end align-items-center">
-          <a class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#taskIntro">Task Introduction</a>
-        </div>
-      </div>
-    </header>
-
-    <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
-      <div class="col-md-12 px-0">
-        <h1 class="display-5 font-italic">Task Design</h1>
-        <p class="lead">
-          The 15 hotels selected according to the given conditions are shown below. 
-          Please refer to the user feedback to select the top 3 hotels (click on the checkbox) you would like to stay at the most. <br>
-          Rank them and give your reasons (under "Pick Top 3").</p>
-      </div>
-      <br>
-        <button type="button" class="btn btn-outline-success btn-sm" id="pickTopButton"
-          data-toggle="modal" data-target="#modal-picktop" onclick="recordClickResult(this)">
-          Picked Top 3
-        </button>
-        <!-- <button type="button" class="btn btn-outline-primary btn-sm" onclick="sortHotels(['rating'], ['asc'])">
-          SortByRating
-        </button> -->
-        <!-- <button type="button" class="btn btn-outline-primary btn-sm" onclick="sortHotels(['name'], ['asc'])">
-          Reorder hotels
-        </button> -->
-        <!-- <div class="form-group col-md-2" style="display: inline-block;">
-          <input type="email" class="form-control form-control-sm" id="inputEmail3" placeholder="Your ID">
-        </div> -->
-    </div>
-    <!--Header end-->   
-      <div id="body-hotel-list">
-        {{> hotellist hotels=hotels}}
-      </div>
-    </div><!--container end-->
-  </div><!--body end-->
-</script>
-
-<!--hotel list -->
-<script id="hotellist-template" type="text/x-handlebars-template">
-    <!--hotel card start-->
-    {{#each hotels as |hotel| }}
-    <div class="row mb-2">
-      <div class="col-md-12">
-        <div class="card flex-md-row mb-4 box-shadow h-md-280">
-          <!--choose hotels-->
-          {{#if hotel.checked}}
-          <input class="form-check-input selectHotel" type="checkbox" value="" 
-            id="checkbox-hotel-{{hotel.index}}" onchange="pickHotel({{hotel.index}})" checked>
-          {{else}}
-          <input class="form-check-input" type="checkbox" value="" 
-            id="checkbox-hotel-{{hotel.index}}" onchange="pickHotel({{hotel.index}})">
-          {{/if}}
-          <!--choose hotels-->
-          
-          <img class="card-img-left flex-auto d-none d-md-block" src={{hotel.img}} alt="Card image cap">
-          <div class="card-body d-flex flex-column align-items-start">
-          <h4>
-            <a class="text-dark font-serif" id="hotel-{{hotel.index}}" href="#">{{hotel.name}}</a>
-          </h4>
-          <div class="mb-1 text-muted">{{hotel.price}}</div>
-          <div class="rating">
-            {{#ifEquals hotel.rating '5.0'}}
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            {{/ifEquals}}
-            {{#ifEquals hotel.rating '4.5'}}
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star-half-alt"></i>
-            {{/ifEquals}}
-            {{#ifEquals hotel.rating '4.0'}}
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="far fa-star"></i>
-            {{/ifEquals}}
-            {{#ifEquals hotel.rating '3.5'}}
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star-half-alt"></i>
-            <i class="far fa-star"></i>
-            {{/ifEquals}}
-            {{#ifEquals hotel.rating '3.0'}}
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="far fa-star"></i>
-            <i class="far fa-star"></i>
-            {{/ifEquals}}
-          </div>
-          <p><i class="fas fa-user"></i> {{hotel.ratingNum}} </p>
-          <!-- Button trigger modal -->
-          <button type="button" class="btn btn-outline-primary btn-sm" id="viewFeedbackButton{{hotel.index}}" 
-            data-toggle="modal" data-target="#modal-{{hotel.index}}" onclick="recordClickResult(this)">
-            User feedback
-          </button>
-          {{> reviewmodal hotel=hotel}}
-
-          </div><!--card-body1 end-->
-        </div><!--card1 end flex-md-row mb-4 box-shadow h-md-280-->
-      </div><!--hotel1 end col-md-12-->
-    </div><!--row mb-2 end-->
-    {{/each}}<!--hotel card end-->
-</script>
-
-<!--vis+review modal-->
-<script id="modal-template" type="text/x-handlebars-template">
-    {{!-- Modal template, using partial --}}
-    <!-- Modal -->
-    <div class="modal fade bd-example-modal-lg" id="modal-{{hotel.index}}" style="z-index: 1052;"
-        tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalCenterTitle">About Hotel {{hotel.name}}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            
-            <div id="modal-vis-{{hotel.index}}"></div>
-            <div style="padding-left:30px; padding-top:20px;">
-              <label class="switch" id="switchBox{{hotel.index}}" style="display:inline-block;">
-                <input type="checkbox" id="filterCheckBox{{hotel.index}}" onclick="filterOnOff({{hotel.index}});recordClickResult(this);" checked>
-                <div class="slider round"></div>
-              </label> &nbsp;
-              <h6 id="filterText{{hotel.index}}" style="display:inline-block;">Filtering is enabled</h6>
-              <i class="fa fa-question-circle" data-toggle="tooltip" 
-                title="You can filter reviews by clicking on elements of the chart"></i>
-            </div>
-            
-              <div class="tab-pane fade active show" id="pills-reviews" role="tabpanel" aria-labelledby="pills-reviews-tab">
-                <div class="bg-white rounded shadow-sm p-4 mb-4 restaurant-detailed-ratings-and-reviews">
-                  
-                  <h5 class="mb-1" style="display: inline-block;">All Reviews</h5> &nbsp;
-                  <a href="#" class="text-muted" style="display: inline-block;" id="showAll{{hotel.index}}" onclick="filterReviews({{hotel.index}}, {});recordClickResult(this)">Show all</a>
-                    <h6 id="filterResultTxt{{hotel.index}}" style="padding-bottom: 10px;" class="text-muted"></h6>
-                    <div class="reviews-members pt-4 pb-4">
-                      <!--replace block-->
-                        <div id="modal-reviews-{{hotel.index}}">
-                          {{> reviewlist reviews=hotel.reviews}}
-                        </div>
-                      <!--replace-->
-                      <a href="#" class = "loading-hotel-{{hotel.index}}">Load More</a>
-                    </div>               
-                  </div>
-                </div>
-          </div><!--modal-body end-->
-        <!-- </div> -->
-          
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-          </div>
-        </div>
-      </div>
-    </div><!--model fade end-->
-</script>
-
-
-<!--pickHotel put here-->
-<script>
-  function pickHotel(index) {
-    var hotel = _.find(context.hotels, {index: index});
-    hotel.checked = !hotel.checked;
-    if (!hotel.checked) {
-        hotel.order = -1
-        window.localStorage.setItem(`order-${hotel.id}`, hotel.order);
-      }
-    window.localStorage.setItem(`checked-${hotel.id}`, hotel.checked);
-
-  }
-</script>
-
-<!--count index-->
-<script>
-  // compute hotel.index
-  function countInd (){
-    context.hotels.forEach((hotel, i) => {
-      hotel.index = i;
-      hotel.id = _.camelCase(hotel.name);
-      hotel.reason = window.localStorage.getItem(`textarea-reason-${hotel.id}`); //add reason
-      hotel.checked = JSON.parse(window.localStorage.getItem(`checked-${hotel.id}`)) === true;
-      hotel.order = JSON.parse(window.localStorage.getItem(`order-${hotel.id}`));
-    })
-  }
-  countInd ();
-</script>
-  
-<!--reviews--> 
-<script id="reviewlist-template" type="text/x-handlebars-template">
-  {{#each reviews as |review|}}  
-    <div class="media" id=review-{{hotel.index}}>
-        <a><img alt="Avatar" src="user-img.png" class="mr-3 rounded-pill" 
-        style="border-radius: 50rem; width: 56px;
-          height: 56px;"></a>
-        <div class="media-body">
-          <div class="reviews-members-header">
-            <h6 class="mb-1"><a class="text-primary">{{review.user_name}}</a></h6>
-            <p class="mb-1 text-muted">{{review.user_wrote_time}}</p>
-            <!-- <p class="mb-1 text-muted">Emotional polarity: {{review.polarity}}</p> -->
-            <small>Contributions: {{review.contriNum}} &nbsp; &nbsp; &nbsp; Helpful number: {{review.helpfulNum}}</small> 
-            <div class="rating">
-              {{#ifEquals review.currentRating '5.0'}}
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              {{/ifEquals}}
-              {{#ifEquals review.currentRating '4.0'}}
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              {{/ifEquals}}
-              {{#ifEquals review.currentRating '3.0'}}
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              {{/ifEquals}}
-              {{#ifEquals review.currentRating '2.0'}}
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              {{/ifEquals}}
-              {{#ifEquals review.currentRating '1.0'}}
-              <i class="fas fa-star"></i>
-              {{/ifEquals}}
-            </div>
-            <div class = "review_content">
-              <p class = "contents">{{review.content}}</p>
-              <a href = "#" class = "readmore" onclick = "recordClickReadMore({{@index}}， {{hotel.index}})">Read More</a>
-              <p>{{#each review.categories as |word|}} 
-                <span class="badge bg-primary text-light">{{word}}</span> 
-                {{/each}}</p>
-            </div>
-        </div>
-      </div>
-    </div>
-  {{/each}}
-</script>
-
-<!--filter--> 
-<script>
-  
-    var source = document.getElementById("reviewlist-template").innerHTML; //new list
-    var reviewlistTemplate = Handlebars.compile(source);
-
-    function filterReviews(hotelIndex, filterParams) {
-      // console.log(hotelIndex, filterParams);
-      var reviews = _.filter(context.hotels[hotelIndex].reviews, filterParams);
-      // console.log("filtered reviews: ", reviews);
-      showNumFilter(hotelIndex, reviews.length, filterParams, "none");
-      var rendered = reviewlistTemplate({reviews});
-      // console.log(rendered); // Debug
-      document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
-      loadSingleReview();
-      // loadMoreReviews();
-    }
-
-    function filterCategory(hotelIndex, filterParams) {
-      
-      var reviews = _.filter(context.hotels[hotelIndex].reviews, function(x){
-        var numContri = x.contriNum.split(" ")[0];
-        var numHelpfulv = x.helpfulNum.split(" ")[0];
-        var keywords = x.categories;
-        // console.log(keywords);
-        //Emo category
-        if (filterParams == 'extremelyPositive'){
-          return x.polarity >= 0.8;
-        } else if (filterParams == 'positive') {
-          return x.polarity > 0.2 && x.polarity < 0.8;
-        } else if (filterParams == 'neutral') {
-          return x.polarity >= -0.2 && x.polarity <= 0.2;
-        } else if (filterParams == 'negative') {
-          return x.polarity > -0.8 && x.polarity < -0.2;
-        } else if (filterParams == 'extremelyNegative') {
-          return x.polarity <= -0.8;
-        } 
-        //contribution
-        else if (filterParams == 'newReviewer'){
-          return numContri >= 1 && numContri <= 2;
-        } else if (filterParams == 'juniorReviewer') {
-          return numContri > 2 && numContri <= 10;
-        } else if (filterParams == 'reviewer') {
-          return numContri > 10 && numContri <= 20;
-        } else if (filterParams == 'seniorReviewer') {
-          return numContri > 20 && numContri <= 50;
-        } else if (filterParams == 'proReviewer') {
-          return numContri > 50 && numContri <= 100;
-        } else if (filterParams == 'topReviewer') {
-          return numContri > 100;
-        }
-        //helpful votes
-        else if (filterParams == 'newContributor'){
-          return numHelpfulv == 0;
-        } else if (filterParams == 'juniorContributor') {
-          return numHelpfulv >= 1 && numHelpfulv <= 10;
-        } else if (filterParams == 'contributor') {
-          return numHelpfulv > 10 && numHelpfulv <= 25;
-        } else if (filterParams == 'seniorContributor') {
-          return numHelpfulv > 25 && numHelpfulv <= 50;
-        } else if (filterParams == 'proContributor') {
-          return numHelpfulv > 50 && numHelpfulv <= 100;
-        } else if (filterParams == 'topContributor') {
-          return numHelpfulv > 100;
-        }
-        //keywords
-        else {
-          return keywords.includes(filterParams);
-        }
-
-      });
-      // console.log("show reviews", reviews, reviews.length);
-      showNumFilter(hotelIndex, reviews.length, filterParams, "none");
-
-      var rendered = reviewlistTemplate({reviews});
-      document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
-      loadSingleReview();
-      // loadMoreReviews();
-    }
-
-    function filter2Criteria(hotelIndex, filterParams1, filterParams2) {
-      var barId = parseFloat(filterParams2.split('pieId')[1]).toFixed(1);
-      // console.log(filterParams1, barId.toString());
-      var reviews = _.filter(context.hotels[hotelIndex].reviews, function(x){
-        var numContri = x.contriNum.split(" ")[0];
-        var numHelpfulv = x.helpfulNum.split(" ")[0];
-        var keywords = x.categories;
-        // console.log(x.currentRating, barId.toString());
-        //Emo category
-        if (filterParams1 == 'extremelyPositive'){
-          return x.polarity >= 0.8 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'positive') {
-          return x.polarity > 0.2 && x.polarity < 0.8 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'neutral') {
-          return x.polarity >= -0.2 && x.polarity <= 0.2 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'negative') {
-          return x.polarity > -0.8 && x.polarity < -0.2 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'extremelyNegative') {
-          return x.polarity <= -0.8 && x.currentRating == barId.toString();
-        } 
-         //contribution
-        else if (filterParams1 == 'newReviewer'){
-          return numContri >= 1 && numContri <= 2 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'juniorReviewer') {
-          return numContri > 2 && numContri <= 10 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'reviewer') {
-          return numContri > 10 && numContri <= 20 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'seniorReviewer') {
-          return numContri > 20 && numContri <= 50 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'proReviewer') {
-          return numContri > 50 && numContri <= 100 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'topReviewer') {
-          return numContri > 100 && x.currentRating == barId.toString(); 
-        }
-        //helpful votes
-        else if (filterParams1 == 'newContributor'){
-          return numHelpfulv == 0 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'juniorContributor') {
-          return numHelpfulv >= 1 && numHelpfulv <= 10 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'contributor') {
-          return numHelpfulv > 10 && numHelpfulv <= 25 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'seniorContributor') {
-          return numHelpfulv > 25 && numHelpfulv <= 50 && x.currentRating == barId.toString(); 
-        } else if (filterParams1 == 'proContributor') {
-          return numHelpfulv > 50 && numHelpfulv <= 100 && x.currentRating == barId.toString();
-        } else if (filterParams1 == 'topContributor') {
-          return numHelpfulv > 100 && x.currentRating == barId.toString();
-        }
-        //keywords
-        else {
-          return keywords.includes(filterParams1) && x.currentRating == barId.toString();
-        }
-      });
-      showNumFilter(hotelIndex, reviews.length, filterParams1, filterParams2);
-      var rendered = reviewlistTemplate({reviews});
-      document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
-
-      loadSingleReview();
-      // loadMoreReviews();
-    }
-
-    function showNumFilter(index, num, para1, para2) {
-      // console.log("filter", para1, para2);
-      var txtDiv = document.getElementById('filterResultTxt'+ index);
-      if (para2 == "none"){
-        if (typeof para1 == 'object') {
-          // console.log(para1);
-          txtDiv.innerHTML = num + " reviews of user rating " + para1['currentRating'];
-        } else {
-          txtDiv.innerHTML = num + " reviews of the selected category \'" + para1 + "\'";
-        }
-      } else {
-          txtDiv.innerHTML = num + " reviews of the selected category \'" +  para1 + "\' under user rating " 
-              + parseFloat(para2.split("Id")[1]).toFixed(1);
-      }
-    }
-
-    function filterOnOff(index) {
-      var curF = document.getElementById('filterText' + index);
-      if (curF.innerHTML == "Filtering is enabled"){
-        //close
-        curF.innerHTML = "Filtering is disabled";
-        d3.selectAll("rect").on('click',null);
-        d3.selectAll(".arc").on('click',null);
-        // $('.arc').prop('disabled',true);
-        // $('rect').prop('disabled',true);
-      } else {
-        //open
-        curF.innerHTML = "Filtering is enabled";
-        d3.select("#svg-" + index).remove();
-        var legendRemove = $("#legend" + index);
-        legendRemove.remove();
-        var bg = $("#groupButton" + index);
-        bg.remove();
-
-        // embedVis();
-        embedSingleVis(index);
-        groupClick();
-      }
-    }
-
-</script>
-
-
-<!--sort part-->
-<script>
-    var source = document.getElementById("hotellist-template").innerHTML;
-    var hotellistTemplate = Handlebars.compile(source);
-
-    function sortHotels(attrs, orders) {
-      var attrList = [['name'], ['rating'], ['ratingNum'], ['price']];
-      var orderList = [['desc'], ['asc']];
-      var attrs = attrList[Math.floor(Math.random() * attrList.length)];
-      var orders = orderList[Math.floor(Math.random() * orderList.length)];
-      // console.log(attrs, orders);
-      var sortedByName = _.orderBy(context.hotels, attrs, orders);
-      // shuffle(context.hotels);
-      // var sortedRandomly =  context.hotels;
-      // console.log(sortedByName);
-      var rendered = hotellistTemplate({hotels: sortedByName});
-      document.getElementById(`body-hotel-list`).innerHTML = rendered;
-
+    $(function () {
+      $("[data-toggle='tooltip']").tooltip();
+    });
+  </script>
+  <!--count index-->
+  <script>
+    // compute hotel.index
+    function countInd (){
       context.hotels.forEach((hotel, i) => {
         hotel.index = i;
-      });
-      embedVis();
-      loadSingleReview();
-      loadMoreReviews();
-    }
-    
-</script>
+        hotel.id = _.camelCase(hotel.name);
+        hotel.reason = window.localStorage.getItem(`textarea-reason-${hotel.id}`); //add reason
+        hotel.checked = JSON.parse(window.localStorage.getItem(`checked-${hotel.id}`)) === true;
+        hotel.order = JSON.parse(window.localStorage.getItem(`order-${hotel.id}`));
 
-
-<!--handlebar-->
-<script>
-  // Funcations to modify content
-  Handlebars.registerHelper('addone', value => value + 1);
-  Handlebars.registerHelper('ifEquals', function(arg1, arg2, options){ //show user rating
-    return (arg1 == arg2) ? options.fn(this):options.inverse(this);
-  });
-  Handlebars.registerHelper('isEqual', (value, equalTo) => value === equalTo);
-  
-  // Partials, like a component
-  // Handlebars.registerPartial('reasonmodal', document.getElementById("reason-template").innerHTML);
-
-  Handlebars.registerPartial('hotellist', document.getElementById("hotellist-template").innerHTML);
-  Handlebars.registerPartial('reviewmodal', document.getElementById("modal-template").innerHTML);
-  Handlebars.registerPartial('reviewlist', document.getElementById("reviewlist-template").innerHTML);
-  
-
-  // Code to render data into template
-  var source = document.getElementById("entry-template").innerHTML;
-  var template = Handlebars.compile(source);
-  var rendered = template(context);
-  //console.log(rendered); // Debug
-  document.getElementById('handlebars-rendering-target').innerHTML = rendered;
-</script>
-
-
-<!-- vis script -->
-<script> 
-function dashboard(id, fData, index){
-    var barColor = "#8d99ae";//'steelblue';
-
-    // function to handle histogram.
-    function histoGram(fD){
-    
-      var hG={},    hGDim = {t: 40, r: 40, b: 0, l: 40};
-      hGDim.w = 500 - hGDim.l - hGDim.r, 
-      hGDim.h = 370 - hGDim.t - hGDim.b;
-          
-      //create svg for histogram.
-      var barY = 2*hGDim.h/3 + 1;
-      var hGsvg = d3.select(id).append("svg")
-          .attr("id", "svg-" + index)
-          .attr("width", hGDim.w + hGDim.l + hGDim.r)
-          .attr("height", hGDim.h + hGDim.t).append("g")
-          .attr("transform", "translate(" + hGDim.l + "," + hGDim.t + ")");
-
-      // create function for x-axis mapping.
-      var x = d3.scaleBand().range([0, hGDim.w]).padding(0.2)//rangeRound([0, hGDim.w], 2.0) //v3 d3.scale.ordinal().rangeRoundBands([0, hGDim.w], 0.1)
-              .domain(fD.map(function(d) { return d[0]; }));
-      // Create function for y-axis map.
-      var y = d3.scaleLinear().range([barY, 0])// v3 d3.scale.linear().range([hGDim.h, 0])
-              .domain([0, d3.max(fD, function(d) { return d[1]; })]);
-
-      var tooltipBar = d3.select(id).append("div").attr("class", "toolTipBar");
-      
-      // Create bars for histogram to contain rectangles and freq labels.
-      var bars = hGsvg.selectAll(".bar").data(fD).enter()
-              .append("g").attr("class", "bar");
-      //create the rectangles.
-      bars.append("rect")
-          .attr("x", function(d) { 
-            return x(d[0]); 
-          })
-          .attr("y", function(d) { return y(d[1]); })
-          .attr("width", x.bandwidth())
-          .attr("height", function(d) { 
-            if (d[1] == 0){
-              return 0;
-            }
-            else {return 2*hGDim.h/3 - y(d[1]); }
-          })
-          .attr('fill',barColor)
-          .attr("id", function(d){
-            return "barRect-" + d[0];
-          })
-          .on("mouseover", barMouseover)
-          .on('mousemove', barMousemove)
-          .on("mouseout", barMouseout)
-          .on("click", function(d) { 
-            var filterObj = {};
-            if (d[0] == "5"){
-              var filterObj = {currentRating: "5.0"};
-            } else if(d[0] == "4"){
-              var filterObj = {currentRating: "4.0"};
-            } else if(d[0] == "3"){
-              var filterObj = {currentRating: "3.0"};
-            } else if(d[0] == "2"){
-              var filterObj = {currentRating: "2.0"};
-            } else if(d[0] == "1"){
-              var filterObj = {currentRating: "1.0"};
-            }
-            filterReviews(index, filterObj);
-            //bar listen click
-            recordClickViz(this, index);
-          });
-
-      //Create the frequency labels above the rectangles.
-      bars.append("text").text(function(d){ return d3.format(",")(d[1])})
-          .attr("x", function(d) { return x(d[0])+x.bandwidth()/2; })
-          .attr("y", function(d) { return y(d[1])-10; })
-          .attr("text-anchor", "middle");
-
-
-      
-      // Add x-axis to the histogram svg.
-      hGsvg.append("g").attr("class", "x axis")
-            .style("font-size", "15px")
-            .attr("transform", "translate(0," + 2*hGDim.h/3 + ")")
-            .call(d3.axisBottom().tickSize(0).scale(x));
-
-      function barMouseover(d){  // utility function to be called on mouseover.
-        //tooltip
-        tooltipBar.style('display', 'inline');
-        RecordOver_b(this, index);
-      }
-
-      function  barMousemove(d) {
-        var xPosition = d3.mouse(this)[0] + 50;   //d3.event.pageX;
-        var yPosition = d3.mouse(this)[1] + 5;    //d3.event.pageY;
-
-        var newHtml = [];
-        newHtml.push('<table><h6>' + d[1] + ' ' 
-          + '<small style="color:blue"> Click to filter review</small></h6>');
-        newHtml.push('</table>');
-        // console.log("mousemove", nD[0]);
-        tooltipBar
-          // .attr("transform", "translate(" + xPosition + "," + yPosition + ")")
-          .style("left", xPosition  + "px")
-          .style("top", yPosition + "px")
-          .style("display", "inline-block")
-          .html(newHtml.join("  "));
-          
-      }
-      
-      function barMouseout(d){    // utility function to be called on mouseout.
-          //tooltip
-          tooltipBar.style('display', 'none');
-          RecordOut_b(this, index);
-      }
-    
-        return hG;
-    }
-
-    
-    // calculate total frequency by state for all segment.
-    var sF = fData.map(function(d){return [d.State,d.total];});
-    
-    console.log(sF);
-    var hG = histoGram(sF);
-}
-
-</script>
-
-<!--add button group-->
-<script type="text/javascript">
-  // code to run after the elements are created
-function embedVis() {
-  context.hotels.forEach(hotel => {
-    var visDiv = document.getElementById("modal-vis-" + hotel.index);
-    visDiv.className = 'row';
-    
-    var dashboardDiv = document.createElement('div');
-    dashboardDiv.id = 'dashboard' + hotel.index;   
-    visDiv.appendChild(dashboardDiv);
-    
-    var hotelCategoryData = JSON.parse(JSON.stringify(hotelEmoAll[hotel.index]));
-    dashboard('#dashboard'+ hotel.index, hotelCategoryData, hotel.index);
-  })
-}
-
-function embedSingleVis(index) {
-
-    var visDiv = document.getElementById("modal-vis-" + index);
-    visDiv.className = 'row';
-    
-    var dashboardDiv = document.createElement('div');
-    dashboardDiv.id = 'dashboard' + index;
-    visDiv.appendChild(dashboardDiv);
-    var hotelCategoryData = JSON.parse(JSON.stringify(hotelEmoAll[index]));
-    
-    dashboard('#dashboard'+ index, hotelCategoryData, index);
-}
-
-
-embedVis();
-</script>
-
-
-
-<!--load reviews-->
-<script type="text/javascript">
-  // read more contents from each review
-  function loadSingleReview(){
-      $('.review_content').each(function(index,element){
-        var maxwidth=300;//设置最多显示的字数
-        var text_long=$(this).find("p[class = 'contents']").text();
-        var text_short = text_long.substring(0,maxwidth);
-        if(text_long.length>maxwidth){
-            $(this).find("p[class = 'contents']").html(text_short+"...");
-        };
-        var read_button = $(this).find('a');
-        read_button.click(function(){
-            if(read_button.text()==="Read More"){
-              read_button.parent().find("p[class = 'contents']").html(text_long);
-              read_button.text("Read Less");
-            } else if (read_button.text()==="Read Less"){
-              read_button.parent().find("p[class = 'contents']").html(text_short+"...");
-              read_button.text("Read More");
-            }
-        })
       })
-  }
-  
-// load 5 more reviews each click
-  function loadMoreReviews() {
-    $('.reviews-members').each(function(index,element){
-      var count = 5;
-      var read_more = $(this).find("a[class^='loading-hotel']");
-      var all_reviews = $(this).find("div[class ='media']");
-      all_reviews.each(function(index,element){
-        $(this).css({"display":'none'});
-      }); 
-
-      all_reviews.slice(0,3).show();
-      read_more.click(function(){
-        count += 5;
-        all_reviews.slice(0,count).show();
-      })
-    })
-  }
-  loadSingleReview();
-  loadMoreReviews();
-</script>
-
-
-<!--tooltip of ?-->
-<script>
-  $(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();   
-  });
-
-  $(function () {
-      $("[data-toggle='tooltip']").tooltip();
-  });
-
-
-</script>
-
-
-<div id="taskIntro" class="modal fade d-example-modal-lg">
-  <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title">Task Introduction</h5>
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
+    }
+    countInd ();
+  </script>
+    
+  <!--reviews--> 
+  <script id="reviewlist-template" type="text/x-handlebars-template">
+    {{#each reviews as |review|}}  
+      <div class="media" id=review-{{hotel.index}}>
+          <a><img alt="Avatar" src="user-img.png" class="mr-3 rounded-pill" 
+          style="border-radius: 50rem; width: 56px;
+            height: 56px;"></a>
+          <div class="media-body">
+            <div class="reviews-members-header">
+              <h6 class="mb-1"><a class="text-primary">{{review.user_name}}</a></h6>
+              <p class="mb-1 text-muted">{{review.user_wrote_time}}</p>
+              <!-- <p class="mb-1 text-muted">Emotional polarity: {{review.polarity}}</p> -->
+              <small>Contributions: {{review.contriNum}} &nbsp; &nbsp; &nbsp; Helpful number: {{review.helpfulNum}}</small> 
+              <div class="rating">
+                {{#ifEquals review.currentRating '5.0'}}
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                {{/ifEquals}}
+                {{#ifEquals review.currentRating '4.0'}}
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                {{/ifEquals}}
+                {{#ifEquals review.currentRating '3.0'}}
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                {{/ifEquals}}
+                {{#ifEquals review.currentRating '2.0'}}
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                {{/ifEquals}}
+                {{#ifEquals review.currentRating '1.0'}}
+                <i class="fas fa-star"></i>
+                {{/ifEquals}}
+              </div>
+              <div class = "review_content">
+                <p class = "contents">{{review.content}}</p>
+                <a href = "#" class = "readmore" onclick = "recordClickReadMore({{@index}}， {{hotel.index}})">Read More</a>
+                <!-- <p>Keywords # 
+                {{#each review.keywords as |word|}} 
+                  <span class="badge">{{word}}</span> 
+                {{/each}}</p> -->
+                <p>{{#each review.categories as |word|}} 
+                  <span class="badge bg-primary text-light">{{word}}</span> 
+                  {{/each}}</p>
+              </div>
           </div>
-          <div class="modal-body">
-            <h6>Imagine that you are going on vacation to London, a city you have never been to. You will be in London for a few days. </h6>
-            <h6>Based on your budget and the average cost of London hotels, you screened all the hotels by price, hotel-class, etc. 
-              Now there are 15 hotels that meet the requirements. These hotels have similar prices, ratings and number of reviews. 
-            </h6>
-            <h5>Task:</h5>
-            
-            <h6><span style="font-weight: bold;">Phase 1: </span>You need to read the user feedback for each hotel carefully , including user ratings and review data, and make decisions 
-              <span style="color:#0275d8">primarily on this information</span>.</h6>
-            <h6>As shown in the image below, you can click the <span style="color:#0275d8">'User feedback'</span> button to see the details of each hotel.</h6> 
-            <img class="mx-auto d-md-block" style="height: 200px;" src="img/intro/intro-1.png" alt="Card image cap">
-            
-            
-            <br>
-            <button type="button" data-dismiss="modal" class="btn btn-outline-primary">Close</button>
-          </div>
-          
+        </div>
       </div>
+    {{/each}}
+  </script>
+
+
+  <!--handlebar All-->
+  <script>
+    // Funcations to modify content
+    Handlebars.registerHelper('addone', value => value + 1);
+    Handlebars.registerHelper('ifEquals', function(arg1, arg2, options){ //show user rating
+      return (arg1 == arg2) ? options.fn(this):options.inverse(this);
+    });
+    Handlebars.registerHelper('isEqual', (value, equalTo) => value === equalTo);
+    
+    // Partials, like a component
+    // Handlebars.registerPartial('reasonmodal', document.getElementById("reason-template").innerHTML);
+
+    Handlebars.registerPartial('hotellist', document.getElementById("hotellist-template").innerHTML);
+    Handlebars.registerPartial('reviewmodal', document.getElementById("modal-template").innerHTML);
+    Handlebars.registerPartial('reviewlist', document.getElementById("reviewlist-template").innerHTML);
+    
+    // Code to render data into template
+    var source = document.getElementById("entry-template").innerHTML;
+    var template = Handlebars.compile(source);
+    var rendered = template(context);
+    //console.log(rendered); // Debug
+    document.getElementById('handlebars-rendering-target').innerHTML = rendered;
+  </script>
+
+
+
+
+  <div id="taskIntro" class="modal fade d-example-modal-lg">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Task Introduction</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              <h6>Imagine that you are going on vacation to London, a city you have never been to. You will be in London for a few days. </h6>
+              <h6>Based on your budget and the average cost of London hotels, you screened all the hotels by price, hotel-class, etc. 
+                Now there are 15 hotels that meet the requirements. These hotels have similar prices, ratings and number of reviews. 
+              </h6>
+              <h5>Task:</h5>
+              
+              <h6><span style="font-weight: bold;">Phase 1: </span>You need to read the user feedback for each hotel carefully , including user ratings and review data, and make decisions 
+                <span style="color:#0275d8">primarily on this information</span>.</h6>
+              <h6>As shown in the image below, you can click the <span style="color:#0275d8">'User feedback'</span> button to see the details of each hotel.</h6> 
+              <img class="mx-auto d-md-block" style="height: 200px;" src="img/intro/intro-1.png" alt="Card image cap">
+              
+              
+              <br>
+              <button type="button" data-dismiss="modal" class="btn btn-outline-primary">Close</button>
+            </div>
+            
+        </div>
+    </div>
   </div>
-</div>
 
 
+<!--remove to js file-->
+<script src= "js/js-code/sortRank.js"></script>
+<script src ="js/js-code/visualizationB.js"></script>
+<script src="js/js-code/filter.js"></script>
+<script src ="js/js-code/loadReview.js"></script>
 
+<script src="js/parse.js"></script>
+<script type="text/javascript" src="https://unpkg.com/parse/dist/parse.min.js"></script>
+<script src="js/js-code/parse-part.js"></script>
 </body>
 
 </html>
