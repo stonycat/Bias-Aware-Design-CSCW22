@@ -90,7 +90,7 @@
       <p>{{hotel.description}}</p>
       <h5>Reviews:</h5>
       {{#each hotel.reviews as |review|}}
-        <p>{{review.content}} {{review.rating}}</p>
+        <p>{{ highlight review.content 'not'}} {{review.rating}}</p>
       {{/each}}
       {{> reviewmodal hotel=hotel}}
       <div id="vis-{{hotel.index}}"></div>
@@ -352,6 +352,13 @@
     // Funcations to modify content
     Handlebars.registerHelper('addone', value => value + 1);
     Handlebars.registerHelper('isEqual', (value, equalTo) => value === equalTo);
+    Handlebars.registerHelper('highlight', (text, phrase) => {
+      if (!phrase) return text;
+      var highlighted = text.replace(new RegExp(phrase, 'gi'), function (str) {
+        return '<span style="background-color: red">' + str + '</span>';
+      });
+      return new Handlebars.SafeString(highlighted);
+    });
 
     // Partials, like a component
     Handlebars.registerPartial('hotellist', document.getElementById("hotellist-template").innerHTML);
