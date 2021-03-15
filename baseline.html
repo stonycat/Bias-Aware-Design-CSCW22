@@ -319,14 +319,14 @@
         hotel.reason = window.localStorage.getItem(`textarea-reason-${hotel.id}`); //add reason
         hotel.checked = JSON.parse(window.localStorage.getItem(`checked-${hotel.id}`)) === true;
         hotel.order = JSON.parse(window.localStorage.getItem(`order-${hotel.id}`));
-
       })
     }
     countInd ();
   </script>
   <script>
     context.hotels.forEach((hotel, i) => {
-      console.log(context.hotels[])
+      console.log(context.hotels[i]);
+      
     })
   </script>
   <!--reviews--> 

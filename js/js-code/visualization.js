@@ -454,7 +454,7 @@ function dashboard(id, fData, index, linkdata, hotel){
     
     // create one row per segment.
     var tr = legend.append("tbody").selectAll("tr").data(lD).enter().append("tr");
-        
+    var tooltipTag = legend.append("div").attr("class", "toolTipTag");
     // create the first column for each segment.
     tr.append("td").append("svg").attr("width", '16').attr("height", '16').append("rect")
         .attr("width", '16').attr("height", '16')
@@ -481,8 +481,13 @@ function dashboard(id, fData, index, linkdata, hotel){
           var food = d3.select(this.parentNode).append("td").style("text-align","center");
           food.append("button").text(tags[i]).attr("class", "tag");
           food.on("click", function(){
-            // console.log(this);
             filterTag(index, this.childNodes[0]);
+          })
+          .on("mouseover", function(){
+            tagMouseover(this.childNodes[0], tags, tagsP);
+          })
+          .on("mouseout", function(){
+            tagMouseout();
           });
         }
 
@@ -495,6 +500,11 @@ function dashboard(id, fData, index, linkdata, hotel){
               facility.append("button").text(tags[i]).attr("class", "tag");
           facility.on("click", function(){
             filterTag(index, this.childNodes[0]);
+          }).on("mouseover", function(){
+            tagMouseover(this.childNodes[0], tags, tagsP);
+          })
+          .on("mouseout", function(){
+            tagMouseout();
           });
         }
       }     
@@ -506,6 +516,11 @@ function dashboard(id, fData, index, linkdata, hotel){
               sur.append("button").text(tags[i]).attr("class", "tag");
           sur.on("click", function(){
             filterTag(index, this.childNodes[0]);
+          }).on("mouseover", function(){
+            tagMouseover(this.childNodes[0], tags, tagsP);
+          })
+          .on("mouseout", function(){
+            tagMouseout();
           });
         }
       }
@@ -517,6 +532,11 @@ function dashboard(id, fData, index, linkdata, hotel){
               service.append("button").text(tags[i]).attr("class", "tag");
           service.on("click", function(){
             filterTag(index, this.childNodes[0]);
+          }).on("mouseover", function(){
+            tagMouseover(this.childNodes[0], tags, tagsP);
+          })
+          .on("mouseout", function(){
+            tagMouseout();
           });
         }
       }
@@ -528,6 +548,11 @@ function dashboard(id, fData, index, linkdata, hotel){
               companion.append("button").text(tags[i]).attr("class", "tag");
           companion.on("click", function(){
             filterTag(index, this.childNodes[0]);
+          }).on("mouseover", function(){
+            tagMouseover(this.childNodes[0], tags, tagsP);
+          })
+          .on("mouseout", function(){
+            tagMouseout();
           });
         }
       }
@@ -539,12 +564,38 @@ function dashboard(id, fData, index, linkdata, hotel){
               travel.append("button").text(tags[i]).attr("class", "tag");
           travel.on("click", function(){
             filterTag(index, this.childNodes[0]);
+          }).on("mouseover", function(){
+            tagMouseover(this.childNodes[0], tags, tagsP);
+          })
+          .on("mouseout", function(){
+            tagMouseout();
           });
         }
       }
     })
     
-    
+    function tagMouseover(el, tags, perc) {
+      // console.log("over", el.innerHTML, tags.indexOf(el.innerHTML));
+      // var svg = el.closest('svg');
+      var showTxt = perc[tags.indexOf(el.innerHTML)];
+      // var xP = d3.event.pageX - svg.getBoundingClientRect().x;
+      // var yP = d3.event.pageY - svg.getBoundingClientRect().y - window.scrollY;
+      var xP = d3.event.x - 100;
+      var yP = d3.event.y - 170;
+
+      var newHtml = [];
+      newHtml.push('<small style="color:blue"> Click to filter review</small><br>'
+            + showTxt + "users mentioned it");
+      tooltipTag
+        .style("left", xP  + "px")
+        .style("top", yP + "px")
+        .style("display", "inline-block")
+        .html(newHtml.join(" "));
+      
+    }
+    function tagMouseout() {
+      tooltipTag.style('display', 'none');
+    }
     // var tags = tr.append("td").text(function(d) {
     //   if (d.type == "food") {
     //     var tags = hotel.filterTagsFood;

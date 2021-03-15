@@ -13,7 +13,7 @@ var h8={
   "filterTagsSurroundings": [],
   "filterPercSurroundings": [],
   
-  "filterTagsService": ["clean","comfortable","firendly"], 
+  "filterTagsService": ["clean","comfortable","friendly"], 
   "filterPercService": ["21.2", "9.5%","4.9%"],
   
   "filterTagsCompanion": [], 
