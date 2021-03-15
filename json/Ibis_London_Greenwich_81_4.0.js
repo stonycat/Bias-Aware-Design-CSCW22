@@ -3,17 +3,17 @@ var e5 = {"name": "Ibis London Greenwich", "price": "$81",
 "smallImg": "smallImg/hotel12.png",
 "rating": "4.0", "ratingNum": 186, 
 
-"filterTagsFood": ["breakfast", "tea"],
-"filterPercFood": ["31.2%", "8.1%"],
+"filterTagsFood": ["breakfast", "tea","coffee"],
+"filterPercFood": ["31.2%", "8.1%","4.9%"],
 
-"filterTagsFacility": ["cafe", "restaurant", "bed", "bathroom", "shower", "toilet"],
-"filterPercFacility": ["19.9%", "18.2%", "15.6%", "14.5%", "11.8%", "6.5%"],
+"filterTagsFacility": ["cafe", "bed", "restaurant", "bathroom", "shower"],
+"filterPercFacility": ["19.9%", "19.3%", "18.2%", "14.5%", "11.8%"],
 
 "filterTagsSurroundings": [],
 "filterPercSurroundings": [],
 
 "filterTagsService": ["clean", "comfortable"], 
-"filterPercService": ["14.5%", "8.1%"],
+"filterPercService": ["14.5%", "13.4%"],
 
 "filterTagsCompanion": [], 
 "filterPercCompanion": [],

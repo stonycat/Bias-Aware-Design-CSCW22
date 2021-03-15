@@ -442,7 +442,7 @@ function dashboard(id, fData, index, linkdata, hotel){
 
 
     // function to handle legend.
-  function legend(lD, id){
+  function legend(lD, id, hotel){
     var leg = {}, legDim = {t: 0, r: 0, b: 0, l: 20};
     legDim.w = 300 - legDim.l - legDim.r, 
     legDim.h = 180 - legDim.t - legDim.b;
@@ -465,14 +465,122 @@ function dashboard(id, fData, index, linkdata, hotel){
         .on("mouseover", mouseover).on("mouseout",mouseout)
         .on("click", function(d) { 
             filterCategory(index, d.type);
-            // d3.select(this).attr("stroke", "black");
-            // d3.select(this).attr("stroke-width", 5);
             //listen
             recordClickViz(this, index);
           });
       
     // create the second column for each segment.
     tr.append("td").text(function(d){ return d.type;});
+    //create filtering tags
+    tr.selectAll("td").each(function(d, i){
+      // console.log(d, i);
+      if (d.type === "food" && i == 1){
+        var tags = hotel.filterTagsFood;
+        var tagsP = hotel.filterPercFood;
+        for (i=0; i<tags.length;i++){
+          var food = d3.select(this.parentNode).append("td").style("text-align","center");
+          food.append("button").text(tags[i]).attr("class", "tag");
+          food.on("click", function(){
+            // console.log(this);
+            filterTag(index, this.childNodes[0]);
+          });
+        }
+
+      }
+      else if (d.type == "facility" && i == 1) {
+        var tags = hotel.filterTagsFacility;
+        var tagsP = hotel.filterPercFacility;
+        for (i=0; i<tags.length;i++){
+          var facility = d3.select(this.parentNode).append("td").style("text-align","center");
+              facility.append("button").text(tags[i]).attr("class", "tag");
+          facility.on("click", function(){
+            filterTag(index, this.childNodes[0]);
+          });
+        }
+      }     
+      else if (d.type == "surroundings" && i == 1) {
+        var tags = hotel.filterTagsSurroundings;
+        var tagsP = hotel.filterPercSurroundings;
+        for (i=0; i<tags.length;i++){
+          var sur = d3.select(this.parentNode).append("td").style("text-align","center");
+              sur.append("button").text(tags[i]).attr("class", "tag");
+          sur.on("click", function(){
+            filterTag(index, this.childNodes[0]);
+          });
+        }
+      }
+      else if (d.type == "service" && i == 1) {
+        var tags = hotel.filterTagsService;
+        var tagsP = hotel.filterPercService;
+        for (i=0; i<tags.length;i++){
+          var service = d3.select(this.parentNode).append("td").style("text-align","center");
+              service.append("button").text(tags[i]).attr("class", "tag");
+          service.on("click", function(){
+            filterTag(index, this.childNodes[0]);
+          });
+        }
+      }
+      else if (d.type == "companion" && i == 1) {
+        var tags = hotel.filterTagsCompanion;
+        var tagsP = hotel.filterPercCompanion;
+        for (i=0; i<tags.length;i++){
+          var companion = d3.select(this.parentNode).append("td").style("text-align","center");
+              companion.append("button").text(tags[i]).attr("class", "tag");
+          companion.on("click", function(){
+            filterTag(index, this.childNodes[0]);
+          });
+        }
+      }
+      else if (d.type == "travelling_purpose" && i == 1) {
+        var tags = hotel.filterTagsTravelling_purpose;
+        var tagsP = hotel.filterPercTravelling_purpose;
+        for (i=0; i<tags.length;i++){
+          var travel = d3.select(this.parentNode).append("td").style("text-align","center");
+              travel.append("button").text(tags[i]).attr("class", "tag");
+          travel.on("click", function(){
+            filterTag(index, this.childNodes[0]);
+          });
+        }
+      }
+    })
+    
+    
+    // var tags = tr.append("td").text(function(d) {
+    //   if (d.type == "food") {
+    //     var tags = hotel.filterTagsFood;
+    //     var tagsP = hotel.filterPercFood;
+    //     // if (tags.length()!=0) {
+    //     // }
+    //     return tags.join(" ");
+    //   }
+    //   else if (d.type == "facility") {
+    //     var tags = hotel.filterTagsFacility;
+    //     var tagsP = hotel.filterPercFacility;
+    //     return tags;
+    //   }     
+    //   else if (d.type == "surroundings") {
+    //     var tags = hotel.filterTagsSurroundings;
+    //     var tagsP = hotel.filterPercSurroundings;
+    //     return tags;
+    //   }
+    //   else if (d.type == "service") {
+    //     var tags = hotel.filterTagsService;
+    //     var tagsP = hotel.filterPercService;
+    //     return tags;
+    //   }
+    //   else if (d.type == "companion") {
+    //     var tags = hotel.filterTagsCompanion;
+    //     var tagsP = hotel.filterPercCompanion;
+    //     return tags;
+    //   }
+    //   else if (d.type == "travelling_purpose") {
+    //     var tags = hotel.filterTagsTravelling_purpose;
+    //     var tagsP = hotel.filterPercTravelling_purpose;
+    //     return tags;
+    //   }
+    // });
+    
+    // console.log(hotel.filterTagsFood, hotel.filterPercFood);
 
     // create the third column for each segment.
     // tr.append("td").attr("class",'legendFreq')
@@ -496,11 +604,12 @@ function dashboard(id, fData, index, linkdata, hotel){
     //     l.select(".legendPerc").text(function(d){ return getLegend(d,nD);});        
     // }
     
-    function getLegend(d,aD){ // Utility function to compute percentage.
-        // return d3.format("%")(d.freq/d3.sum(aD.map(function(v){ return v.freq; })));
-        var tempperc = d.freq/d3.sum(aD.map(function(v){ return v.freq; }));
-        return d3.format(".2%")(tempperc.toFixed(4));
-    }
+    // function getLegend(d,aD){ // Utility function to compute percentage.
+    //     // return d3.format("%")(d.freq/d3.sum(aD.map(function(v){ return v.freq; })));
+    //     var tempperc = d.freq/d3.sum(aD.map(function(v){ return v.freq; }));
+    //     return d3.format(".2%")(tempperc.toFixed(4));
+    // }
+        
     function mouseover(d){ //legend mouse
         RecordOver_b(this, index);
         
@@ -741,7 +850,7 @@ function dashboard(id, fData, index, linkdata, hotel){
 
     //sankeyPie(linkDataEmo);
     var hG = histoGram(sF, linkDataEmo, tF); // create the histogram.
-    legend(tF, '#legend' + index);  // create the legend.
+    legend(tF, '#legend' + index, hotel);  // create the legend.
     // console.log(sF);
 
 }
@@ -803,134 +912,144 @@ function embedVis() {
     //switch function
 
     dashboard('#dashboard'+ hotel.index, hotelCategoryData, hotel.index, linkNumAll[hotel.index], hotel);
-    // console.log(hotel);
-  })
+    
+  });
+  // console.log(context.hotels[0]);
 }
 
-function embedSingleVis(index) {
-
-    var visDiv = document.getElementById("modal-vis-" + index);
-    visDiv.className = 'row';
-    
-    var dashboardDiv = document.createElement('div');
-    dashboardDiv.id = 'dashboard' + index;
-    
-    var legendDiv = document.createElement('div');
-    legendDiv.id = 'legend' + index;
-    
-    // var buttonDiv = document.getElementById("modal-button-" + hotel.index);
-    // buttonDiv.class = 'row';
-    
-    var buttonGroup = document.createElement('div');
-    buttonGroup.classList.add("btn-group", "btn-group-sm");
-    buttonGroup.id = "groupButton" + index;
-    buttonGroup.setAttribute("role", "group");
-    buttonGroup.setAttribute("aria-label", "Basic example");
-    // var buttonGroup = document.getElementById('groupButton' + hotel.index);
-    buttonGroup.style.paddingLeft = '30px';
-    buttonGroup.style.paddingRight = '30px';
-    
-    // var checkBox = document.getElementsByClassName('checkBox' + hotel.index);
-    // checkBox.style.height = '8px';
-    // checkBox.style.width = '12px';
-    
-    var buttonEmo = document.createElement('button');
-    buttonEmo.classList.add("btn", "btn-outline-primary", "active");
-    buttonEmo.id = 'buttonEmo' + index;
-    buttonEmo.innerHTML = 'Emotion';
-    var buttonContri = document.createElement('button');
-    buttonContri.classList.add("btn", "btn-outline-primary");
-    buttonContri.id = 'buttonContri' + index;
-    buttonContri.innerHTML = 'Contribution';
-    var buttonHelpfulv = document.createElement('button');
-    buttonHelpfulv.classList.add("btn", "btn-outline-primary");
-    buttonHelpfulv.id = 'buttonHelpfulv' + index;
-    buttonHelpfulv.innerHTML = 'Helpful votes';
-
-    var buttonKeywords = document.createElement('button');
-    buttonKeywords.classList.add("btn", "btn-outline-primary");
-    buttonKeywords.id = 'buttonKeywords' + index;
-    buttonKeywords.innerHTML = 'Aspects';
-
-    // var buttonKeywords2 = document.createElement('button');
-    // buttonKeywords2.classList.add("btn", "btn-outline-primary");
-    // buttonKeywords2.id = 'buttonKeywords2' + index;
-    // buttonKeywords2.innerHTML = 'keywords';
-    
-    buttonGroup.appendChild(buttonEmo);
-    buttonGroup.appendChild(buttonContri);
-    buttonGroup.appendChild(buttonHelpfulv);
-    buttonGroup.appendChild(buttonKeywords);
-    // buttonGroup.appendChild(buttonKeywords2);
-    
-    
-    visDiv.appendChild(dashboardDiv);
-    visDiv.appendChild(legendDiv);
-    visDiv.appendChild(buttonGroup);
-    // buttonDiv.appendChild(filterBox);
-    visDiv.insertAdjacentElement('beforebegin', buttonGroup);
-    
-    var hotelCategoryData = JSON.parse(JSON.stringify(hotelEmoAll[index]));
-    
-    //switch function
-
-    dashboard('#dashboard'+ index, hotelCategoryData, index, linkNumAll[index]);
-}
 
 embedVis();
 
 function groupClick() {
-  $(".btn-group > .btn").click(function(){
-        $(".btn-group > .btn").removeClass("active");
-        $(this).addClass("active");
-        // console.log(this.id);
-        recordClickResult(this);
-        if (this.id.includes('Contri')) {
-          // console.log("switch contri");
-          var curInd = this.id.replace('buttonContri', '');
-          var contriLoad = JSON.parse(JSON.stringify(hotelContriAll[curInd]));
-          var removeLegend = document.getElementById('legend' + curInd);
-          removeLegend.innerHTML = '';
-          var removeBar = document.getElementById('dashboard' + curInd);
-          removeBar.innerHTML = '';
-
-          dashboard('#dashboard'+ curInd, contriLoad, curInd, linkNumAll[curInd]);
-          
-        } 
-        else if (this.id.includes('Emo')) {
-          // console.log("switch emo");
-          var curInd = this.id.replace('buttonEmo', '');
-          var emoLoad = JSON.parse(JSON.stringify(hotelEmoAll[curInd]));
-          var removeLegend = document.getElementById('legend' + curInd);
-          removeLegend.innerHTML = '';
-          var removeBar = document.getElementById('dashboard' + curInd);
-          removeBar.innerHTML = '';
-
-          dashboard('#dashboard'+ curInd, emoLoad, curInd, linkNumAll[curInd]);
-        }
-        else if (this.id.includes('Helpfulv')) {
-          // console.log("switch Helpfulv");
-          var curInd = this.id.replace('buttonHelpfulv', '');
-          var helpfulvLoad = JSON.parse(JSON.stringify(hotelHelpfulAll[curInd]));
-          var removeLegend = document.getElementById('legend' + curInd);
-          removeLegend.innerHTML = '';
-          var removeBar = document.getElementById('dashboard' + curInd);
-          removeBar.innerHTML = '';
-
-          dashboard('#dashboard'+ curInd, helpfulvLoad, curInd, linkNumAll[curInd]);
-        }
-        else if (this.id.includes('Keywords')) {
-          // console.log("switch aspects");
-          var curInd = this.id.replace('buttonKeywords', '');
-          var keywordsLoad = JSON.parse(JSON.stringify(hotelWordsAll[curInd]));
-          var removeLegend = document.getElementById('legend' + curInd);
-          removeLegend.innerHTML = '';
-          var removeBar = document.getElementById('dashboard' + curInd);
-          removeBar.innerHTML = '';
-
-          dashboard('#dashboard'+ curInd, keywordsLoad, curInd, linkNumAll[curInd]);
-        }
-    });
-  }
+  
+    $(".btn-group > .btn").click(function(){
+          $(".btn-group > .btn").removeClass("active");
+          $(this).addClass("active");
+          // console.log(this.id);
+          recordClickResult(this);
+          if (this.id.includes('Contri')) {
+            // console.log("switch contri");
+            var curInd = this.id.replace('buttonContri', '');
+            var contriLoad = JSON.parse(JSON.stringify(hotelContriAll[curInd]));
+            var removeLegend = document.getElementById('legend' + curInd);
+            removeLegend.innerHTML = '';
+            var removeBar = document.getElementById('dashboard' + curInd);
+            removeBar.innerHTML = '';
+            
+            dashboard('#dashboard'+ curInd, contriLoad, curInd, linkNumAll[curInd], context.hotels[curInd]);
     
+          } 
+          else if (this.id.includes('Emo')) {
+            // console.log("switch emo");
+            var curInd = this.id.replace('buttonEmo', '');
+            var emoLoad = JSON.parse(JSON.stringify(hotelEmoAll[curInd]));
+            var removeLegend = document.getElementById('legend' + curInd);
+            removeLegend.innerHTML = '';
+            var removeBar = document.getElementById('dashboard' + curInd);
+            removeBar.innerHTML = '';
+    
+            dashboard('#dashboard'+ curInd, emoLoad, curInd, linkNumAll[curInd], context.hotels[curInd]);
+    
+          }
+          else if (this.id.includes('Helpfulv')) {
+            // console.log("switch Helpfulv");
+            var curInd = this.id.replace('buttonHelpfulv', '');
+            var helpfulvLoad = JSON.parse(JSON.stringify(hotelHelpfulAll[curInd]));
+            var removeLegend = document.getElementById('legend' + curInd);
+            removeLegend.innerHTML = '';
+            var removeBar = document.getElementById('dashboard' + curInd);
+            removeBar.innerHTML = '';
+
+            dashboard('#dashboard'+ curInd, helpfulvLoad, curInd, linkNumAll[curInd], context.hotels[curInd]);
+
+          }
+          else if (this.id.includes('Keywords')) {
+            // console.log("switch aspects");
+            var curInd = this.id.replace('buttonKeywords', '');
+            var keywordsLoad = JSON.parse(JSON.stringify(hotelWordsAll[curInd]));
+            var removeLegend = document.getElementById('legend' + curInd);
+            removeLegend.innerHTML = '';
+            var removeBar = document.getElementById('dashboard' + curInd);
+            removeBar.innerHTML = '';
+          
+            dashboard('#dashboard'+ curInd, keywordsLoad, curInd, linkNumAll[curInd], context.hotels[curInd]);
+          }
+      });
+  
+  }
+
+
 groupClick();
+
+
+
+
+// function embedSingleVis(index) {
+
+//     var visDiv = document.getElementById("modal-vis-" + index);
+//     visDiv.className = 'row';
+    
+//     var dashboardDiv = document.createElement('div');
+//     dashboardDiv.id = 'dashboard' + index;
+    
+//     var legendDiv = document.createElement('div');
+//     legendDiv.id = 'legend' + index;
+    
+//     // var buttonDiv = document.getElementById("modal-button-" + hotel.index);
+//     // buttonDiv.class = 'row';
+    
+//     var buttonGroup = document.createElement('div');
+//     buttonGroup.classList.add("btn-group", "btn-group-sm");
+//     buttonGroup.id = "groupButton" + index;
+//     buttonGroup.setAttribute("role", "group");
+//     buttonGroup.setAttribute("aria-label", "Basic example");
+//     // var buttonGroup = document.getElementById('groupButton' + hotel.index);
+//     buttonGroup.style.paddingLeft = '30px';
+//     buttonGroup.style.paddingRight = '30px';
+    
+//     // var checkBox = document.getElementsByClassName('checkBox' + hotel.index);
+//     // checkBox.style.height = '8px';
+//     // checkBox.style.width = '12px';
+    
+//     var buttonEmo = document.createElement('button');
+//     buttonEmo.classList.add("btn", "btn-outline-primary", "active");
+//     buttonEmo.id = 'buttonEmo' + index;
+//     buttonEmo.innerHTML = 'Emotion';
+//     var buttonContri = document.createElement('button');
+//     buttonContri.classList.add("btn", "btn-outline-primary");
+//     buttonContri.id = 'buttonContri' + index;
+//     buttonContri.innerHTML = 'Contribution';
+//     var buttonHelpfulv = document.createElement('button');
+//     buttonHelpfulv.classList.add("btn", "btn-outline-primary");
+//     buttonHelpfulv.id = 'buttonHelpfulv' + index;
+//     buttonHelpfulv.innerHTML = 'Helpful votes';
+
+//     var buttonKeywords = document.createElement('button');
+//     buttonKeywords.classList.add("btn", "btn-outline-primary");
+//     buttonKeywords.id = 'buttonKeywords' + index;
+//     buttonKeywords.innerHTML = 'Aspects';
+
+//     // var buttonKeywords2 = document.createElement('button');
+//     // buttonKeywords2.classList.add("btn", "btn-outline-primary");
+//     // buttonKeywords2.id = 'buttonKeywords2' + index;
+//     // buttonKeywords2.innerHTML = 'keywords';
+    
+//     buttonGroup.appendChild(buttonEmo);
+//     buttonGroup.appendChild(buttonContri);
+//     buttonGroup.appendChild(buttonHelpfulv);
+//     buttonGroup.appendChild(buttonKeywords);
+//     // buttonGroup.appendChild(buttonKeywords2);
+    
+    
+//     visDiv.appendChild(dashboardDiv);
+//     visDiv.appendChild(legendDiv);
+//     visDiv.appendChild(buttonGroup);
+//     // buttonDiv.appendChild(filterBox);
+//     visDiv.insertAdjacentElement('beforebegin', buttonGroup);
+    
+//     var hotelCategoryData = JSON.parse(JSON.stringify(hotelEmoAll[index]));
+    
+//     //switch function
+
+//     dashboard('#dashboard'+ index, hotelCategoryData, index, linkNumAll[index], hotel);
+// }

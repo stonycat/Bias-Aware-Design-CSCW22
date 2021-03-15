@@ -272,6 +272,9 @@
                     <h5 class="mb-1" style="display: inline-block;">All Reviews</h5> &nbsp;
                     <a href="#" class="text-muted" style="display: inline-block;" id="showAll{{hotel.index}}" onclick="filterReviews({{hotel.index}}, {});recordClickResult(this)">Show all</a>
                       <h6 id="filterResultTxt{{hotel.index}}" style="padding-bottom: 10px;" class="text-muted"></h6>
+                      <div id="filterTags-{{hotel.index}}">
+
+                      </div>
                       <div class="reviews-members pt-4 pb-4">
                         <!--replace block-->
                           <div id="modal-reviews-{{hotel.index}}">
@@ -321,7 +324,11 @@
     }
     countInd ();
   </script>
-    
+  <script>
+    context.hotels.forEach((hotel, i) => {
+      console.log(context.hotels[])
+    })
+  </script>
   <!--reviews--> 
   <script id="reviewlist-template" type="text/x-handlebars-template">
     {{#each reviews as |review|}}  
@@ -365,10 +372,6 @@
               <div class = "review_content">
                 <p class = "contents">{{review.content}}</p>
                 <a href = "#" class = "readmore" onclick = "recordClickReadMore({{@index}}， {{hotel.index}})">Read More</a>
-                <!-- <p>Keywords # 
-                {{#each review.keywords as |word|}} 
-                  <span class="badge">{{word}}</span> 
-                {{/each}}</p> -->
                 <p>{{#each review.categories as |word|}} 
                   <span class="badge bg-primary text-light">{{word}}</span> 
                   {{/each}}</p>

@@ -175,3 +175,26 @@ function filterOnOff(index) {
     groupClick();
   }
 }
+
+
+function filterTag(hotelIndex, filterParams) {
+  console.log(hotelIndex, filterParams.innerHTML);
+  var reviews = _.filter(context.hotels[hotelIndex].reviews, function(x){
+    var filterWord = filterParams.innerHTML;
+    var matchKeywords = x.matchKeywords;
+    return matchKeywords.includes(filterWord);
+    // console.log(filterTag, matchKeywords);
+  });
+  showNumFilter(hotelIndex, reviews.length, filterParams.innerHTML, "none");
+
+  reviews.forEach(function(review, ind){
+    // console.log(review.content);
+    review.content = review.content.split(RegExp(filterParams.innerHTML, "i"))
+                      .join("<span style='background-color: #ffd100'>"+filterParams.innerHTML+"</span>");
+    
+    // review.content.replace(filterParams.innerHTML, "<mark>"+filterParams.innerHTML+"</mark>");
+  });
+  var rendered = reviewlistTemplate({reviews});
+  document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
+  // loadSingleReview();
+}

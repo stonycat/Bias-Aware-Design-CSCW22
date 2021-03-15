@@ -374,7 +374,7 @@
                 {{/ifEquals}}
               </div>
               <div class = "review_content">
-                <p class = "contents">{{review.content}}</p>
+                <p class = "contents">{{ highlight review.content '不可能的词'}}</p>
                 <a href = "#" class = "readmore" onclick = "recordClickReadMore({{@index}}， {{hotel.index}})">Read More</a>
                 <!-- <p>Keywords # 
                 {{#each review.keywords as |word|}} 
@@ -382,7 +382,12 @@
                 {{/each}}</p> -->
                 <p>{{#each review.categories as |word|}} 
                   <span class="badge bg-primary text-light">{{word}}</span> 
-                  {{/each}}</p>
+                  {{/each}}
+                </p>
+                <!-- <p>{{#each review.matchKeywords as |mword|}} 
+                  <button id="tag2">{{mword}}</button> 
+                  {{/each}}
+                </p> -->
               </div>
           </div>
         </div>
@@ -406,7 +411,13 @@
     Handlebars.registerPartial('hotellist', document.getElementById("hotellist-template").innerHTML);
     Handlebars.registerPartial('reviewmodal', document.getElementById("modal-template").innerHTML);
     Handlebars.registerPartial('reviewlist', document.getElementById("reviewlist-template").innerHTML);
-    
+    Handlebars.registerHelper('highlight', (text, phrase) => {
+      if (!phrase) return text;
+      var highlighted = text.replace(new RegExp(phrase, 'gi'), function (str) {
+        return '<mark>' + str + '</mark>';
+      });
+      return new Handlebars.SafeString(highlighted);
+    });
     // Code to render data into template
     var source = document.getElementById("entry-template").innerHTML;
     var template = Handlebars.compile(source);
@@ -414,7 +425,6 @@
     //console.log(rendered); // Debug
     document.getElementById('handlebars-rendering-target').innerHTML = rendered;
   </script>
-
 
 
 
