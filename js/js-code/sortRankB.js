@@ -86,6 +86,7 @@ function sortHotels(attrs, orders) {
       hotel.index = i;
     });
     embedVis();
+    addTags();
     // groupClick();
     loadSingleReview();
     loadMoreReviews();
