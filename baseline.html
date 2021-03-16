@@ -60,7 +60,8 @@
     </script> -->
 </head>
 
-<body onload="sortHotels(['name'], ['asc'])">
+<body>
+<!-- <body onload="sortHotels(['name'], ['asc'])"> -->
   <!-- Empty element, will be filled in the content by the code below -->
   <div id="handlebars-rendering-target"></div>
 
@@ -314,6 +315,7 @@
       })
     }
     countInd ();
+    context.hotels = _.shuffle(context.hotels)
   </script>
 
   <!--reviews--> 
