@@ -133,6 +133,55 @@
     
   </script>
 
+  <!--vis+review modal-->
+  <script id="modal-template" type="text/x-handlebars-template">
+    {{!-- Modal template, using partial --}}
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-lg" id="modal-{{hotel.index}}" style="z-index: 1052;"
+        tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">About Hotel {{hotel.name}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            
+            <div id="modal-vis-{{hotel.index}}"></div>
+            
+              <div class="tab-pane fade active show" id="pills-reviews" role="tabpanel" aria-labelledby="pills-reviews-tab">
+                <div class="bg-white rounded shadow-sm p-4 mb-4 restaurant-detailed-ratings-and-reviews">
+                  <h5 class="mb-1" style="display: inline-block;">All Reviews</h5> &nbsp;
+                  <a href="#" class="text-muted" style="display: inline-block;" id="showAll{{hotel.index}}" onclick="filterReviews({{hotel.index}}, {});recordClickResult(this)">Show all</a>
+                    <h6 id="filterResultTxt{{hotel.index}}" style="padding-bottom: 10px;" class="text-muted"></h6>
+                    <div id="filtertags-{{hotel.index}}">
+                      
+                    </div>
+                    <div class="reviews-members pt-4 pb-4">
+                      <!--replace block-->
+                        <div id="modal-reviews-{{hotel.index}}">
+                          {{> reviewlist reviews=hotel.reviews}}
+                        </div>
+                      <!--replace-->
+                      <a href="#" class = "loading-hotel-{{hotel.index}}">Load More</a>
+                    </div>               
+                  </div>
+                </div>
+          </div><!--modal-body end-->
+        <!-- </div> -->
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+          </div>
+        </div>
+      </div>
+    </div><!--model fade end-->
+</script>
+
+
   <!--task design-->
   <script id="entry-template" type="text/x-handlebars-template">
     {{!-- Template, mixing html with handlebars syntax --}}
@@ -249,66 +298,9 @@
       {{/each}}<!--hotel card end-->
   </script>
 
-  <!--vis+review modal-->
-  <script id="modal-template" type="text/x-handlebars-template">
-      {{!-- Modal template, using partial --}}
-      <!-- Modal -->
-      <div class="modal fade bd-example-modal-lg" id="modal-{{hotel.index}}" style="z-index: 1052;"
-          tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalCenterTitle">About Hotel {{hotel.name}}</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              
-              <div id="modal-vis-{{hotel.index}}"></div>
-              
-                <div class="tab-pane fade active show" id="pills-reviews" role="tabpanel" aria-labelledby="pills-reviews-tab">
-                  <div class="bg-white rounded shadow-sm p-4 mb-4 restaurant-detailed-ratings-and-reviews">
-                    <h5 class="mb-1" style="display: inline-block;">All Reviews</h5> &nbsp;
-                    <a href="#" class="text-muted" style="display: inline-block;" id="showAll{{hotel.index}}" onclick="filterReviews({{hotel.index}}, {});recordClickResult(this)">Show all</a>
-                      <h6 id="filterResultTxt{{hotel.index}}" style="padding-bottom: 10px;" class="text-muted"></h6>
-                      <div id="filterTags-{{hotel.index}}">
-
-                      </div>
-                      <div class="reviews-members pt-4 pb-4">
-                        <!--replace block-->
-                          <div id="modal-reviews-{{hotel.index}}">
-                            {{> reviewlist reviews=hotel.reviews}}
-                          </div>
-                        <!--replace-->
-                        <a href="#" class = "loading-hotel-{{hotel.index}}">Load More</a>
-                      </div>               
-                    </div>
-                  </div>
-            </div><!--modal-body end-->
-          <!-- </div> -->
-            
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-            </div>
-          </div>
-        </div>
-      </div><!--model fade end-->
-  </script>
 
 
 
-  <!--tooltip of ?-->
-  <script>
-    $(document).ready(function(){
-      $('[data-toggle="tooltip"]').tooltip();   
-    });
-
-    $(function () {
-      $("[data-toggle='tooltip']").tooltip();
-    });
-  </script>
   <!--count index-->
   <script>
     // compute hotel.index
@@ -323,12 +315,7 @@
     }
     countInd ();
   </script>
-  <script>
-    context.hotels.forEach((hotel, i) => {
-      console.log(context.hotels[i]);
-      
-    })
-  </script>
+
   <!--reviews--> 
   <script id="reviewlist-template" type="text/x-handlebars-template">
     {{#each reviews as |review|}}  
@@ -409,7 +396,6 @@
 
 
 
-
   <div id="taskIntro" class="modal fade d-example-modal-lg">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -440,7 +426,7 @@
 
 
 <!--remove to js file-->
-<script src= "js/js-code/sortRank.js"></script>
+<script src= "js/js-code/sortRankB.js"></script>
 <script src ="js/js-code/visualizationB.js"></script>
 <script src="js/js-code/filter.js"></script>
 <script src ="js/js-code/loadReview.js"></script>

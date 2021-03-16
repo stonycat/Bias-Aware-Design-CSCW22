@@ -168,3 +168,22 @@ top: .8rem;
 width: 1.25rem;
 height: 1.25rem;
 }
+
+.tag{
+  background-color: #fff;
+  color: #0275d8;
+  border-color: #0275d8;
+  border-radius: 3px;
+  font-size: 13px;
+  line-height: 15px;
+  padding: 6px 6px;
+  display: inline-block;
+  appearance: none;
+  position: relative;
+  font-family: inherit;
+  border: 1px solid;
+}
+.tag:hover{
+  background-color:#0275d8;
+  color:white;
+}
