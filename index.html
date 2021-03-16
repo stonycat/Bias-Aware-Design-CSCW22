@@ -61,11 +61,26 @@
     });
     </script> -->
 </head>
-
+<!-- <body> -->
 <body onload="sortHotels(['name'], ['asc'])">
   <!-- Empty element, will be filled in the content by the code below -->
   <div id="handlebars-rendering-target"></div>
+  <!--count index-->
+  <script>
+    // compute hotel.index
+    function countInd (){
+      context.hotels.forEach((hotel, i) => {
+        hotel.index = i;
+        hotel.id = _.camelCase(hotel.name);
+        hotel.reason = window.localStorage.getItem(`textarea-reason-${hotel.id}`); //add reason
+        hotel.checked = JSON.parse(window.localStorage.getItem(`checked-${hotel.id}`)) === true;
+        hotel.order = JSON.parse(window.localStorage.getItem(`order-${hotel.id}`));
 
+      })
+    }
+    countInd ();
+    // context.hotels = _.shuffle(context.hotels);
+  </script>
   <!--rank card -->
   <div class="modal fade bd-example-modal-lg" id="modal-picktop" 
   tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
@@ -317,21 +332,7 @@
       $("[data-toggle='tooltip']").tooltip();
     });
   </script>
-  <!--count index-->
-  <script>
-    // compute hotel.index
-    function countInd (){
-      context.hotels.forEach((hotel, i) => {
-        hotel.index = i;
-        hotel.id = _.camelCase(hotel.name);
-        hotel.reason = window.localStorage.getItem(`textarea-reason-${hotel.id}`); //add reason
-        hotel.checked = JSON.parse(window.localStorage.getItem(`checked-${hotel.id}`)) === true;
-        hotel.order = JSON.parse(window.localStorage.getItem(`order-${hotel.id}`));
 
-      })
-    }
-    countInd ();
-  </script>
     
   <!--reviews--> 
   <script id="reviewlist-template" type="text/x-handlebars-template">
@@ -458,8 +459,9 @@
 
 
 <!--remove to js file-->
-<script src= "js/js-code/sortRank.js"></script>
 <script src ="js/js-code/visualization.js"></script>
+<script src= "js/js-code/pickUp.js"></script>
+
 <script src="js/js-code/filter.js"></script>
 <script src ="js/js-code/loadReview.js"></script>
 

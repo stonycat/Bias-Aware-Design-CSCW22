@@ -182,6 +182,7 @@ height: 1.25rem;
   position: relative;
   font-family: inherit;
   border: 1px solid;
+  margin-right: 8px; 
 }
 .tag:hover{
   background-color:#0275d8;

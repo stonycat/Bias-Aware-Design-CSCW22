@@ -60,8 +60,8 @@
     </script> -->
 </head>
 
-<body>
-<!-- <body onload="sortHotels(['name'], ['asc'])"> -->
+<!-- <body> -->
+<body onload="sortHotels(['name'], ['asc'])">
   <!-- Empty element, will be filled in the content by the code below -->
   <div id="handlebars-rendering-target"></div>
 
@@ -156,10 +156,10 @@
                 <div class="bg-white rounded shadow-sm p-4 mb-4 restaurant-detailed-ratings-and-reviews">
                   <h5 class="mb-1" style="display: inline-block;">All Reviews</h5> &nbsp;
                   <a href="#" class="text-muted" style="display: inline-block;" id="showAll{{hotel.index}}" onclick="filterReviews({{hotel.index}}, {});recordClickResult(this)">Show all</a>
-                    <h6 id="filterResultTxt{{hotel.index}}" style="padding-bottom: 10px;" class="text-muted"></h6>
-                    <div id="filtertags-{{hotel.index}}">
-                      
+                    <div id="filtertags-{{hotel.index}}" style="padding: 10px 2px;">
+                        
                     </div>
+                    <h6 id="filterResultTxt{{hotel.index}}" style="padding-bottom: 10px;" class="text-muted"></h6>
                     <div class="reviews-members pt-4 pb-4">
                       <!--replace block-->
                         <div id="modal-reviews-{{hotel.index}}">
@@ -315,7 +315,7 @@
       })
     }
     countInd ();
-    context.hotels = _.shuffle(context.hotels)
+    // context.hotels = _.shuffle(context.hotels);
   </script>
 
   <!--reviews--> 
@@ -359,7 +359,7 @@
                 {{/ifEquals}}
               </div>
               <div class = "review_content">
-                <p class = "contents">{{review.content}}</p>
+                <p class = "contents">{{ highlight review.content '不可能的词'}}</p>
                 <a href = "#" class = "readmore" onclick = "recordClickReadMore({{@index}}， {{hotel.index}})">Read More</a>
                 <p>{{#each review.categories as |word|}} 
                   <span class="badge bg-primary text-light">{{word}}</span> 
@@ -387,7 +387,13 @@
     Handlebars.registerPartial('hotellist', document.getElementById("hotellist-template").innerHTML);
     Handlebars.registerPartial('reviewmodal', document.getElementById("modal-template").innerHTML);
     Handlebars.registerPartial('reviewlist', document.getElementById("reviewlist-template").innerHTML);
-    
+    Handlebars.registerHelper('highlight', (text, phrase) => {
+      if (!phrase) return text;
+      var highlighted = text.replace(new RegExp(phrase, 'gi'), function (str) {
+        return '<mark>' + str + '</mark>';
+      });
+      return new Handlebars.SafeString(highlighted);
+    });
     // Code to render data into template
     var source = document.getElementById("entry-template").innerHTML;
     var template = Handlebars.compile(source);
@@ -428,8 +434,9 @@
 
 
 <!--remove to js file-->
-<script src= "js/js-code/sortRankB.js"></script>
 <script src ="js/js-code/visualizationB.js"></script>
+<script src= "js/js-code/pickUpB.js"></script>
+
 <script src="js/js-code/filter.js"></script>
 <script src ="js/js-code/loadReview.js"></script>
 

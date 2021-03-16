@@ -2,26 +2,73 @@
 function addTags() {
   context.hotels.forEach((hotel) => {
     var food = hotel.filterTagsFood;
-    // var facility = hotel.filterTagsFacility;
-    // var surrounding = hotel.filterTagsSurroundings;
-    // var service = hotel.filterTagsService;
-    // var companion = hotel.filterTagsCompanion;
-    // var travel = hotel.filterTagsTravelling_purpose;
-  
-    
-    var button0 = document.createElement("BUTTON");
-    button0.className = "tag";
-    button0.textContent = food[0];
-
+    var facility = hotel.filterTagsFacility;
+    var surrounding = hotel.filterTagsSurroundings;
+    var service = hotel.filterTagsService;
+    var companion = hotel.filterTagsCompanion;
+    var travel = hotel.filterTagsTravelling_purpose;
     var tagDiv = document.getElementById("filtertags-" + hotel.index);
-    document.body.appendChild(button0);
-    tagDiv.appendChild(button0);
-    console.log(tagDiv);
-    
+
+    food.forEach(f =>{
+      var button0 = document.createElement("BUTTON");
+      button0.className = "tag";
+      button0.textContent = f;
+      tagDiv.appendChild(button0);
+
+      button0.addEventListener("click", function(){
+        filterTag(hotel.index, button0);
+      });
+    });
+    facility.forEach(f =>{
+      var button0 = document.createElement("BUTTON");
+      button0.className = "tag";
+      button0.textContent = f;
+      tagDiv.appendChild(button0);
+      button0.addEventListener("click", function(){
+        filterTag(hotel.index, button0);
+      });
+    });
+    surrounding.forEach(f =>{
+      var button0 = document.createElement("BUTTON");
+      button0.className = "tag";
+      button0.textContent = f;
+      tagDiv.appendChild(button0);
+      button0.addEventListener("click", function(){
+        filterTag(hotel.index, button0);
+      });
+    });
+    service.forEach(f =>{
+      var button0 = document.createElement("BUTTON");
+      button0.className = "tag";
+      button0.textContent = f;
+      tagDiv.appendChild(button0);
+      button0.addEventListener("click", function(){
+        filterTag(hotel.index, button0);
+      });
+    });
+    companion.forEach(f =>{
+      var button0 = document.createElement("BUTTON");
+      button0.className = "tag";
+      button0.textContent = f;
+      tagDiv.appendChild(button0);
+      button0.addEventListener("click", function(){
+        filterTag(hotel.index, button0);
+      });
+    });
+    travel.forEach(f =>{
+      var button0 = document.createElement("BUTTON");
+      button0.className = "tag";
+      button0.textContent = f;
+      tagDiv.appendChild(button0);
+      button0.addEventListener("click", function(){
+        filterTag(hotel.index, button0);
+      });
+    });
+    // console.log(tagDiv);
   })
 }
 
-addTags();
+
 
 
 function dashboard(id, fData, index){
