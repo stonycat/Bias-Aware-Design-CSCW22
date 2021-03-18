@@ -96,10 +96,10 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="recordClickResult(this)">Close without Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="recordClickResult(this)">Close</button>
         <!-- <button id="modal-picktop-save" type="button" class="btn btn-primary" data-dismiss="modal" onclick="recordOrder()">Save and Close</button> -->
         <button id="modal-picktop-save" type="button" 
-          class="btn btn-success" onclick="recordOrder();recordClickSave();">Save and Submit</button>
+          class="btn btn-success" onclick="recordOrder();recordClickSave();">Submit</button>
       </div>
     </div>
   </div>
@@ -434,30 +434,42 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Task Introduction</h5>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
             </div>
             <div class="modal-body">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroup-sizing-default">Your Prolific ID</span>
+                </div>
+                <input type="text" class="form-control" id="userID" placeholder="Please input your ID here" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+              </div>
+              <br>
               <h6>Imagine that you are going on vacation to London, a city you have never been to. You will be in London for a few days. </h6>
               <h6>Based on your budget and the average cost of London hotels, you screened all the hotels by price, hotel-class, etc. 
                 Now there are 15 hotels that meet the requirements. These hotels have similar prices, ratings and number of reviews. 
               </h6>
               <h5>Task:</h5>
               
-              <h6><span style="font-weight: bold;">Phase 1: </span>You need to read the user feedback for each hotel carefully , including user ratings and review data, and make decisions 
-                <span style="color:#0275d8">primarily on this information</span>.</h6>
-              <h6>As shown in the image below, you can click the <span style="color:#0275d8">'User feedback'</span> button to see the details of each hotel.</h6> 
-              <img class="mx-auto d-md-block" style="height: 200px;" src="img/intro/intro-1.png" alt="Card image cap">
-              
-              
-              <br>
-              <button type="button" data-dismiss="modal" class="btn btn-outline-primary">Close</button>
+              <button type="button" class="btn btn-outline-primary" onclick="checkid()">Next</button>
+              <span class="warnID" style="color:red; display:none">Please input your ID in the top text box.</span>
             </div>
             
         </div>
     </div>
   </div>
 
-
+<script>
+  function checkid(){
+    var idBox = document.getElementById("userID");
+    if (idBox.value == ""){
+      $(".warnID").css("display","block");
+    } else {
+      $(".warnID").css("display","none");
+      $("#taskIntro").modal("hide");
+      //
+    }
+  }
+</script>
 <!--remove to js file-->
 <script src ="js/js-code/visualization.js"></script>
 <script src= "js/js-code/pickUp.js"></script>

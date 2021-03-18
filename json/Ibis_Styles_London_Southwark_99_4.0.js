@@ -1,4 +1,4 @@
-var f6={"name": "Ibis Styles London Southwark", "price": "$99", "img": "img/hotel3.png", "smallImg": "smallImg/hotel3.png", "rating": "4.0", "ratingNum": 280, 
+var f6={"name": "Styles London Southwark", "price": "$99", "img": "img/hotel3.png", "smallImg": "smallImg/hotel3.png", "rating": "4.0", "ratingNum": 280, 
 
 "filterTagsFood": ["breakfast", "coffee", "tea"],
 "filterPercFood": ["58.9%", "11.8%", "8.9%"],

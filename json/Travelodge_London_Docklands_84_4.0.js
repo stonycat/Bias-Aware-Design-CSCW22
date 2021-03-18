@@ -1,4 +1,4 @@
-var m13={"name": "Travelodge London Docklands", "price": "$84", "img": "img/hotel9.png", "smallImg": "smallImg/hotel9.png", "rating": "4.0", "ratingNum": 884, 
+var m13={"name": "Travelodge London Docklands", "price": "$84", "img": "img/hotel9.png", "smallImg": "smallImg/hotel9.png", "rating": "4.0", "ratingNum": 390, 
 "filterTagsFood": ["breakfast"],
 "filterPercFood": ["39.5%"],
 

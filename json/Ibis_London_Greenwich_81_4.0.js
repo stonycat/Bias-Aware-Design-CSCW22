@@ -1,4 +1,4 @@
-var e5={"name": "Ibis London Greenwich", "price": "$81", "img": "img/hotel12.png", "smallImg": "smallImg/hotel12.png", "rating": "4.0", "ratingNum": 186, 
+var e5={"name": "Greenwich Hotel", "price": "$81", "img": "img/hotel12.png", "smallImg": "smallImg/hotel12.png", "rating": "4.0", "ratingNum": 186, 
 
 "filterTagsFood": ["breakfast", "tea","coffee"],
 "filterPercFood": ["31.2%", "8.1%","4.9%"],

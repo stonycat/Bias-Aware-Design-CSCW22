@@ -1,4 +1,4 @@
-var o15={"name": "Travelodge London Greenwich High Road", "price": "$99", "img": "img/hotel6.png", "smallImg": "smallImg/hotel6.png", "rating": "4.0", "ratingNum": 348, 
+var o15={"name": "Greenwich High Road Hotel", "price": "$99", "img": "img/hotel6.png", "smallImg": "smallImg/hotel6.png", "rating": "4.0", "ratingNum": 348, 
 
 "filterTagsFood": ["breakfast"],
 "filterPercFood": ["23.9%"],

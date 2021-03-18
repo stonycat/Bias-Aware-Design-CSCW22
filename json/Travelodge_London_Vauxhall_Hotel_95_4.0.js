@@ -1,4 +1,4 @@
-var p16={"name": "Travelodge London Vauxhall Hotel", "price": "$95", "img": "img/hotel11.png", "smallImg": "smallImg/hotel11.png", "rating": "4.0", "ratingNum": 639, 
+var p16={"name": "London Vauxhall Hotel", "price": "$95", "img": "img/hotel11.png", "smallImg": "smallImg/hotel11.png", "rating": "4.0", "ratingNum": 357, 
 "filterTagsFood": ["breakfast","coffee","food"],
 "filterPercFood": ["33.6%","7.3%","5.0%"],
 

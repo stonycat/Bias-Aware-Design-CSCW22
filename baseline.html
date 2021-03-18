@@ -53,11 +53,11 @@
   <script src="json/Travelodge_London_Greenwich_High_Road_99_4.0.js"></script>
   <script src="json/Travelodge_London_Vauxhall_Hotel_95_4.0.js"></script>
   <script type="text/javascript" src="json/t1.js"></script> 
-  <!-- <script>
+  <script>
     $(window).on('load', function() {
       $('#taskIntro').modal('show');
     });
-    </script> -->
+    </script>
 </head>
 
 <!-- <body> -->
@@ -80,10 +80,10 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="recordClickResult(this)">Close without Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="recordClickResult(this)">Close</button>
         <!-- <button id="modal-picktop-save" type="button" class="btn btn-primary" data-dismiss="modal" onclick="recordOrder()">Save and Close</button> -->
         <button id="modal-picktop-save" type="button" 
-          class="btn btn-success" onclick="recordOrder();recordClickSave();">Save and Submit</button>
+          class="btn btn-success" onclick="recordOrder();recordClickSave();">Submit</button>
       </div>
     </div>
   </div>
@@ -409,9 +409,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Task Introduction</h5>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
             </div>
             <div class="modal-body">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroup-sizing-default">Your Prolific ID</span>
+                </div>
+                <input type="text" class="form-control" id="userID" placeholder="Please input your ID here" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+              </div>
+              <br>
               <h6>Imagine that you are going on vacation to London, a city you have never been to. You will be in London for a few days. </h6>
               <h6>Based on your budget and the average cost of London hotels, you screened all the hotels by price, hotel-class, etc. 
                 Now there are 15 hotels that meet the requirements. These hotels have similar prices, ratings and number of reviews. 
@@ -422,10 +429,23 @@
                 <span style="color:#0275d8">primarily on this information</span>.</h6>
               <h6>As shown in the image below, you can click the <span style="color:#0275d8">'User feedback'</span> button to see the details of each hotel.</h6> 
               <img class="mx-auto d-md-block" style="height: 200px;" src="img/intro/intro-1.png" alt="Card image cap">
-              
-              
               <br>
-              <button type="button" data-dismiss="modal" class="btn btn-outline-primary">Close</button>
+              <h6>You can see the rating bar and reviews of each hotel in a popup window. You can 
+              filter reviews by clicking the rating bars or the word tags. 
+              <span style="color:#0275d8">Please learn about each hotel by their user ratings and reviews carefully.</span></h6>
+              <img class="mx-auto d-md-block" style="height: 500px;" src="img/intro/intro-b-2.png" alt="Card image cap">
+              <br>
+              <h6><span style="font-weight: bold;">Phase 2: </span>You need to select the top3 hotels that you want to stay at by 
+                checking the box in front of the hotel and click the button <span style="color:#28A745">'Picked Top 3'</span> above.</h6>
+              <img class="mx-auto d-md-block" style="height: 300px;" src="img/intro/intro-b-3.png" alt="Card image cap">
+              <h6><span style="font-weight: bold;">Phase 3: </span>You need to rank these 3 hotels by draging. 
+                Please write down your reasons for choosing and ranking each hotel in the text box. You can also check the details of the selected hotels by clicking 
+                <span style="color:#0275d8">'User feedback'</span> button in this window. Finally, please submit your reuslts by clicking the
+              <span style="color:#28A745">Submit</span> button</h6>
+              <img class="mx-auto d-md-block" style="height: 400px;" src="img/intro/intro-b-4.png" alt="Card image cap">
+              
+              <button type="button" class="btn btn-outline-primary" onclick="checkid()">Next</button>
+              <span class="warnID" style="color:red; display:none">Please input your ID in the top text box.</span>
             </div>
             
         </div>
@@ -434,6 +454,18 @@
 
 
 <!--remove to js file-->
+<script>
+  function checkid(){
+    var idBox = document.getElementById("userID");
+    if (idBox.value == ""){
+      $(".warnID").css("display","block");
+    } else {
+      $(".warnID").css("display","none");
+      $("#taskIntro").modal("hide");
+      //
+    }
+  }
+</script>
 <script src ="js/js-code/visualizationB.js"></script>
 <script src= "js/js-code/pickUpB.js"></script>
 

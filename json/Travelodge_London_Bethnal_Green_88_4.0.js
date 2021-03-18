@@ -1,4 +1,4 @@
-var k11={"name": "Travelodge London Bethnal Green", "price": "$88", "img": "img/hotel1.png", "smallImg": "smallImg/hotel1.png", "rating": "4.0", "ratingNum": 344, 
+var k11={"name": "London Bethnal Green Hotel", "price": "$88", "img": "img/hotel1.png", "smallImg": "smallImg/hotel1.png", "rating": "4.0", "ratingNum": 344, 
 "filterTagsFood": ["breakfast","tea","coffee"],
 "filterPercFood": ["32.8%","4.4%", "3.8%"],
 "filterTagsFacility": ["bed","shower","bathroom","wifi"],

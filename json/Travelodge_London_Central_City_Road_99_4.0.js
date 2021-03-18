@@ -1,4 +1,4 @@
-var l12={"name": "Travelodge London Central City Road", "price": "$99", "img": "img/hotel4.png", "smallImg": "smallImg/hotel4.png", "rating": "4.0", "ratingNum": 993, 
+var l12={"name": "Central City Road Hotel", "price": "$99", "img": "img/hotel4.png", "smallImg": "smallImg/hotel4.png", "rating": "4.0", "ratingNum": 393, 
 
 "filterTagsFood": ["breakfast","tea","coffee"],
 "filterPercFood": ["38.7%","5.6%","5.1%"],

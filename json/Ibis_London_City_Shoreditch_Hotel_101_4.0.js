@@ -1,4 +1,4 @@
-var d4={"name": "Ibis London City Shoreditch Hotel", "price": "$101", "img": "img/hotel7.png", "smallImg": "smallImg/hotel7.png", "rating": "4.0", 
+var d4={"name": "City Shoreditch Hotel", "price": "$101", "img": "img/hotel7.png", "smallImg": "smallImg/hotel7.png", "rating": "4.0", 
 "ratingNum": 320, 
 
 "filterTagsFood": ["breakfast", "food"],
