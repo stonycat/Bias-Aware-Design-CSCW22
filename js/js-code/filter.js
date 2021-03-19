@@ -178,7 +178,7 @@ function filterOnOff(index) {
 
 
 function filterTag(hotelIndex, filterParams) {
-  console.log(hotelIndex, filterParams.innerHTML);
+  // console.log(hotelIndex, filterParams.innerHTML);
   var reviews = _.filter(context.hotels[hotelIndex].reviews, function(x){
     var filterWord = filterParams.innerHTML;
     var matchKeywords = x.matchKeywords;
@@ -198,4 +198,24 @@ function filterTag(hotelIndex, filterParams) {
   var rendered = reviewlistTemplate({reviews});
   document.getElementById(`modal-reviews-${hotelIndex}`).innerHTML = rendered;
   // loadSingleReview();
+}
+
+function reloadAllreviews(index){
+  
+  var reviews = context.hotels[index].reviews;
+  console.log("all", reviews);
+  reviews.forEach(function(review){
+    review.content = review.content;
+    review.content = review.content.replace("<span style='background-color: #ffd100'>","");
+    review.content = review.content.replace("</span>","");
+  });
+  var rendered = reviewlistTemplate({reviews});
+  document.getElementById(`modal-reviews-${index}`).innerHTML = rendered;
+
+  var txtDiv = document.getElementById('filterResultTxt'+ index);
+  txtDiv.innerHTML = "";
+
+  loadSingleReview();
+  loadMoreReviews();
+
 }
