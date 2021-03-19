@@ -187,11 +187,12 @@ function filterTag(hotelIndex, filterParams) {
   });
   showNumFilter(hotelIndex, reviews.length, filterParams.innerHTML, "none");
 
-  reviews.forEach(function(review, ind){
+  reviews.forEach(function(review){
     // console.log(review.content);
-    review.content = review.content.split(RegExp(filterParams.innerHTML, "i"))
+    var temp = review.content.split(RegExp(filterParams.innerHTML, "i"))
                       .join("<span style='background-color: #ffd100'>"+filterParams.innerHTML+"</span>");
     
+    review.content = temp;
     // review.content.replace(filterParams.innerHTML, "<mark>"+filterParams.innerHTML+"</mark>");
   });
   var rendered = reviewlistTemplate({reviews});

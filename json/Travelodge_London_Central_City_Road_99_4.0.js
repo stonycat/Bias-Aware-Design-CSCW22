@@ -1,16 +1,16 @@
 var l12={"name": "Central City Road Hotel", "price": "$99", "img": "img/hotel4.png", "smallImg": "smallImg/hotel4.png", "rating": "4.0", "ratingNum": 393, 
 
-"filterTagsFood": ["breakfast","tea","coffee"],
-"filterPercFood": ["38.7%","5.6%","5.1%"],
+"filterTagsFood": ["breakfast","coffee","tea"],
+"filterPercFood": ["38.7%","5.1%", "5.6%"],
 
-"filterTagsFacility": ["bed","shower","restaurant"],
-"filterPercFacility": ["11.7%","8.1%","5.9%"],
+"filterTagsFacility": ["restaurant","shower","bed"],
+"filterPercFacility": ["5.9%", "8.1%","11.7%"],
 
 "filterTagsSurroundings": [],
 "filterPercSurroundings": [],
 
-"filterTagsService": ["clean","comfortable","sleep","friendly"], 
-"filterPercService": ["16.5%","9.9%","6.9%","6.6%"],
+"filterTagsService": ["comfortable","friendly","clean","sleep"], 
+"filterPercService": ["9.9%","6.6%","16.5%","6.9%"],
 
 "filterTagsCompanion": [], 
 "filterPercCompanion": [],

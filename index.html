@@ -337,7 +337,7 @@
   <!--reviews--> 
   <script id="reviewlist-template" type="text/x-handlebars-template">
     {{#each reviews as |review|}}  
-      <div class="media" id=review-{{hotel.index}}>
+      <div class="media" id=review-{{@../index}}>
           <a><img alt="Avatar" src="user-img.png" class="mr-3 rounded-pill" 
           style="border-radius: 50rem; width: 56px;
             height: 56px;"></a>
@@ -375,20 +375,12 @@
                 {{/ifEquals}}
               </div>
               <div class = "review_content">
-                <p class = "contents">{{ highlight review.content '不可能的词'}}</p>
+                <p class = "contents">{{highlight review.content}}</p>
                 <a href = "#" class = "readmore" onclick = "recordClickReadMore({{@index}}， {{hotel.index}})">Read More</a>
-                <!-- <p>Keywords # 
-                {{#each review.keywords as |word|}} 
-                  <span class="badge">{{word}}</span> 
-                {{/each}}</p> -->
                 <p>{{#each review.categories as |word|}} 
                   <span class="badge bg-primary text-light">{{word}}</span> 
                   {{/each}}
                 </p>
-                <!-- <p>{{#each review.matchKeywords as |mword|}} 
-                  <button id="tag2">{{mword}}</button> 
-                  {{/each}}
-                </p> -->
               </div>
           </div>
         </div>
@@ -405,20 +397,21 @@
       return (arg1 == arg2) ? options.fn(this):options.inverse(this);
     });
     Handlebars.registerHelper('isEqual', (value, equalTo) => value === equalTo);
-    
+    Handlebars.registerHelper('highlight', (text) => {
+      // console.log("phrase",phrase);
+      // if (!phrase) return text;
+      // var highlighted = text.replace(new RegExp(phrase, 'gi'), function (str) {
+      //   return '<mark>' + str + '</mark>';
+      // });
+      return new Handlebars.SafeString(text);
+    });
     // Partials, like a component
     // Handlebars.registerPartial('reasonmodal', document.getElementById("reason-template").innerHTML);
 
     Handlebars.registerPartial('hotellist', document.getElementById("hotellist-template").innerHTML);
     Handlebars.registerPartial('reviewmodal', document.getElementById("modal-template").innerHTML);
     Handlebars.registerPartial('reviewlist', document.getElementById("reviewlist-template").innerHTML);
-    Handlebars.registerHelper('highlight', (text, phrase) => {
-      if (!phrase) return text;
-      var highlighted = text.replace(new RegExp(phrase, 'gi'), function (str) {
-        return '<mark>' + str + '</mark>';
-      });
-      return new Handlebars.SafeString(highlighted);
-    });
+
     // Code to render data into template
     var source = document.getElementById("entry-template").innerHTML;
     var template = Handlebars.compile(source);

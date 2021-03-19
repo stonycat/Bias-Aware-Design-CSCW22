@@ -2,14 +2,14 @@ var m13={"name": "Travelodge London Docklands", "price": "$84", "img": "img/hote
 "filterTagsFood": ["breakfast"],
 "filterPercFood": ["39.5%"],
 
-"filterTagsFacility": ["shower","bathroom","bed","food"],
+"filterTagsFacility": ["bathroom","shower","bed","food"],
 "filterPercFacility": ["14.9%","11.8%","11.8%","7.2%"],
 
 "filterTagsSurroundings": ["concert"],
 "filterPercSurroundings": ["4.6%"],
 
-"filterTagsService": ["clean","comfortable","receptionist"], 
-"filterPercService": ["10.8%","8.3%","5.4%"],
+"filterTagsService": ["comfortable","receptionist","clean"], 
+"filterPercService": ["8.3%","5.4%","10.8%"],
 
 "filterTagsCompanion": [], 
 "filterPercCompanion": [],

@@ -478,7 +478,8 @@ function dashboard(id, fData, index, linkdata, hotel){
         var tags = hotel.filterTagsFood;
         var tagsP = hotel.filterPercFood;
         for (i=0; i<tags.length;i++){
-          var food = d3.select(this.parentNode).append("td").style("text-align","center");
+          var food = d3.select(this.parentNode).append("td")
+          .style("text-align","center");
           food.append("button").text(tags[i]).attr("class", "tag");
           food.on("click", function(){
             filterTag(index, this.childNodes[0]);
