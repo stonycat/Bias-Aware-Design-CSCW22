@@ -1,4 +1,4 @@
-document.write("<script src='js/parse.js'></script>")
+document.write("<script src='js/parseB.js'></script>")
 parseAPI.init()
 
     function recordClickResult(button) {

@@ -250,7 +250,7 @@ saveClickReadMore: (obj,metaInfo) =>{
     },
 
     saveDrag: (obj,metaInfo) =>{
-      const Result = Parse.Object.extend('Baseline')
+      const Result = Parse.Object.extend('Data')
 
       const result = new Result()
       const acl = new Parse.ACL()
@@ -266,8 +266,6 @@ saveClickReadMore: (obj,metaInfo) =>{
       _.forEach(metaInfo, (v, k) => {
         result.set(k, v)
       })
-
-
       return result.save()
     },
     saveScroll: (obj,metaInfo) =>{
