@@ -1,13 +1,13 @@
 document.write("<script src='js/parse.js'></script>")
-
+document.write("<script src='js/parseB.js'></script>")
 parseAPI.init()
 
     function recordClickResult(button) {
       
       parseAPI.saveClickResult(
         // {ID: 'user id', Button: $(this).attr('id')},
-        {ID: 'user id', Button: button.id, username: 'hello, 3.3', q1: true, q2: false}, 
-        {anything: 'type: Click', numbers: 123, but: {better: 'not object'}} //not obj
+        {ID: $('input[id="userID"]').val(), Button: button.id}, 
+        {anything: 'type: Click'} //not obj
       ) 
       console.log( "ClickButton ", button.id);
     }
@@ -16,8 +16,8 @@ parseAPI.init()
     function recordClickReadMore(indexReview,hotelInd) {
       
       parseAPI.saveClickReadMore(
-        {ID: 'user id', Button: 'Read More', username: 'hello, 3.3', q1: true, q2: false, Hotel: hotelInd, ReviewNum: (indexReview+1)}, 
-        {anything: 'type: Click', numbers: 123, but: {better: 'not object'}} //not obj
+        {ID: $('input[id="userID"]').val(), Button: 'Read More', Hotel: hotelInd, ReviewNum: (indexReview+1)}, 
+        {anything: 'type: Click'} //not obj
       ) 
       console.log("ClickReadMore", indexReview,hotelInd);
     }
@@ -26,11 +26,22 @@ parseAPI.init()
       
       parseAPI.saveClickResult(
         // {ID: 'user id', Button: $(this).attr('id')},
-        {ID: 'user id', Button: el.id, username: 'hello, 3.3'}, 
+        {ID: $('input[id="userID"]').val(), Button: el.id}, 
         {anything: 'type: Click'} //not obj
       ) 
       console.log( "ClickButton ", el.id, index);
     }
+
+    function recordClickAspectsTag(button, index){
+      // console.log($('input[id="userID"]').val());
+        parseAPI.saveClickAspectsTag(
+        {ID: $('input[id="userID"]').val(), Button: button, Hotel: index}, 
+        {anything: 'type: Click'} //not obj
+      ) 
+      console.log( "ClickButton ", button, index);
+    }
+
+
     function recordClickSave() {
       var review01= $("textarea:eq(0)").val();
       var review02= $('textarea:eq(1)').val();
@@ -52,30 +63,38 @@ parseAPI.init()
 
       for(var i=0; i<3;i++){
         parseAPI.saveReason(
-        {ID: 'user id',  username: 'hello, 3.3', q1: true, q2: false, Hotel: hotelNums[i] , Reason:reviews[i],Ranking: (i+1) }, 
-        {anything: 'type: Save Reasons', numbers: 123, but: {better: 'not object'}} //not obj
+        {ID: $('input[id="userID"]').val(), Hotel: hotelNums[i] , Reason:reviews[i],Ranking: (i+1) }, 
+        {anything: 'type: Save Reasons'} //not obj
       ) 
       }
-      console.log("recordClickSave");
+      // console.log("recordClickSave");
+    }
+
+    function saveDragHistory(items){
+      parseAPI.saveDrag(
+        {ID: $('input[id="userID"]').val(), Rank1: items[0], Rank2: items[1], Rank3: items[2]}, 
+        {anything: 'type: DragUpdate'}
+      );
+      console.log(items);
     }
     function RecordOver_b(button, hotelInd) {
       
       parseAPI.saveMouseOver(
         // {ID: 'user id', Button: 'this.id'},
-        {ID: 'user id', Button: button.id, username: 'hello, 3.3', q1: true, q2: false, Hotel: hotelInd}, 
-        {anything: 'type: MouseOver', numbers: 123, but: {better: 'not object'}} //not obj
+        {ID: $('input[id="userID"]').val(), Button: button.id,  Hotel: hotelInd}, 
+        {anything: 'type: MouseOver'} //not obj
       ) 
-      console.log("MouseOver", button.id, hotelInd);
+      // console.log("MouseOver", button.id, hotelInd);
     }
 
     function RecordOut_b(button, hotelInd) {
       
       parseAPI.saveMouseOut(
         // {ID: 'user id', Button: 'this.id'}, 
-        {ID: 'user id', Button: button.id, username: 'hello, 3.3', q1: true, q2: false, Hotel: hotelInd}, 
-        {anything: 'type: MouseOut', numbers: 123, but: {better: 'not object'}} //not obj
+        {ID: $('input[id="userID"]').val(), Button: button.id, Hotel: hotelInd}, 
+        {anything: 'type: MouseOut'} //not obj
       ) 
-      console.log("MouseOut", button.id, hotelInd);
+      // console.log("MouseOut", button.id, hotelInd);
 
     }
 
@@ -83,21 +102,20 @@ parseAPI.init()
       
       parseAPI.saveMouseOver(
         // {ID: 'user id', Button: 'this.id'},
-        {ID: 'user id', Button: type, username: 'hello, 3.3', q1: true, q2: false, Hotel: hotelInd}, 
-        {anything: 'type: MouseOver', numbers: 123, but: {better: 'not object'}} //not obj
+        {ID: $('input[id="userID"]').val(), Button: type, Hotel: hotelInd}, 
+        {anything: 'type: MouseOver'} //not obj
       ) 
-      console.log("MouseOver", type,  barId.parentElement.id, hotelInd);
+      // console.log("MouseOver", type,  barId.parentElement.id, hotelInd);
     }
 
     function RecordOut_arc(type,  barId, hotelInd) {
       
       parseAPI.saveMouseOut(
         // {ID: 'user id', Button: 'this.id'}, 
-        {ID: 'user id', Button: type, username: 'hello, 3.3', q1: true, q2: false, Hotel: hotelInd}, 
-        {anything: 'type: MouseOut', numbers: 123, but: {better: 'not object'}} //not obj
+        {ID: $('input[id="userID"]').val(), Button: type,  Hotel: hotelInd}, 
+        {anything: 'type: MouseOut'} //not obj
       ) 
-      console.log("MouseOut", type,  barId.parentElement.id, hotelInd);
-
+      // console.log("MouseOut", type,  barId.parentElement.id, hotelInd);
     }
 
 
@@ -116,36 +134,36 @@ parseAPI.init()
               if (e.wheelDelta > 0) { //Chrome / IE
                   console.log("scroll up");
                   parseAPI.saveScroll(
-                  {username: 'hello, 3.3', q1: true, q2: false, Length: ''+length}, 
-                  {anything: 'scroll up', numbers: 123, but: {better: 'not object'}} 
+                  {ID: $('input[id="userID"]').val(), Length: ''+length}, 
+                  {anything: 'scroll up'} 
                 )
-                  console.log("send msg to backend");   
+                  // console.log("send msg to backend");   
               }  
               if (e.wheelDelta < 0) { 
                   console.log("scroll down");
                   parseAPI.saveScroll(
-                  {username: 'hello, 3.3', q1: true, q2: false, Length: ''+length}, 
-                  {anything: 'scroll down', numbers: 123, but: {better: 'not object'}} 
+                    {ID: $('input[id="userID"]').val(),  Length: ''+length}, 
+                    {anything: 'scroll down'} 
                 )
-                  console.log("send msg to backend");  
+                  // console.log("send msg to backend");  
               }
           }
           else if (e.detail) {  //Firefox]
               if (e.detail < 0) { 
                 console.log("scroll up");
                   parseAPI.saveScroll(
-                  {username: 'hello, 3.3', q1: true, q2: false, Length: ''+length}, 
-                  {anything: 'scroll up'+length, numbers: 123, but: {better: 'not object'}} 
+                    {ID: $('input[id="userID"]').val(), Length: ''+length}, 
+                    {anything: 'scroll up'+length} 
                 )
-                  console.log("send msg to backend"); 
+                  // console.log("send msg to backend"); 
               }  
               if (e.detail > 0) { 
                 console.log("scroll down");
                   parseAPI.saveScroll(
-                  {username: 'hello, 3.3', q1: true, q2: false, Length: ''+length}, 
-                  {anything: 'scroll down'+length, numbers: 123, but: {better: 'not object'}} 
+                    {ID: $('input[id="userID"]').val(),  Length: ''+length}, 
+                    {anything: 'scroll down'+length} 
                 )
-                  console.log("send msg to backend");  
+                  // console.log("send msg to backend");  
               }  
               
           }  

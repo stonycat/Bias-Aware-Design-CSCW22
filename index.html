@@ -55,16 +55,44 @@
   <script src="json/Travelodge_London_Greenwich_High_Road_99_4.0.js"></script>
   <script src="json/Travelodge_London_Vauxhall_Hotel_95_4.0.js"></script>
   <script type="text/javascript" src="json/t1.js"></script> 
-  <!-- <script>
+  <script>
     $(window).on('load', function() {
       $('#taskIntro').modal('show');
     });
-    </script> -->
+    </script>
 </head>
 <!-- <body> -->
 <body onload="sortHotels(['name'], ['asc'])">
   <!-- Empty element, will be filled in the content by the code below -->
   <div id="handlebars-rendering-target"></div>
+
+  <!--the last modal-->
+  <div class="modal" id="post-question" tabindex="-1" role="dialog" style="z-index: 1052;">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h6>Are you sure to submit your results and end this study?</h6>
+          <!-- <p>If yes, you will answer a few questions about the study and then end the experiment.</p> -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="postQ();recordClickSave();">Yes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function postQ() {
+      console.log("jump to questionnaire");
+      window.location.assign("https://docs.google.com/forms/d/e/1FAIpQLSc0gbgLpvbiYL3GjF-kh93ciAT4RTFAS3HGrEnknSC0QZeR5g/viewform?usp=sf_link");
+    }
+  </script>
   <!--count index-->
   <script>
     // compute hotel.index
@@ -99,7 +127,7 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="recordClickResult(this)">Close</button>
         <!-- <button id="modal-picktop-save" type="button" class="btn btn-primary" data-dismiss="modal" onclick="recordOrder()">Save and Close</button> -->
         <button id="modal-picktop-save" type="button" 
-          class="btn btn-success" onclick="recordOrder();recordClickSave();">Submit</button>
+          class="btn btn-success" data-toggle="modal" data-target="#post-question" onclick="recordOrder();recordClickSave();">Submit</button>
       </div>
     </div>
   </div>
@@ -121,7 +149,7 @@
                     <div class="col-sm-7">
                     <h6><a class="text-dark font-serif" id="hotel-{{item.index}}" href="#">{{item.name}}</a></h6>
                     <h6 class="mb-1 text-muted">{{item.price}}</h6>
-                    <h6><i class="fas fa-user"></i> {{item.ratingNum}} </h6>
+                    <h6><i class="fas fa-user"></i> {{item.ratingNum}}</h6>
                     <button type="button" class="btn btn-outline-primary btn-sm" 
                       id="viewFeedbackButton{{item.index}}" 
                       data-toggle="modal" data-target="#modal-{{item.index}}" onclick="recordClickResult(this)">
@@ -135,7 +163,6 @@
                     <textarea id=textarea-reason-{{item.index}} style="min-width: 100%;" rows="3" 
                     onkeyup="textareaOnChange({{item.index}})">{{item.reason}}</textarea>
                     <p class="text-muted">words count (min 20 words)</p>
-                    
                   </div>
                 </div>
             </div>
@@ -376,7 +403,7 @@
               </div>
               <div class = "review_content">
                 <p class = "contents">{{highlight review.content}}</p>
-                <a href = "#" class = "readmore" onclick = "recordClickReadMore({{@index}}， {{hotel.index}})">Read More</a>
+                <a href = "#" class = "readmore" onclick = "recordClickReadMore({{@index}},{{@../index}})">Read More</a>
                 <p>{{#each review.categories as |word|}} 
                   <span class="badge bg-primary text-light">{{word}}</span> 
                   {{/each}}
@@ -417,6 +444,7 @@
 
 
 
+
   <div id="taskIntro" class="modal fade d-example-modal-lg">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -432,13 +460,23 @@
                 <input type="text" class="form-control" id="userID" placeholder="Please input your ID here" aria-label="Default" aria-describedby="inputGroup-sizing-default">
               </div>
               <br>
-              <h6>Imagine that you are going on vacation to London, a city you have never been to. You will be in London for a few days. </h6>
-              <h6>Based on your budget and the average cost of London hotels, you screened all the hotels by price, hotel-class, etc. 
-                Now there are 15 hotels that meet the requirements. These hotels have similar prices, ratings and number of reviews. 
+              <h6>Imagine that you are going on a vacation to London, a city you have never been to. You will be in London for a few days. </h6>
+              <h6>Based on your budget and the average cost of London hotels, 
+                imagine that you have filtered the all hotels by price ($84-$105), hotel-class (3-star), location and so on.</h6>
+              <h6>Now there are 15 hotels that meet the requirements. 
+                <span style="color:#0275d8">What you need to do is to learn about the user ratings and reviews of 
+                each hotel and make a decision based on the feedback from other users.</span>
               </h6>
-              <h5>Task:</h5>
+              <h5>Please watch the video (2min) with subtitle carefully.</h5>
               
-              <button type="button" class="btn btn-outline-primary" onclick="checkid()">Next</button>
+
+              <br>
+              <h6 style="color:red">The website will log your behavior and time during this process, please learn each hotel carefully and upload your reasons.</h6>
+              <h6 style="color:red">Don't forget to answer the questions in the questionnaire after you submit your reasons.</h6>
+              <h6>Don't forget input your ID in the top textbox. If you are ready, click the <span style="color:#0275d8">Next</span> button to start the task.</h6>
+              <div class="text-center">
+                <button type="button" class="btn btn-outline-primary" onclick="checkid()">Next</button>
+              </div>
               <span class="warnID" style="color:red; display:none">Please input your ID in the top text box.</span>
             </div>
             

@@ -8,7 +8,7 @@ window.parseAPI = {
     },
 
     saveResult: (obj, metaInfo) => {
-        const Result = Parse.Object.extend('Data') //change name open new data sheet
+        const Result = Parse.Object.extend('Baseline') //change name open new data sheet
 
         const result = new Result()
         const acl = new Parse.ACL()
@@ -32,7 +32,7 @@ window.parseAPI = {
 
 
     saveClickResult: (obj,metaInfo) =>{
-      const Result = Parse.Object.extend('Data') //change name open new data sheet
+      const Result = Parse.Object.extend('Baseline') //change name open new data sheet
 
       const result = new Result()
       const acl = new Parse.ACL()
@@ -59,7 +59,7 @@ window.parseAPI = {
   },
   // saveClickShowAll
   saveClickShowAll: (obj,metaInfo) =>{
-    const Result = Parse.Object.extend('Data') //change name open new data sheet
+    const Result = Parse.Object.extend('Baseline') //change name open new data sheet
 
     const result = new Result()
     const acl = new Parse.ACL()
@@ -87,7 +87,7 @@ window.parseAPI = {
 
 
 saveReason: (obj,metaInfo) =>{
-  const Result = Parse.Object.extend('Data') //change name open new data sheet
+  const Result = Parse.Object.extend('Baseline') //change name open new data sheet
 
   const result = new Result()
   const acl = new Parse.ACL()
@@ -116,7 +116,7 @@ saveReason: (obj,metaInfo) =>{
 },
 
 saveClickAspectsTag:(obj,metaInfo) =>{
-  const Result = Parse.Object.extend('Data') //change name open new data sheet
+  const Result = Parse.Object.extend('Baseline') //change name open new data sheet
 
   const result = new Result()
   const acl = new Parse.ACL()
@@ -144,7 +144,7 @@ saveClickAspectsTag:(obj,metaInfo) =>{
 },
 
 saveClickReadMore: (obj,metaInfo) =>{
-  const Result = Parse.Object.extend('Data') //change name open new data sheet
+  const Result = Parse.Object.extend('Baseline') //change name open new data sheet
 
   const result = new Result()
   const acl = new Parse.ACL()
@@ -172,7 +172,7 @@ saveClickReadMore: (obj,metaInfo) =>{
 },
 
 //   saveButtonClickResult: (obj,metaInfo) =>{
-//     const Result = Parse.Object.extend('Data') //change name open new data sheet
+//     const Result = Parse.Object.extend('Baseline') //change name open new data sheet
 
 //     const result = new Result()
 //     const acl = new Parse.ACL()
@@ -197,7 +197,7 @@ saveClickReadMore: (obj,metaInfo) =>{
 
 // },
     saveMouseOver: (obj,metaInfo) =>{
-      const Result = Parse.Object.extend('Data') //change name open new data sheet
+      const Result = Parse.Object.extend('Baseline') //change name open new data sheet
 
       const result = new Result()
       const acl = new Parse.ACL()
@@ -223,7 +223,7 @@ saveClickReadMore: (obj,metaInfo) =>{
 
     },
     saveMouseOut: (obj,metaInfo) =>{
-      const Result = Parse.Object.extend('Data') //change name open new data sheet
+      const Result = Parse.Object.extend('Baseline') //change name open new data sheet
 
       const result = new Result()
       const acl = new Parse.ACL()
@@ -270,8 +270,9 @@ saveClickReadMore: (obj,metaInfo) =>{
 
       return result.save()
     },
+
     saveScroll: (obj,metaInfo) =>{
-      const Result = Parse.Object.extend('Data') //change name open new data sheet
+      const Result = Parse.Object.extend('Baseline') //change name open new data sheet
 
       const result = new Result()
       const acl = new Parse.ACL()
@@ -293,7 +294,7 @@ saveClickReadMore: (obj,metaInfo) =>{
 
     },
     // saveTime: (obj,metaInfo) =>{
-    //   const Result = Parse.Object.extend('Data') //change name open new data sheet
+    //   const Result = Parse.Object.extend('Baseline') //change name open new data sheet
 
     //   const result = new Result()
     //   const acl = new Parse.ACL()

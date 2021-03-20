@@ -64,7 +64,33 @@
 <body onload="sortHotels(['name'], ['asc'])">
   <!-- Empty element, will be filled in the content by the code below -->
   <div id="handlebars-rendering-target"></div>
-
+  <!--the last modal-->
+  <div class="modal" id="post-question" tabindex="-1" role="dialog" style="z-index: 1052;">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h6>Are you sure to submit your results and end this study?</h6>
+          <!-- <p>If yes, you will answer a few questions about the study and then end the experiment.</p> -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="postQ();recordClickSave();">Yes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function postQ() {
+      console.log("jump to questionnaire");
+      window.location.assign("https://docs.google.com/forms/d/e/1FAIpQLSc0gbgLpvbiYL3GjF-kh93ciAT4RTFAS3HGrEnknSC0QZeR5g/viewform?usp=sf_link");
+    }
+  </script>
   <!--rank card -->
   <div class="modal fade bd-example-modal-lg" id="modal-picktop" 
   tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
@@ -83,7 +109,7 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="recordClickResult(this)">Close</button>
         <!-- <button id="modal-picktop-save" type="button" class="btn btn-primary" data-dismiss="modal" onclick="recordOrder()">Save and Close</button> -->
         <button id="modal-picktop-save" type="button" 
-          class="btn btn-success" onclick="recordOrder();recordClickSave();">Submit</button>
+          class="btn btn-success" data-toggle="modal" data-target="#post-question" onclick="recordOrder();recordClickSave();">Submit</button>
       </div>
     </div>
   </div>
@@ -105,7 +131,7 @@
                     <div class="col-sm-7">
                     <h6><a class="text-dark font-serif" id="hotel-{{item.index}}" href="#">{{item.name}}</a></h6>
                     <h6 class="mb-1 text-muted">{{item.price}}</h6>
-                    <h6><i class="fas fa-user"></i> {{item.ratingNum}} </h6>
+                    <h6><i class="fas fa-user"></i>{{item.ratingNum}}</h6>
                     <button type="button" class="btn btn-outline-primary btn-sm" 
                       id="viewFeedbackButton{{item.index}}" 
                       data-toggle="modal" data-target="#modal-{{item.index}}" onclick="recordClickResult(this)">
@@ -115,7 +141,7 @@
                     </div>
                   </div>
                   <div class="col-sm-5">
-                    <p style="color:red">Write down your reason:</p>
+                    <p style="color:red">Pleas write down your reason:</p>
                     <textarea id=textarea-reason-{{item.index}} style="min-width: 100%;" rows="3" 
                     onkeyup="textareaOnChange({{item.index}})">{{item.reason}}</textarea>
                     <p class="text-muted">words count (min 20 words)</p>
@@ -408,7 +434,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Task Introduction</h5>
+                <h5 class="modal-title">Task Introduction (Find it in the top right corner of the page)</h5>
                 <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
             </div>
             <div class="modal-body">
@@ -420,13 +446,25 @@
               </div>
               <br>
               <h6>Imagine that you are going on a vacation to London, a city you have never been to. You will be in London for a few days. </h6>
-              <h6>Based on your budget and the average cost of London hotels, imagine that you have $--
-                you screened all the hotels by price, hotel-class, etc. 
-                Now there are 15 hotels that meet the requirements. These hotels have similar prices, ratings and number of reviews. 
+              <h6>Based on your budget and the average cost of London hotels, 
+                imagine that you have filtered the all hotels by price ($84-$105), hotel-class (3-star), location and so on.</h6>
+              <h6>Now there are 15 hotels that meet the requirements. 
+                <span style="color:#0275d8">What you need to do is to learn about the user ratings and reviews of 
+                each hotel and make a decision based on the feedback from other users.</span>
               </h6>
-              <h5>Task:</h5>
               
-              <h6><span style="font-weight: bold;">Phase 1: </span>You need to read the user feedback for each hotel carefully , including user ratings and review data, and make decisions 
+              <h5>Please watch the video (1min 13s) with subtitle carefully.</h5>
+              <!-- <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" src="video/baseline.mp4"></iframe>
+              </div> -->
+              <video width="840" height="480" controls>
+                <source src="video/baseline.mp4" type="video/mp4">
+              </video>
+              <br>
+              <h6 style="color:red">The website will log your behavior and time during this process, please learn each hotel carefully and upload your reasons.</h6>
+              <h6 style="color:red">Don't forget to answer the questions in the questionnaire after you submit your reasons.</h6>
+              <h6>Don't forget input your ID in the top textbox. If you are ready, click the <span style="color:#0275d8">Next</span> button to start the task.</h6>
+              <!-- <h6><span style="font-weight: bold;">Phase 1: </span>You need to read the user feedback for each hotel carefully , including user ratings and review data, and make decisions 
                 <span style="color:#0275d8">primarily on this information</span>.</h6>
               <h6>As shown in the image below, you can click the <span style="color:#0275d8">'User feedback'</span> button to see the details of each hotel.</h6> 
               <img class="mx-auto d-md-block" style="height: 200px;" src="img/intro/intro-1.png" alt="Card image cap">
@@ -443,11 +481,13 @@
                 Please write down your reasons for choosing and ranking each hotel in the text box. You can also check the details of the selected hotels by clicking 
                 <span style="color:#0275d8">'User feedback'</span> button in this window. Finally, please submit your reuslts by clicking the
               <span style="color:#28A745">Submit</span> button</h6>
-              <img class="mx-auto d-md-block" style="height: 400px;" src="img/intro/intro-b-4.png" alt="Card image cap">
-              
-              <button type="button" class="btn btn-outline-primary" onclick="checkid()">Next</button>
-              <span class="warnID" style="color:red; display:none">Please input your ID in the top text box.</span>
+              <img class="mx-auto d-md-block" style="height: 400px;" src="img/intro/intro-b-4.png" alt="Card image cap">-->
+              <div class="text-center">
+                  <button type="button" class="btn btn-outline-primary" onclick="checkid()">Next</button>
+              </div>
+              <span class="warnID" style="color:red; display:none">Please input your ID in the top text box.</span> 
             </div>
+            <br>
             
         </div>
     </div>
@@ -468,14 +508,15 @@
   }
 </script>
 <script src ="js/js-code/visualizationB.js"></script>
+<script src="js/parseB.js"></script>
+<script type="text/javascript" src="https://unpkg.com/parse/dist/parse.min.js"></script>
+<script src="js/js-code/parse-part.js"></script>
 <script src= "js/js-code/pickUpB.js"></script>
 
 <script src="js/js-code/filter.js"></script>
 <script src ="js/js-code/loadReview.js"></script>
 
-<script src="js/parse.js"></script>
-<script type="text/javascript" src="https://unpkg.com/parse/dist/parse.min.js"></script>
-<script src="js/js-code/parse-part.js"></script>
+
 </body>
 
 </html>

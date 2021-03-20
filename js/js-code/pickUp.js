@@ -40,7 +40,8 @@ function onReorderingListSort() {
   context.hotels.forEach(hotel => {
     hotel.order = items.indexOf(hotel.id);
     window.localStorage.setItem(`order-${hotel.id}`, hotel.order);
-  })
+  });
+  saveDragHistory(items);
 }
 
 function textareaOnChange(index) {

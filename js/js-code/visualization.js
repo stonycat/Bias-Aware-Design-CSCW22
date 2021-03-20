@@ -283,7 +283,7 @@ function dashboard(id, fData, index, linkdata, hotel){
     function pieMouseover(d) {
       tooltipPie.style('display', 'inline');
 
-      RecordOver_arc(d.data.type, this, index);
+      RecordOver_arc(d.data.type, this, hotel.index);
         // return function() {
         d3.select(this).transition().delay(0).attrTween("d", function(d) {
           var i = d3.interpolate(d.outerRadius, 42);
@@ -323,7 +323,7 @@ function dashboard(id, fData, index, linkdata, hotel){
     function pieMouseout(d) {
       tooltipPie.style('display', 'none');
 
-      RecordOut_arc(d.data.type, this, index);
+      RecordOut_arc(d.data.type, this, hotel.index);
         // return function() {
         d3.select(this).transition().delay(150).attrTween("d", function(d) {
           var i = d3.interpolate(d.outerRadius, 37);
@@ -335,7 +335,7 @@ function dashboard(id, fData, index, linkdata, hotel){
     function barMouseover(d){  // utility function to be called on mouseover.
       //tooltip
       tooltipBar.style('display', 'inline');
-      RecordOver_b(this, index);
+      RecordOver_b(this, hotel.index);
       // grey pie
       var curPieId = parseInt(d[0]);
       // console.log("moveon", curPieId);
@@ -414,7 +414,7 @@ function dashboard(id, fData, index, linkdata, hotel){
             // $("#pieId" + i).find("path").css({fill: ""});
           }
         }
-        RecordOut_b(this, index);
+        RecordOut_b(this, hotel.index);
         // reset the pie-chart and legend.    
         // leg.update(tF);
     }
@@ -483,6 +483,7 @@ function dashboard(id, fData, index, linkdata, hotel){
           food.append("button").text(tags[i]).attr("class", "tag");
           food.on("click", function(){
             filterTag(index, this.childNodes[0]);
+            recordClickAspectsTag(this.childNodes[0].innerHTML,hotel.index);
           })
           .on("mouseover", function(){
             tagMouseover(this.childNodes[0], tags, tagsP);
@@ -501,6 +502,7 @@ function dashboard(id, fData, index, linkdata, hotel){
               facility.append("button").text(tags[i]).attr("class", "tag");
           facility.on("click", function(){
             filterTag(index, this.childNodes[0]);
+            recordClickAspectsTag(this.childNodes[0].innerHTML,hotel.index);
           }).on("mouseover", function(){
             tagMouseover(this.childNodes[0], tags, tagsP);
           })
@@ -517,6 +519,7 @@ function dashboard(id, fData, index, linkdata, hotel){
               sur.append("button").text(tags[i]).attr("class", "tag");
           sur.on("click", function(){
             filterTag(index, this.childNodes[0]);
+            recordClickAspectsTag(this.childNodes[0].innerHTML,hotel.index);
           }).on("mouseover", function(){
             tagMouseover(this.childNodes[0], tags, tagsP);
           })
@@ -533,6 +536,7 @@ function dashboard(id, fData, index, linkdata, hotel){
               service.append("button").text(tags[i]).attr("class", "tag");
           service.on("click", function(){
             filterTag(index, this.childNodes[0]);
+            recordClickAspectsTag(this.childNodes[0].innerHTML,hotel.index);
           }).on("mouseover", function(){
             tagMouseover(this.childNodes[0], tags, tagsP);
           })
@@ -549,6 +553,7 @@ function dashboard(id, fData, index, linkdata, hotel){
               companion.append("button").text(tags[i]).attr("class", "tag");
           companion.on("click", function(){
             filterTag(index, this.childNodes[0]);
+            recordClickAspectsTag(this.childNodes[0].innerHTML,hotel.index);
           }).on("mouseover", function(){
             tagMouseover(this.childNodes[0], tags, tagsP);
           })
@@ -565,6 +570,7 @@ function dashboard(id, fData, index, linkdata, hotel){
               travel.append("button").text(tags[i]).attr("class", "tag");
           travel.on("click", function(){
             filterTag(index, this.childNodes[0]);
+            recordClickAspectsTag(this.childNodes[0].innerHTML,hotel.index);
           }).on("mouseover", function(){
             tagMouseover(this.childNodes[0], tags, tagsP);
           })

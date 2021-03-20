@@ -172,6 +172,13 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 85%;
 }
 
+#modal-picktop{
+  overflow-y:auto;
+}
+video {
+  display: block;
+  margin: auto;
+}
 
 
 /* ------- */

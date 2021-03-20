@@ -17,6 +17,7 @@ function addTags() {
 
       button0.addEventListener("click", function(){
         filterTag(hotel.index, button0);
+        recordClickAspectsTag(button0.innerHTML,hotel.index);
       });
     });
     facility.forEach(f =>{
@@ -26,6 +27,7 @@ function addTags() {
       tagDiv.appendChild(button0);
       button0.addEventListener("click", function(){
         filterTag(hotel.index, button0);
+        recordClickAspectsTag(button0.innerHTML,hotel.index);
       });
     });
     surrounding.forEach(f =>{
@@ -35,6 +37,7 @@ function addTags() {
       tagDiv.appendChild(button0);
       button0.addEventListener("click", function(){
         filterTag(hotel.index, button0);
+        recordClickAspectsTag(button0.innerHTML,hotel.index);
       });
     });
     service.forEach(f =>{
@@ -44,6 +47,7 @@ function addTags() {
       tagDiv.appendChild(button0);
       button0.addEventListener("click", function(){
         filterTag(hotel.index, button0);
+        recordClickAspectsTag(button0.innerHTML,hotel.index);
       });
     });
     companion.forEach(f =>{
@@ -53,6 +57,7 @@ function addTags() {
       tagDiv.appendChild(button0);
       button0.addEventListener("click", function(){
         filterTag(hotel.index, button0);
+        recordClickAspectsTag(button0.innerHTML,hotel.index);
       });
     });
     travel.forEach(f =>{
@@ -62,6 +67,7 @@ function addTags() {
       tagDiv.appendChild(button0);
       button0.addEventListener("click", function(){
         filterTag(hotel.index, button0);
+        recordClickAspectsTag(button0.innerHTML,hotel.index);
       });
     });
     // console.log(tagDiv);
