@@ -390,13 +390,7 @@ function dashboard(id, fData, index, linkdata, hotel){
           .style("top", yPosition + "px")
           .style("display", "inline-block")
           .html(newHtml.join("  "));
-          // .html('Number:' + d[1] + "<br>"
-          //     + "-----------" + "<br>"
-          //     + nD[0].type + " " + nD[0].freq + " "+ outPerc0 + "<br>"
-          //     + nD[1].type + " " + nD[1].freq + " "+ outPerc1+ "<br>"
-          //     + nD[2].type + " " + nD[2].freq + " "+ outPerc2+ "<br>"
-          //     + nD[3].type + " " + nD[3].freq + " "+ outPerc3+ "<br>"
-          //     + nD[4].type + " " + nD[4].freq + " "+ outPerc4);
+
         
     }
     
