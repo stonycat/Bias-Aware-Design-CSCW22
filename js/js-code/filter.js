@@ -13,6 +13,7 @@ function filterReviews(hotelIndex, filterParams) {
   // loadMoreReviews();
 }
 
+
 function filterCategory(hotelIndex, filterParams) {
   
   var reviews = _.filter(context.hotels[hotelIndex].reviews, function(x){
@@ -213,7 +214,7 @@ function reloadAllreviews(index){
   document.getElementById(`modal-reviews-${index}`).innerHTML = rendered;
 
   var txtDiv = document.getElementById('filterResultTxt'+ index);
-  txtDiv.innerHTML = "";
+  txtDiv.innerHTML = "All "+ reviews.length +" reviews of user rating";
 
   loadSingleReview();
   loadMoreReviews();

@@ -88,7 +88,8 @@
   <script>
     function postQ() {
       console.log("jump to questionnaire");
-      window.location.assign("https://docs.google.com/forms/d/e/1FAIpQLSccwDNUIudimoqwxcdZkuKh9-BLPJKePZdf_zeyOLstJAZYIQ/viewform?usp=sf_link");
+      window.location.assign(
+        "https://docs.google.com/forms/d/e/1FAIpQLSccwDNUIudimoqwxcdZkuKh9-BLPJKePZdf_zeyOLstJAZYIQ/viewform?usp=sf_link");
     }
   </script>
   <!--rank card -->
@@ -134,7 +135,8 @@
                     <h6><i class="fas fa-user"></i>{{item.ratingNum}}</h6>
                     <button type="button" class="btn btn-outline-primary btn-sm" 
                       id="viewFeedbackButton{{item.index}}" 
-                      data-toggle="modal" data-target="#modal-{{item.index}}" onclick="recordClickResult(this)">
+                      data-toggle="modal" data-target="#modal-{{item.index}}" 
+                      onclick="recordClickResult(this);reloadAllreviews({{hotel.index}})">
                       User feedback
                     </button>
                       {{> reviewmodal item=item}}
@@ -181,7 +183,8 @@
               <div class="tab-pane fade active show" id="pills-reviews" role="tabpanel" aria-labelledby="pills-reviews-tab">
                 <div class="bg-white rounded shadow-sm p-4 mb-4 restaurant-detailed-ratings-and-reviews">
                   <h5 class="mb-1" style="display: inline-block;">All Reviews</h5> &nbsp;
-                  <a href="#" class="text-muted" style="display: inline-block;" id="showAll{{hotel.index}}" onclick="filterReviews({{hotel.index}}, {});recordClickResult(this)">Show all</a>
+                  <a href="#" class="text-muted" style="display: inline-block;" id="showAll{{hotel.index}}" 
+                  onclick="reloadAllreviews({{hotel.index}});recordClickResult(this)">Show all</a>
                     <div id="filtertags-{{hotel.index}}" style="padding: 10px 2px;">
                         
                     </div>
@@ -313,7 +316,8 @@
             <p><i class="fas fa-user"></i> {{hotel.ratingNum}} </p>
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-outline-primary btn-sm" id="viewFeedbackButton{{hotel.index}}" 
-              data-toggle="modal" data-target="#modal-{{hotel.index}}" onclick="recordClickResult(this)">
+              data-toggle="modal" data-target="#modal-{{hotel.index}}" 
+              onclick="recordClickResult(this);reloadAllreviews({{hotel.index}})">
               User feedback
             </button>
             {{> reviewmodal hotel=hotel}}
@@ -447,10 +451,12 @@
               <br>
               <h6>Imagine that you are going on a vacation to London, a city you have never been to. You will be in London for a few days. </h6>
               <h6>Based on your budget and the average cost of London hotels, 
-                imagine that you have filtered the all hotels by price ($84-$105), hotel-class (3-star), location and so on.</h6>
+                imagine that you have filtered the all hotels by price ($84-$105), hotel-class (3-star), user rating (4 points), location and so on.</h6>
               <h6>Now there are 15 hotels that meet the requirements. 
                 <span style="color:#0275d8">What you need to do is to learn about the user ratings and reviews of 
-                each hotel and make a decision based on the feedback from other users.</span>
+                each hotel and make a decision based on the feedback from other users.</span></h6>
+                <h6><span style="color:red">We have controlled other variables (price, number of reviews) besides user rating and reviews. 
+                  Please try to make your decisions mainly by user feedback of each hotel.</span>
               </h6>
               
               <h5>Please watch the video (1min) with subtitle carefully.</h5>
@@ -461,9 +467,9 @@
                 <source src="video/baseline.mp4" type="video/mp4">
               </video>
               <br>
-              <h6 style="color:red">The website will log your behavior and time during this process, please learn each hotel carefully and upload your reasons.</h6>
-              <h6 style="color:red">Don't forget to answer the questions in the questionnaire after you submit your reasons.</h6>
-              <h6>Don't forget input your ID in the top textbox. If you are ready, click the <span style="color:#0275d8">Next</span> button to start the task.</h6>
+              <h6 style="color:red">1. The website will log your behavior and time during this process, please learn each hotel carefully and upload your reasons.</h6>
+              <h6 style="color:red">2. Don't forget to answer the questions in the questionnaire after you submit your reasons.</h6>
+              <h6>3. Don't forget input your ID in the top textbox. If you are ready, click the <span style="color:#0275d8">Next</span> button to start the task.</h6>
               <!-- <h6><span style="font-weight: bold;">Phase 1: </span>You need to read the user feedback for each hotel carefully , including user ratings and review data, and make decisions 
                 <span style="color:#0275d8">primarily on this information</span>.</h6>
               <h6>As shown in the image below, you can click the <span style="color:#0275d8">'User feedback'</span> button to see the details of each hotel.</h6> 
