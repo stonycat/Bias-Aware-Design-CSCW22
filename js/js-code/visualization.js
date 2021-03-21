@@ -296,7 +296,7 @@ function dashboard(id, fData, index, linkdata, hotel){
       var svg = this.closest('svg');
       var xP = d3.event.pageX - svg.getBoundingClientRect().x;
       var yP = d3.event.pageY - svg.getBoundingClientRect().y - window.scrollY;
-      console.log("pie:", xP, yP); 
+      // console.log("pie:", xP, yP); 
 
       var barNum  = this.parentElement.id.split("pieId")[1];
       var st = fData.filter(function(s){ return s.State == barNum;});
@@ -441,11 +441,13 @@ function dashboard(id, fData, index, linkdata, hotel){
     legDim.w = 300 - legDim.l - legDim.r, 
     legDim.h = 180 - legDim.t - legDim.b;
     // create table for legend.
+    
     var legend = d3.select(id).append("table").attr('class','legend')
         .attr("width", legDim.w + legDim.l + legDim.r)
         .attr("height", legDim.h + legDim.t + legDim.b)
         .attr("transform", "translate(" + legDim.l + ",0");
-    
+
+    // var tooltipRec = legend.append("div").attr("class", "toolTipRec");
     // create one row per segment.
     var tr = legend.append("tbody").selectAll("tr").data(lD).enter().append("tr");
     var tooltipTag = legend.append("div").attr("class", "toolTipTag");
@@ -456,7 +458,8 @@ function dashboard(id, fData, index, linkdata, hotel){
             return "legendRect-" + d.type;
           })
         .attr("fill",function(d){ return segColor(d.type); })
-        .on("mouseover", mouseover).on("mouseout",mouseout)
+        .on("mouseover", mouseover)
+        .on("mouseout",mouseout)
         .on("click", function(d) { 
             filterCategory(index, d.type);
             //listen
@@ -597,43 +600,7 @@ function dashboard(id, fData, index, linkdata, hotel){
     function tagMouseout() {
       tooltipTag.style('display', 'none');
     }
-    // var tags = tr.append("td").text(function(d) {
-    //   if (d.type == "food") {
-    //     var tags = hotel.filterTagsFood;
-    //     var tagsP = hotel.filterPercFood;
-    //     // if (tags.length()!=0) {
-    //     // }
-    //     return tags.join(" ");
-    //   }
-    //   else if (d.type == "facility") {
-    //     var tags = hotel.filterTagsFacility;
-    //     var tagsP = hotel.filterPercFacility;
-    //     return tags;
-    //   }     
-    //   else if (d.type == "surroundings") {
-    //     var tags = hotel.filterTagsSurroundings;
-    //     var tagsP = hotel.filterPercSurroundings;
-    //     return tags;
-    //   }
-    //   else if (d.type == "service") {
-    //     var tags = hotel.filterTagsService;
-    //     var tagsP = hotel.filterPercService;
-    //     return tags;
-    //   }
-    //   else if (d.type == "companion") {
-    //     var tags = hotel.filterTagsCompanion;
-    //     var tagsP = hotel.filterPercCompanion;
-    //     return tags;
-    //   }
-    //   else if (d.type == "travelling_purpose") {
-    //     var tags = hotel.filterTagsTravelling_purpose;
-    //     var tagsP = hotel.filterPercTravelling_purpose;
-    //     return tags;
-    //   }
-    // });
-    
-    // console.log(hotel.filterTagsFood, hotel.filterPercFood);
-
+  
     // create the third column for each segment.
     // tr.append("td").attr("class",'legendFreq')
     //     .text(function(d){ return d3.format(",")(d.freq);});
@@ -663,12 +630,11 @@ function dashboard(id, fData, index, linkdata, hotel){
     // }
         
     function mouseover(d){ //legend mouse
-        RecordOver_b(this, index);
+        RecordOver_b(this, hotel.index);
         
-        //grey all pies, focus on the bars
-        // $('.arc').not('#arc-' + d.type).find("path").css({fill: "#CDD0D3"});
+        // //grey all pies, focus on the bars
+        // // $('.arc').not('#arc-' + d.type).find("path").css({fill: "#CDD0D3"});
         $('.arc').not('#arc-' + d.type).css({fill: "#CDD0D3"});
-        
         // call the update function of histogram with new data.
         var aspectsList = ['food', 'facility', 'surroundings', 'service', 'companion', 'travelling_purpose'];
         if (aspectsList.includes(d.type)) {
@@ -682,10 +648,12 @@ function dashboard(id, fData, index, linkdata, hotel){
     }
     //Utility function to be called on mouseout a pie slice.
     function mouseout(d){
-        RecordOut_b(this, index);
-        $('.arc').css({fill: ""});
-        hG.update(fData.map(function(v){
-            return [v.State,v.total];}), barColor);
+      // tooltipRec.style('display', 'none'); 
+      RecordOut_b(this, hotel.index);
+      $('.arc').css({fill: ""});
+      
+      hG.update(fData.map(function(v){
+          return [v.State,v.total];}), barColor);
       }
       return leg;
     } 
