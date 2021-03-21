@@ -8,7 +8,7 @@ parseAPI.init()
         {ID: $('input[id="userID"]').val(), Button: button.id}, 
         {anything: 'type: Click'} //not obj
       ) 
-      console.log( "ClickButton ", button.id);
+      // console.log( "ClickButton ", button.id);
     }
 
 
@@ -18,7 +18,7 @@ parseAPI.init()
         {ID: $('input[id="userID"]').val(), Button: 'Read More', Hotel: hotelInd, ReviewNum: (indexReview+1)}, 
         {anything: 'type: Click'} //not obj
       ) 
-      console.log("ClickReadMore", indexReview,hotelInd);
+      // console.log("ClickReadMore", indexReview,hotelInd);
     }
 
     function recordClickViz(el, index) {
@@ -28,7 +28,7 @@ parseAPI.init()
         {ID: $('input[id="userID"]').val(), Button: el.id}, 
         {anything: 'type: Click'} //not obj
       ) 
-      console.log( "ClickButton ", el.id, index);
+      // console.log( "ClickButton ", el.id, index);
     }
 
     function recordClickAspectsTag(button, index){
@@ -37,7 +37,7 @@ parseAPI.init()
         {ID: $('input[id="userID"]').val(), Button: button, Hotel: index}, 
         {anything: 'type: Click'} //not obj
       ) 
-      console.log( "ClickButton ", button, index);
+      // console.log( "ClickButton ", button, index);
     }
 
 
@@ -74,7 +74,7 @@ parseAPI.init()
         {ID: $('input[id="userID"]').val(), Rank1: items[0], Rank2: items[1], Rank3: items[2]}, 
         {anything: 'type: DragUpdate'}
       );
-      console.log(items);
+      // console.log(items);
     }
     function RecordOver_b(button, hotelInd) {
       
@@ -128,7 +128,7 @@ parseAPI.init()
         time = setTimeout( () => {
           e = e || window.event;
           var length = e.deltaY;
-          console.log(length);  
+          // console.log(length);  
           if (e.wheelDelta) {               
               if (e.wheelDelta > 0) { //Chrome / IE
                   console.log("scroll up");
@@ -139,7 +139,7 @@ parseAPI.init()
                   // console.log("send msg to backend");   
               }  
               if (e.wheelDelta < 0) { 
-                  console.log("scroll down");
+                  // console.log("scroll down");
                   parseAPI.saveScroll(
                     {ID: $('input[id="userID"]').val(),  Length: ''+length}, 
                     {anything: 'scroll down'} 
@@ -149,7 +149,7 @@ parseAPI.init()
           }
           else if (e.detail) {  //Firefox]
               if (e.detail < 0) { 
-                console.log("scroll up");
+                // console.log("scroll up");
                   parseAPI.saveScroll(
                     {ID: $('input[id="userID"]').val(), Length: ''+length}, 
                     {anything: 'scroll up'+length} 

@@ -204,7 +204,7 @@ function filterTag(hotelIndex, filterParams) {
 function reloadAllreviews(index){
   
   var reviews = context.hotels[index].reviews;
-  console.log("all", reviews);
+  // console.log("all", reviews);
   reviews.forEach(function(review){
     review.content = review.content;
     review.content = review.content.replace("<span style='background-color: #ffd100'>","");
