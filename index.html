@@ -310,7 +310,7 @@
             <div class="modal-body">
               
               <div id="modal-vis-{{hotel.index}}"></div>
-              <div style="padding-left:30px; padding-top:20px;">
+              <!-- <div style="padding-left:30px; padding-top:20px;">
                 <label class="switch" id="switchBox{{hotel.index}}" style="display:inline-block;">
                   <input type="checkbox" id="filterCheckBox{{hotel.index}}" onclick="filterOnOff({{hotel.index}});recordClickResult(this);" checked>
                   <div class="slider round"></div>
@@ -318,7 +318,7 @@
                 <h6 id="filterText{{hotel.index}}" style="display:inline-block;">Filtering is enabled</h6>
                 <i class="fa fa-question-circle" data-toggle="tooltip" 
                   title="You can filter reviews by clicking on elements of the chart"></i>
-              </div>
+              </div> -->
               
                 <div class="tab-pane fade active show" id="pills-reviews" role="tabpanel" aria-labelledby="pills-reviews-tab">
                   <div class="bg-white rounded shadow-sm p-4 mb-4 restaurant-detailed-ratings-and-reviews">
@@ -501,15 +501,16 @@
   }
 </script>
 <!--remove to js file-->
+<script src="js/js-code/filter.js"></script>
 <script src ="js/js-code/visualization.js"></script>
-
 
 <script type="text/javascript" src="https://unpkg.com/parse/dist/parse.min.js"></script>
 <script src="js/parse.js"></script>
 <script src="js/js-code/parse-part.js"></script>
 <script src= "js/js-code/pickUp.js"></script>
 
-<script src="js/js-code/filter.js"></script>
+
+
 <script src ="js/js-code/loadReview.js"></script>
 
 

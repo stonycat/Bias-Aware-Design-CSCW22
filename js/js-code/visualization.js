@@ -1004,72 +1004,72 @@ groupClick();
 
 
 
-// function embedSingleVis(index) {
+function embedSingleVis(index) {
+    console.log("single vis");
+    var visDiv = document.getElementById("modal-vis-" + index);
+    visDiv.className = 'row';
+    
+    var dashboardDiv = document.createElement('div');
+    dashboardDiv.id = 'dashboard' + index;
+    
+    var legendDiv = document.createElement('div');
+    legendDiv.id = 'legend' + index;
+    
+    // var buttonDiv = document.getElementById("modal-button-" + hotel.index);
+    // buttonDiv.class = 'row';
+    
+    var buttonGroup = document.createElement('div');
+    buttonGroup.classList.add("btn-group", "btn-group-sm");
+    buttonGroup.id = "groupButton" + index;
+    buttonGroup.setAttribute("role", "group");
+    buttonGroup.setAttribute("aria-label", "Basic example");
+    // var buttonGroup = document.getElementById('groupButton' + hotel.index);
+    buttonGroup.style.paddingLeft = '30px';
+    buttonGroup.style.paddingRight = '30px';
+    
+    // var checkBox = document.getElementsByClassName('checkBox' + hotel.index);
+    // checkBox.style.height = '8px';
+    // checkBox.style.width = '12px';
+    
+    var buttonEmo = document.createElement('button');
+    buttonEmo.classList.add("btn", "btn-outline-primary", "active");
+    buttonEmo.id = 'buttonEmo' + index;
+    buttonEmo.innerHTML = 'Emotion';
+    var buttonContri = document.createElement('button');
+    buttonContri.classList.add("btn", "btn-outline-primary");
+    buttonContri.id = 'buttonContri' + index;
+    buttonContri.innerHTML = 'Contribution';
+    var buttonHelpfulv = document.createElement('button');
+    buttonHelpfulv.classList.add("btn", "btn-outline-primary");
+    buttonHelpfulv.id = 'buttonHelpfulv' + index;
+    buttonHelpfulv.innerHTML = 'Helpful votes';
 
-//     var visDiv = document.getElementById("modal-vis-" + index);
-//     visDiv.className = 'row';
-    
-//     var dashboardDiv = document.createElement('div');
-//     dashboardDiv.id = 'dashboard' + index;
-    
-//     var legendDiv = document.createElement('div');
-//     legendDiv.id = 'legend' + index;
-    
-//     // var buttonDiv = document.getElementById("modal-button-" + hotel.index);
-//     // buttonDiv.class = 'row';
-    
-//     var buttonGroup = document.createElement('div');
-//     buttonGroup.classList.add("btn-group", "btn-group-sm");
-//     buttonGroup.id = "groupButton" + index;
-//     buttonGroup.setAttribute("role", "group");
-//     buttonGroup.setAttribute("aria-label", "Basic example");
-//     // var buttonGroup = document.getElementById('groupButton' + hotel.index);
-//     buttonGroup.style.paddingLeft = '30px';
-//     buttonGroup.style.paddingRight = '30px';
-    
-//     // var checkBox = document.getElementsByClassName('checkBox' + hotel.index);
-//     // checkBox.style.height = '8px';
-//     // checkBox.style.width = '12px';
-    
-//     var buttonEmo = document.createElement('button');
-//     buttonEmo.classList.add("btn", "btn-outline-primary", "active");
-//     buttonEmo.id = 'buttonEmo' + index;
-//     buttonEmo.innerHTML = 'Emotion';
-//     var buttonContri = document.createElement('button');
-//     buttonContri.classList.add("btn", "btn-outline-primary");
-//     buttonContri.id = 'buttonContri' + index;
-//     buttonContri.innerHTML = 'Contribution';
-//     var buttonHelpfulv = document.createElement('button');
-//     buttonHelpfulv.classList.add("btn", "btn-outline-primary");
-//     buttonHelpfulv.id = 'buttonHelpfulv' + index;
-//     buttonHelpfulv.innerHTML = 'Helpful votes';
+    var buttonKeywords = document.createElement('button');
+    buttonKeywords.classList.add("btn", "btn-outline-primary");
+    buttonKeywords.id = 'buttonKeywords' + index;
+    buttonKeywords.innerHTML = 'Aspects';
 
-//     var buttonKeywords = document.createElement('button');
-//     buttonKeywords.classList.add("btn", "btn-outline-primary");
-//     buttonKeywords.id = 'buttonKeywords' + index;
-//     buttonKeywords.innerHTML = 'Aspects';
+    // var buttonKeywords2 = document.createElement('button');
+    // buttonKeywords2.classList.add("btn", "btn-outline-primary");
+    // buttonKeywords2.id = 'buttonKeywords2' + index;
+    // buttonKeywords2.innerHTML = 'keywords';
+    
+    buttonGroup.appendChild(buttonEmo);
+    buttonGroup.appendChild(buttonContri);
+    buttonGroup.appendChild(buttonHelpfulv);
+    buttonGroup.appendChild(buttonKeywords);
+    // buttonGroup.appendChild(buttonKeywords2);
+    
+    
+    visDiv.appendChild(dashboardDiv);
+    visDiv.appendChild(legendDiv);
+    visDiv.appendChild(buttonGroup);
+    // buttonDiv.appendChild(filterBox);
+    visDiv.insertAdjacentElement('beforebegin', buttonGroup);
+    
+    var hotelCategoryData = JSON.parse(JSON.stringify(hotelEmoAll[index]));
+    
+    //switch function
 
-//     // var buttonKeywords2 = document.createElement('button');
-//     // buttonKeywords2.classList.add("btn", "btn-outline-primary");
-//     // buttonKeywords2.id = 'buttonKeywords2' + index;
-//     // buttonKeywords2.innerHTML = 'keywords';
-    
-//     buttonGroup.appendChild(buttonEmo);
-//     buttonGroup.appendChild(buttonContri);
-//     buttonGroup.appendChild(buttonHelpfulv);
-//     buttonGroup.appendChild(buttonKeywords);
-//     // buttonGroup.appendChild(buttonKeywords2);
-    
-    
-//     visDiv.appendChild(dashboardDiv);
-//     visDiv.appendChild(legendDiv);
-//     visDiv.appendChild(buttonGroup);
-//     // buttonDiv.appendChild(filterBox);
-//     visDiv.insertAdjacentElement('beforebegin', buttonGroup);
-    
-//     var hotelCategoryData = JSON.parse(JSON.stringify(hotelEmoAll[index]));
-    
-//     //switch function
-
-//     dashboard('#dashboard'+ index, hotelCategoryData, index, linkNumAll[index], hotel);
-// }
+    dashboard('#dashboard'+ index, hotelCategoryData, index, linkNumAll[index], hotel);
+}
