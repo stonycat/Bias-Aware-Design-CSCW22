@@ -22,15 +22,15 @@ function filterCategory(hotelIndex, filterParams) {
     var keywords = x.categories;
     // console.log(keywords);
     //Emo category
-    if (filterParams == 'extremelyPositive'){
+    if (filterParams == 'positiveOnly'){
       return x.polarity >= 0.8;
-    } else if (filterParams == 'positive') {
+    } else if (filterParams == 'positiveGenerally') {
       return x.polarity > 0.2 && x.polarity < 0.8;
     } else if (filterParams == 'neutral') {
       return x.polarity >= -0.2 && x.polarity <= 0.2;
-    } else if (filterParams == 'negative') {
+    } else if (filterParams == 'negativeGenerally') {
       return x.polarity > -0.8 && x.polarity < -0.2;
-    } else if (filterParams == 'extremelyNegative') {
+    } else if (filterParams == 'negativeOnly') {
       return x.polarity <= -0.8;
     } 
     //contribution
@@ -85,15 +85,15 @@ function filter2Criteria(hotelIndex, filterParams1, filterParams2) {
     var keywords = x.categories;
     // console.log(x.currentRating, barId.toString());
     //Emo category
-    if (filterParams1 == 'extremelyPositive'){
+    if (filterParams1 == 'positiveOnly'){
       return x.polarity >= 0.8 && x.currentRating == barId.toString();
-    } else if (filterParams1 == 'positive') {
+    } else if (filterParams1 == 'positiveGenerally') {
       return x.polarity > 0.2 && x.polarity < 0.8 && x.currentRating == barId.toString();
     } else if (filterParams1 == 'neutral') {
       return x.polarity >= -0.2 && x.polarity <= 0.2 && x.currentRating == barId.toString();
-    } else if (filterParams1 == 'negative') {
+    } else if (filterParams1 == 'negativeGenerally') {
       return x.polarity > -0.8 && x.polarity < -0.2 && x.currentRating == barId.toString();
-    } else if (filterParams1 == 'extremelyNegative') {
+    } else if (filterParams1 == 'negativeOnly') {
       return x.polarity <= -0.8 && x.currentRating == barId.toString();
     } 
      //contribution
