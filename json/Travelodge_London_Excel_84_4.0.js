@@ -1,4 +1,4 @@
-var n14={"name": "London Excel Hotel", "price": "$84", "img": "img/hotel14.png", "smallImg": "smallImg/hotel14.png", "rating": "4.0", "ratingNum": 392, 
+var n14={"name": "London Excel Hotel", "price": "$92", "img": "img/hotel14.png", "smallImg": "smallImg/hotel14.png", "rating": "4.0", "ratingNum": 392, 
 
 "filterTagsFood": ["breakfast","food","dinner"],
 "filterPercFood": ["31.1%", "6.1%","4.4%"],

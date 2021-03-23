@@ -1,4 +1,4 @@
-var l12={"name": "Central City Road Hotel", "price": "$99", "img": "img/hotel4.png", "smallImg": "smallImg/hotel4.png", "rating": "4.0", "ratingNum": 393, 
+var l12={"name": "Central City Road Hotel", "price": "$96", "img": "img/hotel4.png", "smallImg": "smallImg/hotel4.png", "rating": "4.0", "ratingNum": 393, 
 
 "filterTagsFood": ["breakfast","coffee","tea"],
 "filterPercFood": ["38.7%","5.1%", "5.6%"],

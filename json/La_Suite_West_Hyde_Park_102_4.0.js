@@ -1,4 +1,4 @@
-var g7={"name": "La Suite West Hyde Park", "price": "$102", "img": "img/hotel2.png", "smallImg": "smallImg/hotel2.png", "rating": "4.0", "ratingNum": 397,  
+var g7={"name": "La Suite West Hyde Park", "price": "$97", "img": "img/hotel2.png", "smallImg": "smallImg/hotel2.png", "rating": "4.0", "ratingNum": 397,  
 
 "filterTagsFood": ["breakfast"],
 "filterPercFood": ["11.3%"],

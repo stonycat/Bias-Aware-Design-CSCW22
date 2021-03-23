@@ -3,9 +3,9 @@ function dashboard(id, fData, index, linkdata, hotel){
     // console.log(fData[0]['freq']);
     var barColor = "#8d99ae";//'steelblue';
     function segColor(c){ 
-      if (Object.keys(fData[0]['freq']).includes("negative")) {
-        return {extremelyPositive:"#FA9601", positive:"#ffd100",neutral:"#c6dbef", 
-        negative:"#6796C6", extremelyNegative:"#08519c"}[c]; 
+      if (Object.keys(fData[0]['freq']).includes("neutral")) {
+        return {positiveOnly:"#fa9601", positiveGenerally:"#ffd60a",neutral:"#c6dbef", 
+        negativeGenerally:"#6796C6", negativeOnly:"#08519c"}[c]; 
       } 
       else if(Object.keys(fData[0]['freq']).includes("newReviewer")) {
         return {newReviewer:"#eff3ff", juniorReviewer:"#c6dbef",reviewer:"#9ecae1", 
@@ -23,9 +23,9 @@ function dashboard(id, fData, index, linkdata, hotel){
     
     //compute total for each state.
     //emo
-    if (Object.keys(fData[0]['freq']).includes("negative")) {
+    if (Object.keys(fData[0]['freq']).includes("neutral")) {
       fData.forEach(function(d){
-        d.total=d.freq.extremelyPositive+d.freq.positive+d.freq.neutral+d.freq.negative+d.freq.extremelyNegative;
+        d.total=d.freq.positiveOnly+d.freq.positiveGenerally+d.freq.neutral+d.freq.negativeGenerally+d.freq.negativeOnly;
       });
       // console.log("emo");
     } else if(Object.keys(fData[0]['freq']).includes("newReviewer")){
@@ -578,6 +578,12 @@ function dashboard(id, fData, index, linkdata, hotel){
       }
     })
     
+    
+    // var alert = d3.select(id).append("div")
+    //   .attr("class", "alert alert-danger")
+    //   .attr("role", "alert")
+    //   .text("There are % reviews with extreme emotions in this hotel");
+
     function tagMouseover(el, tags, perc) {
       // console.log("over", el.innerHTML, tags.indexOf(el.innerHTML));
       // var svg = el.closest('svg');
@@ -659,8 +665,8 @@ function dashboard(id, fData, index, linkdata, hotel){
     } 
 
     // calculate total frequency by segment for all state.
-    if (Object.keys(fData[0]['freq']).includes("negative")){
-        var tF = ['extremelyPositive','positive','neutral','negative','extremelyNegative'].map(function(d){ 
+    if (Object.keys(fData[0]['freq']).includes("neutral")){
+        var tF = ['positiveOnly','positiveGenerally','neutral','negativeGenerally','negativeOnly'].map(function(d){ 
           return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
         });  
     }

@@ -1,4 +1,4 @@
-var h8={"name": "London House Hotel", "price": "$108", "img": "img/hotel15.png", "smallImg": "smallImg/hotel15.png", "rating": "4.0", "ratingNum": 391, 
+var h8={"name": "London House Hotel", "price": "$99", "img": "img/hotel15.png", "smallImg": "smallImg/hotel15.png", "rating": "4.0", "ratingNum": 391, 
 
 "filterTagsFood": ["breakfast","tea","coffee"],
 "filterPercFood": ["25.1%","7.4%","4.3%"],
