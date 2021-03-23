@@ -190,9 +190,15 @@ function filterTag(hotelIndex, filterParams) {
 
   reviews.forEach(function(review){
     // console.log(review.content);
-    var temp = review.content.split(RegExp(filterParams.innerHTML, "i"))
+    //remove history highlight
+    // var reg = new RegExp("<span style='background-color: #ffd100'>", "</span>");
+    var oriContent0 = review.content.replace("</span>", "");
+    var oriContent1 = oriContent0.replace("<span style='background-color: #ffd100'>", "");
+    console.log(oriContent1);
+    //add highlight
+    var temp = oriContent1.split(RegExp(filterParams.innerHTML, "i"))
                       .join("<span style='background-color: #ffd100'>"+filterParams.innerHTML+"</span>");
-    
+    console.log(temp);
     review.content = temp;
     // review.content.replace(filterParams.innerHTML, "<mark>"+filterParams.innerHTML+"</mark>");
   });
