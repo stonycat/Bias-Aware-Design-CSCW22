@@ -403,6 +403,7 @@
                 {{/ifEquals}}
               </div>
               <div class = "review_content">
+                <h5>{{highlight review.title}}</h5>
                 <p class = "contents">{{highlight review.content}}</p>
                 <a href = "#" class = "readmore" onclick = "recordClickReadMore({{@index}},{{@../index}})">Read More</a>
                 <p>{{#each review.categories as |word|}} 
