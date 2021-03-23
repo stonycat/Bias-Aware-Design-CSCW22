@@ -25,7 +25,8 @@ function dashboard(id, fData, index, linkdata, hotel){
     //emo
     if (Object.keys(fData[0]['freq']).includes("neutral")) {
       fData.forEach(function(d){
-        d.total=d.freq.positiveOnly+d.freq.positiveGenerally+d.freq.neutral+d.freq.negativeGenerally+d.freq.negativeOnly;
+        d.total=d.freq.positiveOnly+d.freq.positiveGenerally+
+        d.freq.neutral+d.freq.negativeGenerally+d.freq.negativeOnly;
       });
       // console.log("emo");
     } else if(Object.keys(fData[0]['freq']).includes("newReviewer")){
