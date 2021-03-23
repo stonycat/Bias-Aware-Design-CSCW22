@@ -85,7 +85,7 @@ function dashboard(id, fData, index){
     //emo
     if (Object.keys(fData[0]['freq']).includes("negative")) {
       fData.forEach(function(d){
-        d.total=d.freq.extremelyPositive+d.freq.positive+d.freq.neutral+d.freq.negative+d.freq.extremelyNegative;
+        d.total=d.freq.positiveOnly+d.freq.positiveGenerally+d.freq.neutral+d.freq.negativeGenerally+d.freq.negativeOnly;
       });
       // console.log("emo");
     } else if(Object.keys(fData[0]['freq']).includes("newReviewer")){
@@ -218,27 +218,27 @@ function dashboard(id, fData, index){
 
 
     // calculate total frequency by segment for all state.
-    if (Object.keys(fData[0]['freq']).includes("negative")){
-        var tF = ['extremelyPositive','positive','neutral','negative','extremelyNegative'].map(function(d){ 
-          return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
-        });  
-    }
-    else if (Object.keys(fData[0]['freq']).includes("reviewer")) {
-        var tF = ['newReviewer','juniorReviewer', 'reviewer','seniorReviewer',
-        'proReviewer', 'topReviewer'].map(function(d){ 
-            return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
-        });    
-    } else if (Object.keys(fData[0]['freq']).includes("contributor")) {
-        var tF = ['newContributor', 'juniorContributor', 'contributor','seniorContributor',
-        'proContributor', 'topContributor'].map(function(d){ 
-            return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
-        });    
-    } else if (Object.keys(fData[0]['freq']).includes("food")) {
-        var tF = ['food', 'facility', 'surroundings','service','companion', 
-          'travelling_purpose'].map(function(d){ 
-            return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
-        });    
-    }
+    // if (Object.keys(fData[0]['freq']).includes("negative")){
+    //     var tF = ['positiveOnly','positiveGenerally','neutral','negativeGenerally','negativeOnly'].map(function(d){ 
+    //       return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
+    //     });  
+    // }
+    // else if (Object.keys(fData[0]['freq']).includes("reviewer")) {
+    //     var tF = ['newReviewer','juniorReviewer', 'reviewer','seniorReviewer',
+    //     'proReviewer', 'topReviewer'].map(function(d){ 
+    //         return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
+    //     });    
+    // } else if (Object.keys(fData[0]['freq']).includes("contributor")) {
+    //     var tF = ['newContributor', 'juniorContributor', 'contributor','seniorContributor',
+    //     'proContributor', 'topContributor'].map(function(d){ 
+    //         return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
+    //     });    
+    // } else if (Object.keys(fData[0]['freq']).includes("food")) {
+    //     var tF = ['food', 'facility', 'surroundings','service','companion', 
+    //       'travelling_purpose'].map(function(d){ 
+    //         return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
+    //     });    
+    // }
       
     // calculate total frequency by state for all segment.
     var sF = fData.map(function(d){return [d.State,d.total];});
@@ -279,10 +279,9 @@ function embedVis() {
     
     visDiv.appendChild(dashboardDiv);
     
-    var hotelCategoryData = JSON.parse(JSON.stringify(hotelEmoAll[hotel.index]));
+    var hotelCategoryData = JSON.parse(JSON.stringify(hotelContriAll[hotel.index]));
     
     //switch function
-
     dashboard('#dashboard'+ hotel.index, hotelCategoryData, hotel.index);
 
   })
