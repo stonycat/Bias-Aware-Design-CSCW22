@@ -418,12 +418,8 @@
     Handlebars.registerPartial('hotellist', document.getElementById("hotellist-template").innerHTML);
     Handlebars.registerPartial('reviewmodal', document.getElementById("modal-template").innerHTML);
     Handlebars.registerPartial('reviewlist', document.getElementById("reviewlist-template").innerHTML);
-    Handlebars.registerHelper('highlight', (text, phrase) => {
-      if (!phrase) return text;
-      var highlighted = text.replace(new RegExp(phrase, 'gi'), function (str) {
-        return '<mark>' + str + '</mark>';
-      });
-      return new Handlebars.SafeString(highlighted);
+    Handlebars.registerHelper('highlight', (text) => {
+      return new Handlebars.SafeString(text);
     });
     // Code to render data into template
     var source = document.getElementById("entry-template").innerHTML;
