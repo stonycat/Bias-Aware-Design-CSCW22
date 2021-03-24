@@ -90,7 +90,7 @@
     function postQ() {
       // console.log("jump to questionnaire");
       window.location.assign(
-        "https://docs.google.com/forms/d/e/1FAIpQLSc0gbgLpvbiYL3GjF-kh93ciAT4RTFAS3HGrEnknSC0QZeR5g/viewform?usp=sf_link");
+        "https://docs.google.com/forms/d/e/1FAIpQLSczNEgwVj5UrZ99x2w3HIeYlSCDkcB5mXk6e8UGHh08rPnnIQ/viewform?usp=sf_link");
     }
   </script>
   <!--count index-->
@@ -403,7 +403,7 @@
                 {{/ifEquals}}
               </div>
               <div class = "review_content">
-                <h6>{{highlight review.title}}</h6>
+                <p>{{highlight review.title}}</p>
                 <p class = "contents">{{highlight review.content}}</p>
                 <a href = "#" class = "readmore" onclick = "recordClickReadMore({{@index}},{{@../index}})">Read More</a>
                 <p>{{#each review.categories as |word|}} 
@@ -462,15 +462,20 @@
                 <input type="text" class="form-control" id="userID" placeholder="Please input your ID here" aria-label="Default" aria-describedby="inputGroup-sizing-default">
               </div>
               <h6>Imagine that you are going on a vacation to London, a city you have never been to. </h6>
-              <h6>Imagine that you have filtered the all hotels by price ($92-$99), user rating (4 points), location and so on.</h6>
+              <h6>Assuming that you have filtered the all hotels by price ($92-$99), user rating (4 points), location and other conditions you care about.</h6>
               <h6>Now there are <span style="color:red">9 hotels</span> that meet your requirements. 
                 What you need to do is to learn about the user ratings and reviews of 
                 these hotels and make a decision mainly based on them.</h6>
-                <h6>We have controlled other variables, like the number of reviews and the hotel-class. 
-                  Please do not judge a hotel by its picture, price or other controlled conditions.
-                  <Please style="color:red">Please try to make your decisions mainly by user ratings and reviews of each hotel.</span>
-              </h6>
-              <h5>Please watch the video (2min, without audio) with subtitle carefully.</h5>
+              <hr>
+              <h5><span style="color:red">In order to test our design of the user ratings only. </span></h5>
+              <h6>We have controlled some variables, like the number of reviews and the hotel-class.</h6>
+              <h6>Please do not judge a hotel by its picture, price or other controlled conditions. </h6>
+              <h5><span style="color:red">
+                Since you have filtered hotels by some conditions, 
+                please choose hotels mainly based on other users' ratings/reviews and give your feedback about our design.
+              </span></h5>
+            
+              <h6>Please watch the video (2min, without audio) with subtitle carefully.</h6>
               <video width="720" height="480" controls>
                 <source src="video/design.mp4" type="video/mp4">
               </video>
