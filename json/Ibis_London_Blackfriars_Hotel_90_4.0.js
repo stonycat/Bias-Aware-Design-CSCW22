@@ -1,4 +1,5 @@
-var c3={"name": "Blackfriars Hotel", "price": "$92", "img": "img/hotel10.png", "smallImg": "smallImg/hotel10.png", 
+var c3={"name": "Blackfriars Hotel", "price": "$92", "img": "img/hotel10.png", 
+"smallImg": "smallImg/hotel10.png", 
 "rating": "4.0", "ratingNum": 396, 
 
 "filterTagsFood": ["breakfast", "tea"],
