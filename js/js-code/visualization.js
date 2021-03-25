@@ -912,7 +912,7 @@ function embedVis() {
     var buttonContri = document.createElement('button');
     buttonContri.classList.add("btn", "btn-outline-primary");
     buttonContri.id = 'buttonContri' + hotel.index;
-    buttonContri.innerHTML = 'Contribution';
+    buttonContri.innerHTML = 'Reviews';
     var buttonHelpfulv = document.createElement('button');
     buttonHelpfulv.classList.add("btn", "btn-outline-primary");
     buttonHelpfulv.id = 'buttonHelpfulv' + hotel.index;
