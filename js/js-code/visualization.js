@@ -391,7 +391,6 @@ function dashboard(id, fData, index, linkdata, hotel){
           .style("top", yPosition + "px")
           .style("display", "inline-block")
           .html(newHtml.join("  "));
-
         
     }
     
@@ -577,9 +576,61 @@ function dashboard(id, fData, index, linkdata, hotel){
           });
         }
       }
-    })
+    });
+
+    tr.selectAll("td").each(function(d, i){
+      if (d.type === "newReviewer" && i == 1){
+        var nr = d3.select(this.parentNode).append("td");
+        nr.text("1-2 reviews");
+      }
+      else if (d.type === "juniorReviewer" && i == 1){
+        var nr = d3.select(this.parentNode).append("td");
+        nr.text("3-10 reviews");
+      }
+      else if (d.type === "reviewer" && i == 1){
+        var nr = d3.select(this.parentNode).append("td");
+        nr.text("11-20 reviews");
+      }
+      else if (d.type === "seniorReviewer" && i == 1){
+        var nr = d3.select(this.parentNode).append("td");
+        nr.text("21-50 reviews");
+      }
+      else if (d.type === "proReviewer" && i == 1){
+        var nr = d3.select(this.parentNode).append("td");
+        nr.text("51-100 reviews");
+      }
+      else if (d.type === "topReviewer" && i == 1){
+        var nr = d3.select(this.parentNode).append("td");
+        nr.text("100+ reviews");
+      }
+    });
     
-    
+    tr.selectAll("td").each(function(d, i){
+      if (d.type === "newContributor" && i == 1){
+        var nr = d3.select(this.parentNode).append("td");
+        nr.text("0 vote");
+      }
+      else if (d.type === "juniorContributor" && i == 1){
+        var nr = d3.select(this.parentNode).append("td");
+        nr.text("1-10 votes");
+      }
+      else if (d.type === "contributor" && i == 1){
+        var nr = d3.select(this.parentNode).append("td");
+        nr.text("11-25 votes");
+      }
+      else if (d.type === "seniorContributor" && i == 1){
+        var nr = d3.select(this.parentNode).append("td");
+        nr.text("26-50 votes");
+      }
+      else if (d.type === "proContributor" && i == 1){
+        var nr = d3.select(this.parentNode).append("td");
+        nr.text("51-100 votes");
+      }
+      else if (d.type === "topContributor" && i == 1){
+        var nr = d3.select(this.parentNode).append("td");
+        nr.text("100+ votes");
+      }
+    });
     // var alert = d3.select(id).append("div")
     //   .attr("class", "alert alert-danger")
     //   .attr("role", "alert")
@@ -1006,7 +1057,7 @@ function groupClick() {
   }
 
 
-groupClick();
+// groupClick();
 
 
 
