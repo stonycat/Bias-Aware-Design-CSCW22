@@ -202,13 +202,27 @@
           <p class="lead">
             The 9 hotels selected according to the given conditions are shown below. 
             Please refer to the user feedback to select the top 3 hotels (click on the checkbox) you would like to stay at the most. <br>
-            Rank them and give your reasons (under "Pick Top 3").</p>
+            Then, rank them and give your reasons (under "Pick Top 3").</p>
         </div>
         <br>
-          <button type="button" class="btn btn-outline-success btn-sm" id="pickTopButton"
-            data-toggle="modal" data-target="#modal-picktop" onclick="recordClickResult(this)">
-            Picked Top 3
-          </button>
+        <form class="form-inline">
+
+          <div class="col">
+            <button type="button" class="btn btn-outline-success btn-sm" id="pickTopButton"
+              data-toggle="modal" data-target="#modal-picktop" onclick="recordClickResult(this)">
+              Picked Top 3
+            </button>
+          </div>
+          <div class="col">
+            <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">Prolific ID</span>
+            </div>
+            <input type="email" class="form-control form-control-sm" id="userID" style="display:inline-block"
+              placeholder="Enter your ID again before you start">
+            </div>
+          </div>
+        </form>
       </div>
       <!--Header end-->   
         <div id="body-hotel-list">
@@ -459,7 +473,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroup-sizing-default">Your Prolific ID</span>
                 </div>
-                <input type="text" class="form-control" id="userID" placeholder="Please input your ID here" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                <input type="text" class="form-control" id="userID1" placeholder="Please input your ID here" aria-label="Default" aria-describedby="inputGroup-sizing-default">
               </div>
               <h6>Imagine that you are going on a vacation to London, a city you have never been to. </h6>
               <h6>Assuming that you have filtered the all hotels by price ($92-$99), user rating (4 points), location and other conditions you care about.</h6>
@@ -495,7 +509,7 @@
 
 <script>
   function checkid(){
-    var idBox = document.getElementById("userID");
+    var idBox = document.getElementById("userID1");
     if (idBox.value == ""){
       $(".warnID").css("display","block");
     } else {

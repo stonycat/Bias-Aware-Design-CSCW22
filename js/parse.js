@@ -210,6 +210,7 @@ saveClickReadMore: (obj,metaInfo) =>{
       // result.set('q2', obj.q2)
       result.set('Button', obj.Button)
       result.set('ID', obj.ID)
+      result.set('ID1', obj.ID1)
       result.set('Hotel', obj.Hotel)
       // result.set('anything', obj.anything)
       // result.set('numbers', obj.number)
@@ -236,6 +237,7 @@ saveClickReadMore: (obj,metaInfo) =>{
       // result.set('q2', obj.q2)
       result.set('Button', obj.Button)
       result.set('ID', obj.ID)
+      result.set('ID1', obj.ID1)
       result.set('Hotel', obj.Hotel)
       // result.set('anything', obj.anything)
       // result.set('numbers', obj.number)
@@ -259,6 +261,7 @@ saveClickReadMore: (obj,metaInfo) =>{
       result.setACL(acl)
 
       result.set('ID', obj.ID)
+      result.set('ID1', obj.ID1)
       result.set('dragrank1', obj.Rank1)
       result.set('dragrank2', obj.Rank2)
       result.set('dragrank3', obj.Rank3)
@@ -281,6 +284,7 @@ saveClickReadMore: (obj,metaInfo) =>{
       // result.set('q1', obj.q1)
       // result.set('q2', obj.q2)
       result.set('ID', obj.ID)
+      result.set('ID1', obj.ID1)
       result.set('Length', obj.Length)
 
       _.forEach(metaInfo, (v, k) => {

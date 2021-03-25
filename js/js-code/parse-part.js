@@ -62,6 +62,7 @@ parseAPI.init()
 
       for(var i=0; i<3;i++){
         parseAPI.saveReason(
+        {ID1: $('input[id="userID1"]').val()}, 
         {ID: $('input[id="userID"]').val(), Hotel: hotelNums[i] , Reason:reviews[i],Ranking: (i+1) }, 
         {anything: 'type: Save Reasons'} //not obj
       ) 
@@ -71,6 +72,7 @@ parseAPI.init()
 
     function saveDragHistory(items){
       parseAPI.saveDrag(
+        {ID1: $('input[id="userID1"]').val()}, 
         {ID: $('input[id="userID"]').val(), Rank1: items[0], Rank2: items[1], Rank3: items[2]}, 
         {anything: 'type: DragUpdate'}
       );
@@ -80,6 +82,7 @@ parseAPI.init()
       
       parseAPI.saveMouseOver(
         // {ID: 'user id', Button: 'this.id'},
+        {ID1: $('input[id="userID1"]').val()}, 
         {ID: $('input[id="userID"]').val(), Button: button.id,  Hotel: hotelInd}, 
         {anything: 'type: MouseOver'} //not obj
       ) 
@@ -90,6 +93,7 @@ parseAPI.init()
       
       parseAPI.saveMouseOut(
         // {ID: 'user id', Button: 'this.id'}, 
+        {ID1: $('input[id="userID1"]').val()}, 
         {ID: $('input[id="userID"]').val(), Button: button.id, Hotel: hotelInd}, 
         {anything: 'type: MouseOut'} //not obj
       ) 
@@ -101,6 +105,7 @@ parseAPI.init()
       
       parseAPI.saveMouseOver(
         // {ID: 'user id', Button: 'this.id'},
+        {ID1: $('input[id="userID1"]').val(), Button: type, Hotel: hotelInd}, 
         {ID: $('input[id="userID"]').val(), Button: type, Hotel: hotelInd}, 
         {anything: 'type: MouseOver'} //not obj
       ) 
@@ -111,6 +116,7 @@ parseAPI.init()
       
       parseAPI.saveMouseOut(
         // {ID: 'user id', Button: 'this.id'}, 
+        {ID1: $('input[id="userID1"]').val()}, 
         {ID: $('input[id="userID"]').val(), Button: type,  Hotel: hotelInd}, 
         {anything: 'type: MouseOut'} //not obj
       ) 
@@ -133,6 +139,7 @@ parseAPI.init()
               if (e.wheelDelta > 0) { //Chrome / IE
                   // console.log("scroll up");
                   parseAPI.saveScroll(
+                  {ID1: $('input[id="userID1"]').val()}, 
                   {ID: $('input[id="userID"]').val(), Length: ''+length}, 
                   {anything: 'scroll up'} 
                 )
@@ -141,6 +148,7 @@ parseAPI.init()
               if (e.wheelDelta < 0) { 
                   // console.log("scroll down");
                   parseAPI.saveScroll(
+                    {ID1: $('input[id="userID1"]').val()}, 
                     {ID: $('input[id="userID"]').val(),  Length: ''+length}, 
                     {anything: 'scroll down'} 
                 )
@@ -151,6 +159,7 @@ parseAPI.init()
               if (e.detail < 0) { 
                 // console.log("scroll up");
                   parseAPI.saveScroll(
+                    {ID1: $('input[id="userID1"]').val()}, 
                     {ID: $('input[id="userID"]').val(), Length: ''+length}, 
                     {anything: 'scroll up'+length} 
                 )
@@ -159,6 +168,7 @@ parseAPI.init()
               if (e.detail > 0) { 
                 // console.log("scroll down");
                   parseAPI.saveScroll(
+                    {ID1: $('input[id="userID1"]').val()}, 
                     {ID: $('input[id="userID"]').val(),  Length: ''+length}, 
                     {anything: 'scroll down'+length} 
                 )
