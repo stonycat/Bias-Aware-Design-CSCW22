@@ -1,6 +1,19 @@
 # Bias-Aware Design
 This is the source code of the CSCW22 paper: Bias-Aware Design for Informed Decisions: Raising Awareness of Self-Selection Bias in User Ratings and Reviews
 
+
+@article{zhu2022bias,
+  title={Bias-Aware Design for Informed Decisions: Raising Awareness of Self-Selection Bias in User Ratings and Reviews},
+  author={Zhu, Qian and Lo, Leo Yu-Ho and Xia, Meng and Chen, Zixin and Ma, Xiaojuan},
+  journal={Proceedings of the ACM on Human-Computer Interaction},
+  volume={6},
+  number={CSCW2},
+  pages={1--31},
+  year={2022},
+  publisher={ACM New York, NY, USA}
+}
+
+
 [^_^]:
     commentted-out contents
     ## Milestone
