@@ -1,6 +1,6 @@
 # Bias-Aware Design
 The source code of the hotel-booking prototypes in our CSCW paper: Bias-Aware Design for Informed Decisions: Raising Awareness of Self-Selection Bias in User Ratings and Reviews.
-Proceedings of the ACM on Human-Computer InteractionVolume 6 Issue CSCW2Article No.: 496 pp 1–31 https://doi.org/10.1145/3555597
+Proceedings of the ACM on Human-Computer Interaction Volume 6 Issue CSCW2Article No.: 496 pp 1–31 https://doi.org/10.1145/3555597
 
 Please read the paper on ACM Library.: https://dl.acm.org/doi/abs/10.1145/3555597
 
